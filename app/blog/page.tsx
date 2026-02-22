@@ -125,7 +125,7 @@ export default function BlogPage() {
       `}</style>
 
       <nav className="nav">
-        <Link href="/" className="nav-logo">rs<span>.</span>dev</Link>
+        <Link href="/" className="nav-logo">var<span>-</span>raphael</Link>
         <Link href="/" className="nav-back">← Back home</Link>
       </nav>
 

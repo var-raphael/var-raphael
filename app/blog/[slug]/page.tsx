@@ -156,7 +156,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       `}</style>
 
       <nav className="nav">
-        <Link href="/" className="nav-logo">rs<span>.</span>dev</Link>
+        <Link href="/" className="nav-logo">var<span>-</span>raphael</Link>
         <Link href="/blog" className="nav-back">← All posts</Link>
       </nav>
 

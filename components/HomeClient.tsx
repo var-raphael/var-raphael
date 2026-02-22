@@ -71,6 +71,70 @@ function TechTag({ label, gold = false }: { label: string; gold?: boolean }) {
   );
 }
 
+// ── Auto-cycling image component with subtle Ken Burns animation ───────────────
+function CyclingImage({ images, alt, style }: { images: string[]; alt: string; style?: React.CSSProperties }) {
+  const [idx, setIdx] = useState(0);
+  const [nextIdx, setNextIdx] = useState<number | null>(null);
+  const [phase, setPhase] = useState<'idle' | 'crossfade'>('idle');
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    const interval = setInterval(() => {
+      const next = (idx + 1) % images.length;
+      setNextIdx(next);
+      setPhase('crossfade');
+      setTimeout(() => {
+        setIdx(next);
+        setNextIdx(null);
+        setPhase('idle');
+      }, 700);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [idx, images.length]);
+
+  const kenBurnsStyle = (active: boolean): React.CSSProperties => ({
+    position: 'absolute',
+    inset: 0,
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    display: 'block',
+    animation: active ? `kenBurns${idx % 2 === 0 ? 'A' : 'B'} 6s ease-in-out forwards` : 'none',
+  });
+
+  return (
+    <div style={{ ...style, position: 'relative', overflow: 'hidden' }}>
+      {/* Current image */}
+      <img
+        key={`cur-${idx}`}
+        src={images[idx]}
+        alt={alt}
+        style={{
+          ...kenBurnsStyle(true),
+          opacity: phase === 'crossfade' ? 0 : 1,
+          transition: phase === 'crossfade' ? 'opacity 0.7s ease' : 'none',
+          zIndex: 1,
+        }}
+      />
+      {/* Next image fading in */}
+      {nextIdx !== null && (
+        <img
+          key={`next-${nextIdx}`}
+          src={images[nextIdx]}
+          alt={alt}
+          style={{
+            ...kenBurnsStyle(false),
+            opacity: phase === 'crossfade' ? 1 : 0,
+            transition: 'opacity 0.7s ease',
+            zIndex: 2,
+            animation: `kenBurns${nextIdx % 2 === 0 ? 'A' : 'B'} 6s ease-in-out forwards`,
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
 // ── Falling canvas ────────────────────────────────────────────────────────────
 const ICON_SRCS = Object.values(TECH_ICONS).slice(0, 14);
 const TEXT_SYMBOLS = ['</>', '{}', '=>', 'fn()', '[]', '&&', '||', '??', 'async', 'await', 'const', 'type', 'SELECT', 'JOIN', 'POST', 'GET', 'npm', 'git', '::'];
@@ -211,7 +275,7 @@ const PROJECTS = [
     title: 'phantomit',
     desc: 'CLI tool that watches your code, diffs changes, and generates professional git commit messages via Groq AI. Live on npm.',
     visual: 'terminal' as const,
-    gif: '',
+    images: [] as string[],
     live: 'https://phantomit-docs.vercel.app',
     github: 'https://github.com/var-raphael/phantomit',
     closedSource: false,
@@ -220,8 +284,8 @@ const PROJECTS = [
   {
     title: 'PhantomTrack',
     desc: 'Privacy-first web analytics SaaS. No cookies, no signup. One script tag — instant insights. AI weekly review, 7 export formats. 10+ active users.',
-    visual: 'gif' as const,
-    gif: '/images/phantomtrack.gif',
+    visual: 'img' as const,
+    images: ['/portfolio-images/img/phantomtrack1.jpg', '/portfolio-images/img/phantomtrack2.jpg'],
     live: 'https://phantomtrack-docs.vercel.app',
     github: '',
     closedSource: true,
@@ -230,8 +294,8 @@ const PROJECTS = [
   {
     title: 'ClassFlow',
     desc: 'Assignment management platform for teachers and students. Real-time grading, file uploads, comment threads, and visual dashboards.',
-    visual: 'gif' as const,
-    gif: '/images/classflow.gif',
+    visual: 'img' as const,
+    images: ['/portfolio-images/img/classflow1.jpg', '/portfolio-images/img/classflow2.jpg'],
     live: 'https://myclassflow.vercel.app',
     github: 'https://github.com/var-raphael',
     closedSource: false,
@@ -240,8 +304,8 @@ const PROJECTS = [
   {
     title: 'Go Rate Limiter',
     desc: 'High-performance rate limiting library in Go. Handles 10k+ req/s. DDoS tested. Token bucket and sliding window algorithms.',
-    visual: 'gif' as const,
-    gif: '',
+    visual: 'img' as const,
+    images: ['/portfolio-images/img/rate1.jpg', '/portfolio-images/img/rate2.jpg'],
     live: '#',
     github: 'https://github.com/var-raphael',
     closedSource: false,
@@ -249,11 +313,36 @@ const PROJECTS = [
   },
 ];
 
+// ── Jewelry Collections — updated with real images & fitting descriptions ─────
 const JEWELRY_COLLECTIONS = [
-  { name: 'Lumière Collection', desc: 'Premium jewelry store landing page with animated hero, elegant product showcase, and luxury checkout flow.', gif: '/images/jewelry-1.gif', live: '#', tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion'] },
-  { name: 'Aurum Store', desc: 'Gold-themed e-commerce landing with parallax scrolling, animated product cards, and newsletter integration.', gif: '/images/jewelry-2.gif', live: '#', tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion'] },
-  { name: 'Velvet & Stone', desc: 'Dark luxury jewelry brand page with dramatic typography, product spotlights, and seamless contact form.', gif: '/images/jewelry-3.gif', live: '#', tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion'] },
-  { name: 'Celestine Atelier', desc: 'High-end bespoke jewelry boutique page with editorial layout, lookbook-style gallery, and appointment booking flow.', gif: '/images/jewelry-4.gif', live: '#', tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion'] },
+  {
+    name: 'Aqua Collection',
+    desc: 'Cool-toned jewelry store with a crisp aqua palette. Showcases rings and accessories in an airy, modern layout with smooth hover transitions and a streamlined checkout experience.',
+    images: ['/portfolio-images/img/ecomm-aqua1.jpg', '/portfolio-images/img/ecomm-aqua2.jpg'],
+    live: '#',
+    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion'],
+  },
+  {
+    name: 'Coal Collection',
+    desc: 'Bold, dark-mode e-commerce experience built for high-end prestige jewelry. Deep charcoal tones, dramatic product lighting, and an editorial grid that commands attention.',
+    images: ['/portfolio-images/img/ecomm-coal1.jpg', '/portfolio-images/img/ecomm-coal2.jpg'],
+    live: '#',
+    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion'],
+  },
+  {
+    name: 'Floral Collection',
+    desc: 'Nature-inspired jewelry storefront with warm, organic aesthetics. Floral motifs woven into the layout guide customers through curated collections with an elegant, botanical feel.',
+    images: ['/portfolio-images/img/ecomm-flw1.jpg', '/portfolio-images/img/ecomm-flw2.jpg'],
+    live: '#',
+    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion'],
+  },
+  {
+    name: 'Ice Collection',
+    desc: 'Glacial, ultra-clean jewelry landing page inspired by diamonds and frost. Minimal white space, sharp typography, and a sleek product showcase built to highlight icy, brilliant pieces.',
+    images: ['/portfolio-images/img/ecomm-ice1.jpg', '/portfolio-images/img/ecomm-ice2.jpg'],
+    live: '#',
+    tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion'],
+  },
 ];
 
 const STACK = ['Next.js', 'TypeScript', 'PHP', 'PostgreSQL', 'MySQL', 'Go', 'Node.js', 'Git'];
@@ -272,7 +361,7 @@ function JewelryCarousel() {
   const [current, setCurrent] = useState(0);
   const [animating, setAnimating] = useState(false);
   const [direction, setDirection] = useState<'left' | 'right'>('right');
-  const [displayed, setDisplayed] = useState(0); // what's actually rendered
+  const [displayed, setDisplayed] = useState(0);
 
   const go = (dir: 'prev' | 'next') => {
     if (animating) return;
@@ -315,12 +404,11 @@ function JewelryCarousel() {
     <div className="carousel-grid">
       {/* Image panel */}
       <div className="carousel-image-panel" style={slideOut}>
-        {item.gif
-          ? <img src={item.gif} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-          : <div style={{ width: '100%', height: '100%', minHeight: 280, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.12)', letterSpacing: '0.1em' }}>[ gif coming soon ]</span>
-            </div>
-        }
+        <CyclingImage
+          images={item.images}
+          alt={item.name}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+        />
         <div style={{ position: 'absolute', bottom: 16, left: 16, display: 'flex', alignItems: 'baseline', gap: 3, background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, padding: '6px 12px' }}>
           <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: 'rgba(255,255,255,0.9)', lineHeight: 1 }}>{String(current + 1).padStart(2, '0')}</span>
           <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: 'rgba(255,255,255,0.3)', margin: '0 2px' }}>/</span>
@@ -377,6 +465,14 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         body { background: #0e0d0c; color: #e8e0d0; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
         html { scroll-behavior: smooth; }
         @keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+        @keyframes kenBurnsA {
+          0%   { transform: scale(1)    translate(0%, 0%); }
+          100% { transform: scale(1.07) translate(-1.5%, -1%); }
+        }
+        @keyframes kenBurnsB {
+          0%   { transform: scale(1.07) translate(-1.5%, -1%); }
+          100% { transform: scale(1)    translate(1%, 0.5%); }
+        }
 
         /* ── Nav ── */
         .nav-link { font-size: 13px; font-weight: 500; color: rgba(232,224,208,0.45); text-decoration: none; transition: color 0.2s; letter-spacing: 0.04em; }
@@ -398,10 +494,12 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         .section-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
         .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); margin: 0 40px; }
 
-        /* ── Project cards — 2-col desktop grid ── */
-        .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .project-card { background: #141310; border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; transition: all 0.3s; }
+        /* ── Project cards — full-width standalone ── */
+        .projects-grid { display: flex; flex-direction: column; gap: 20px; }
+        .project-card { background: #141310; border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; overflow: hidden; display: grid; grid-template-columns: 380px 1fr; transition: all 0.3s; }
         .project-card:hover { border-color: rgba(255,255,255,0.14); transform: translateY(-3px); box-shadow: 0 24px 64px rgba(0,0,0,0.55); }
+        .project-card-media { height: 100%; min-height: 240px; }
+        .project-card-body { padding: 32px 40px; display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.06); }
 
         /* ── Ring card — asymmetric 2-col ── */
         .ring-card { display: grid; grid-template-columns: 5fr 7fr; background: #141310; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; transition: all 0.3s; }
@@ -441,7 +539,10 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
 
         /* ── Responsive ── */
         @media (max-width: 900px) {
-          .projects-grid { grid-template-columns: 1fr; }
+          .projects-grid { gap: 16px; }
+          .project-card { grid-template-columns: 1fr; }
+          .project-card-media { min-height: 210px; }
+          .project-card-body { border-left: none; border-top: 1px solid rgba(255,255,255,0.06); padding: 24px 24px 28px; }
           .ring-card { grid-template-columns: 1fr; }
           .ring-visual { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.07) !important; }
           .carousel-grid { grid-template-columns: 1fr; }
@@ -477,7 +578,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         {/* ── Nav ── */}
         <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 24px 18px 48px', background: 'rgba(14,13,12,0.75)', backdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
           <a href="#" style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, letterSpacing: '0.12em', color: 'rgba(232,224,208,0.5)', textDecoration: 'none' }}>
-            rs<span style={{ color: '#6366f1' }}>.</span>dev
+            var-raphael
           </a>
 
           {/* Desktop links */}
@@ -485,7 +586,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
             {[['#projects','Projects'],['#frontend','Frontend'],['#blog','Blog'],['#contact','Contact']].map(([href, label]) => (
               <a key={href} href={href} className="nav-link">{label}</a>
             ))}
-            <a href="/cv.pdf" download className="btn-cv">Download CV</a>
+            <a href="/portfolio-images/img/var-raphael-cv.pdf" download className="btn-cv">Download CV</a>
           </div>
 
           {/* Hamburger */}
@@ -505,13 +606,12 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
           {[['#projects','Projects'],['#frontend','Frontend'],['#blog','Blog'],['#contact','Contact']].map(([href, label]) => (
             <a key={href} href={href} className="nav-mobile-link" onClick={() => setMenuOpen(false)}>{label}</a>
           ))}
-          <a href="/cv.pdf" download className="nav-mobile-cv" onClick={() => setMenuOpen(false)}>Download CV</a>
+          <a href="/portfolio-images/img/var-raphael-cv.pdf" download className="nav-mobile-cv">Download CV</a>
         </div>
 
         {/* ── Hero ── */}
-        <section id="home" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 24px 80px' }}>
-          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.22em', color: '#6366f1', textTransform: 'uppercase', marginBottom: 28, display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span style={{ display: 'block', width: 40, height: 1, background: '#6366f1', opacity: 0.5 }} />
+        <section style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 24px 80px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(232,224,208,0.3)', marginBottom: 28 }}>
             <span>Fullstack Developer</span>
             <span style={{ display: 'block', width: 40, height: 1, background: '#6366f1', opacity: 0.5 }} />
           </div>
@@ -529,7 +629,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
 
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 20 }}>
             <a href="#projects" className="btn-primary">View Projects</a>
-            <a href="/cv.pdf" download className="btn-ghost">Download CV</a>
+            <a href="/portfolio-images/img/var-raphael-cv.pdf" download className="btn-ghost">Download CV</a>
           </div>
 
           {/* Availability + quick contact */}
@@ -571,18 +671,26 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
             <div className="projects-grid">
               {PROJECTS.map(p => (
                 <div key={p.title} className="project-card">
-                  {p.visual === 'terminal' ? (
-                    <div style={{ padding: 16, background: '#1a1815', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                      <PhantomitTerminal />
-                    </div>
-                  ) : p.gif ? (
-                    <img src={p.gif} alt={p.title} style={{ width: '100%', height: 210, objectFit: 'cover', display: 'block', borderBottom: '1px solid rgba(255,255,255,0.06)' }} />
-                  ) : (
-                    <div style={{ width: '100%', height: 210, background: 'linear-gradient(135deg, #1a1815, #0e0d0c)', borderBottom: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.12)', letterSpacing: '0.1em' }}>[ gif coming soon ]</span>
-                    </div>
-                  )}
-                  <div style={{ padding: '24px 28px 28px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                  {/* Media panel */}
+                  <div className="project-card-media" style={{ background: '#0e0d0c', overflow: 'hidden', display: 'flex', alignItems: 'stretch' }}>
+                    {p.visual === 'terminal' ? (
+                      <div style={{ padding: 20, background: '#1a1815', width: '100%', display: 'flex', alignItems: 'center' }}>
+                        <PhantomitTerminal />
+                      </div>
+                    ) : p.images.length > 0 ? (
+                      <CyclingImage
+                        images={p.images}
+                        alt={p.title}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      />
+                    ) : (
+                      <div style={{ width: '100%', height: '100%', minHeight: 240, background: 'linear-gradient(135deg, #1a1815, #0e0d0c)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.12)', letterSpacing: '0.1em' }}>[ coming soon ]</span>
+                      </div>
+                    )}
+                  </div>
+                  {/* Body panel */}
+                  <div className="project-card-body">
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
                       {p.tags.map(t => <TechTag key={t} label={t} />)}
                       {p.title === 'phantomit' && (
@@ -620,11 +728,11 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
             {/* Ring Viewer */}
             <div className="ring-card" style={{ marginBottom: 64 }}>
               <div className="ring-visual" style={{ position: 'relative', minHeight: 320, borderRight: '1px solid rgba(255,255,255,0.07)', background: 'linear-gradient(135deg, #141008, #0a0806)', overflow: 'hidden' }}>
-                {/* swap with <img src="/images/ring-viewer.gif" style={{width:'100%',height:'100%',objectFit:'cover'}} /> */}
-                <div style={{ width: '100%', height: '100%', minHeight: 320, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
-                  <span style={{ fontSize: 52, opacity: 0.4 }}>💍</span>
-                  <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: 'rgba(234,179,8,0.25)', letterSpacing: '0.12em' }}>[ replace with gif ]</span>
-                </div>
+                <CyclingImage
+                  images={['/portfolio-images/img/ring-view1.jpg', '/portfolio-images/img/ring-view2.jpg']}
+                  alt="Interactive 3D Ring Viewer"
+                  style={{ width: '100%', height: '100%', minHeight: 320, objectFit: 'cover', display: 'block' }}
+                />
                 <span style={{ position: 'absolute', top: 16, left: 16, fontFamily: "'DM Mono', monospace", fontSize: 10, background: 'rgba(234,179,8,0.1)', border: '1px solid rgba(234,179,8,0.25)', color: 'rgba(234,179,8,0.65)', borderRadius: 4, padding: '4px 10px', letterSpacing: '0.1em', textTransform: 'uppercase' }}>3D Interactive</span>
               </div>
               <div style={{ padding: '48px 52px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -695,7 +803,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
           <div className="section-inner">
             <div className="contact-row">
               <div style={{ width: 210, height: 210, borderRadius: 18, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.12)', flexShrink: 0, boxShadow: '0 0 60px rgba(99,102,241,0.12)', background: '#1a1815' }}>
-                <img src="/images/avatar.png" alt="Raphael Samuel" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                <img src="/portfolio-images/img/avatar.jpg" alt="Raphael Samuel" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
               </div>
               <div style={{ flex: 1 }}>
                 <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#6366f1', marginBottom: 14 }}>Get in Touch</p>
@@ -721,7 +829,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         </section>
 
         <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '26px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-          <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(232,224,208,0.2)', letterSpacing: '0.06em' }}>© 2026 Raphael Samuel — rs.dev</p>
+          <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(232,224,208,0.2)', letterSpacing: '0.06em' }}>© 2026 Raphael Samuel — var-raphael</p>
           <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(232,224,208,0.2)', letterSpacing: '0.06em' }}>Built with Next.js + TypeScript</p>
         </footer>
 
