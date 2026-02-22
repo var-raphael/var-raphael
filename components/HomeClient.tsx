@@ -709,7 +709,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   <a href="mailto:samuelraphael925@gmail.com" style={{ display: 'inline-block', background: '#6366f1', color: '#fff', fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.06em', padding: '12px 22px', borderRadius: 10, textDecoration: 'none', boxShadow: '0 0 28px rgba(99,102,241,0.3)', transition: 'all 0.2s' }}>
                     samuelraphael925@gmail.com
                   </a>
-                  {[['https://github.com/var-raphael','GitHub'],['https://linkedin.com/in/your-link-here','LinkedIn']].map(([href, label]) => (
+                  {[['https://github.com/var-raphael','GitHub'],['https://www.linkedin.com/in/samuel-raphael-7679313a2','LinkedIn']].map(([href, label]) => (
                     <a key={label} href={href} target="_blank" rel="noreferrer" style={{ display: 'inline-block', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(232,224,208,0.45)', fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.06em', padding: '12px 22px', borderRadius: 10, textDecoration: 'none', transition: 'all 0.2s' }}>
                       {label}
                     </a>

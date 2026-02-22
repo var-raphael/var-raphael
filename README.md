@@ -1,37 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Raphael Samuel
 
-## Getting Started
+**Fullstack Developer** — building backends that scale and frontends that ship.
 
-First, run the development server:
+6 years of code. 18 years old. Based remotely.  
+I care about performance, clean architecture, and products that feel finished.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## Tech Stack
+
+**Frontend**
+```
+Next.js · React · TypeScript · Tailwind CSS · Framer Motion · Three.js
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Backend**
+```
+Node.js · Go · PHP · REST APIs
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Databases**
+```
+PostgreSQL · MySQL
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Tooling**
+```
+Git · Docker · npm · CLI tooling · Linux
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Projects
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### [phantomit](https://github.com/var-raphael/phantomit) — `npm i -g phantomit-cli`
+> CLI tool that watches your code, diffs changes on save, and generates professional git commit messages via Groq AI.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Hooks into your file system in real-time
+- Diffs changes and sends context to an LLM
+- Generates conventional commit messages instantly
+- Live on npm · Built with Node.js + TypeScript
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### [PhantomTrack](https://phantomtrack-docs.vercel.app)
+> Privacy-first web analytics SaaS. No cookies, no signup required.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# var-raphael
+- Drop in one `<script>` tag and get instant insights
+- AI-powered weekly review of your traffic
+- 7 export formats
+- 10+ active users in production
+- Built with PHP + MySQL · Closed source
+
+---
+
+### [ClassFlow](https://myclassflow.vercel.app)
+> Assignment management platform for teachers and students.
+
+- Real-time grading and submission tracking
+- File uploads, comment threads per assignment
+- Visual dashboards for teachers
+- Built with Next.js · TypeScript · PostgreSQL
+
+---
+
+### [Go Rate Limiter](https://github.com/var-raphael)
+> High-performance rate limiting library in Go.
+
+- Handles 10,000+ requests per second
+- DDoS tested under sustained load
+- Token bucket and sliding window algorithms
+- Built with Go · Zero dependencies
+
+---
+
+### [Interactive 3D Ring Viewer](https://github.com/var-raphael)
+> Real-time 3D ring configurator for jewelry e-commerce.
+
+- 360° rotation, zoom and pan via mouse and touch
+- Live band and diamond colour swapping without remounting
+- Embeddable as a drop-in component in any store page
+- Built with Next.js · Three.js · TypeScript · Tailwind · WebGL
+
+---
+
+## Currently
+
+- Deepening TypeScript — generics, conditional types, strict inference patterns
+- Expanding Go backend work — REST APIs, concurrency, PostgreSQL with `pgx`
+- Building and shipping real products, not tutorials
+
+---
+
+## Open To
+
+- Remote fullstack or backend roles
+- Freelance contracts
+- Interesting problems worth solving
+
+---
+
+## Contact
+
+| | |
+|---|---|
+| Email | [samuelraphael925@gmail.com](mailto:samuelraphael925@gmail.com) |
+| Portfolio | [var-raphal](https://var-raphael.vercel.app) |
+| LinkedIn | [https://www.linkedin.com/in/samuel-raphael-7679313a2](https://www.linkedin.com/in/samuel-raphael-7679313a2) |
+
+---
+
+<sub>Available for work · Open to remote · Building in public</sub>
