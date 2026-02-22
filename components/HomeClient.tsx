@@ -4,6 +4,13 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import Lenis from 'lenis';
 import type { PostMeta } from '@/lib/posts';
 
+// ── Phantom tracking helper ───────────────────────────────────────────────────
+function track(event: string, props?: Record<string, string>) {
+  if (typeof window !== 'undefined' && (window as any).phantom?.track) {
+    (window as any).phantom.track(event, props ?? {});
+  }
+}
+
 // ── Devicon icon map ──────────────────────────────────────────────────────────
 const TECH_ICONS: Record<string, string> = {
   'Next.js':    'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg',
@@ -313,7 +320,7 @@ const PROJECTS = [
   },
 ];
 
-// ── Jewelry Collections — updated with real images & fitting descriptions ─────
+// ── Jewelry Collections ───────────────────────────────────────────────────────
 const JEWELRY_COLLECTIONS = [
   {
     name: 'Aqua Collection',
@@ -428,7 +435,14 @@ function JewelryCarousel() {
 
         <div style={{ marginTop: 24 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 18 }}>
-            <a href={item.live} target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', background: '#6366f1', color: '#fff', fontFamily: "'DM Mono', monospace", fontSize: 11, fontWeight: 500, padding: '9px 18px', borderRadius: 8, textDecoration: 'none', letterSpacing: '0.06em', boxShadow: '0 0 20px rgba(99,102,241,0.3)', transition: 'all 0.2s' }}>
+            {/* TRACKED: jewelry carousel "View Site" */}
+            <a
+              href={item.live}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => track('jewelry_view_site_clicked', { collection: item.name })}
+              style={{ display: 'inline-flex', alignItems: 'center', background: '#6366f1', color: '#fff', fontFamily: "'DM Mono', monospace", fontSize: 11, fontWeight: 500, padding: '9px 18px', borderRadius: 8, textDecoration: 'none', letterSpacing: '0.06em', boxShadow: '0 0 20px rgba(99,102,241,0.3)', transition: 'all 0.2s' }}
+            >
               View Site ↗
             </a>
             <div style={{ display: 'flex', gap: 8 }}>
@@ -577,16 +591,37 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
 
         {/* ── Nav ── */}
         <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 24px 18px 48px', background: 'rgba(14,13,12,0.75)', backdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-          <a href="#" style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, letterSpacing: '0.12em', color: 'rgba(232,224,208,0.5)', textDecoration: 'none' }}>
+          {/* TRACKED: logo/name click */}
+          <a
+            href="#"
+            onClick={() => track('nav_logo_clicked')}
+            style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, letterSpacing: '0.12em', color: 'rgba(232,224,208,0.5)', textDecoration: 'none' }}
+          >
             var-raphael
           </a>
 
           {/* Desktop links */}
           <div className="nav-desktop-links">
             {[['#projects','Projects'],['#frontend','Frontend'],['#blog','Blog'],['#contact','Contact']].map(([href, label]) => (
-              <a key={href} href={href} className="nav-link">{label}</a>
+              // TRACKED: desktop nav section links
+              <a
+                key={href}
+                href={href}
+                className="nav-link"
+                onClick={() => track('nav_link_clicked', { label, device: 'desktop' })}
+              >
+                {label}
+              </a>
             ))}
-            <a href="/portfolio-images/img/var-raphael-cv.pdf" download className="btn-cv">Download CV</a>
+            {/* TRACKED: CV download from navbar */}
+            <a
+              href="/portfolio-images/img/var-raphael-cv.pdf"
+              download
+              className="btn-cv"
+              onClick={() => track('cv_downloaded', { source: 'navbar' })}
+            >
+              Download CV
+            </a>
           </div>
 
           {/* Hamburger */}
@@ -604,9 +639,25 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         {/* Mobile dropdown */}
         <div className={`nav-mobile-menu${menuOpen ? ' open' : ''}`}>
           {[['#projects','Projects'],['#frontend','Frontend'],['#blog','Blog'],['#contact','Contact']].map(([href, label]) => (
-            <a key={href} href={href} className="nav-mobile-link" onClick={() => setMenuOpen(false)}>{label}</a>
+            // TRACKED: mobile nav section links
+            <a
+              key={href}
+              href={href}
+              className="nav-mobile-link"
+              onClick={() => { setMenuOpen(false); track('nav_link_clicked', { label, device: 'mobile' }); }}
+            >
+              {label}
+            </a>
           ))}
-          <a href="/portfolio-images/img/var-raphael-cv.pdf" download className="nav-mobile-cv">Download CV</a>
+          {/* TRACKED: CV download from mobile menu */}
+          <a
+            href="/portfolio-images/img/var-raphael-cv.pdf"
+            download
+            className="nav-mobile-cv"
+            onClick={() => track('cv_downloaded', { source: 'mobile_menu' })}
+          >
+            Download CV
+          </a>
         </div>
 
         {/* ── Hero ── */}
@@ -628,8 +679,23 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
           </p>
 
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 20 }}>
-            <a href="#projects" className="btn-primary">View Projects</a>
-            <a href="/portfolio-images/img/var-raphael-cv.pdf" download className="btn-ghost">Download CV</a>
+            {/* TRACKED: hero "View Projects" CTA */}
+            <a
+              href="#projects"
+              className="btn-primary"
+              onClick={() => track('hero_cta_clicked', { button: 'view_projects' })}
+            >
+              View Projects
+            </a>
+            {/* TRACKED: CV download from hero */}
+            <a
+              href="/portfolio-images/img/var-raphael-cv.pdf"
+              download
+              className="btn-ghost"
+              onClick={() => track('cv_downloaded', { source: 'hero' })}
+            >
+              Download CV
+            </a>
           </div>
 
           {/* Availability + quick contact */}
@@ -638,7 +704,12 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
               <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 8px #4ade80', flexShrink: 0, animation: 'pulse 2s ease-in-out infinite' }} />
               Available for work
             </span>
-            <a href="mailto:samuelraphael925@gmail.com" className="hero-email">
+            {/* TRACKED: hero email link */}
+            <a
+              href="mailto:samuelraphael925@gmail.com"
+              className="hero-email"
+              onClick={() => track('email_clicked', { source: 'hero' })}
+            >
               samuelraphael925@gmail.com
             </a>
           </div>
@@ -694,8 +765,14 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
                       {p.tags.map(t => <TechTag key={t} label={t} />)}
                       {p.title === 'phantomit' && (
-                        <a href="https://www.npmjs.com/package/phantomit-cli" target="_blank" rel="noreferrer"
-                          style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 5, fontSize: 10, fontFamily: "'DM Mono', monospace", fontWeight: 500, border: '1px solid rgba(248,113,113,0.25)', background: 'rgba(248,113,113,0.08)', color: 'rgba(248,113,113,0.75)', textDecoration: 'none', transition: 'all 0.2s' }}>
+                        // TRACKED: npm badge on phantomit card
+                        <a
+                          href="https://www.npmjs.com/package/phantomit-cli"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => track('npm_badge_clicked', { project: 'phantomit' })}
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 5, fontSize: 10, fontFamily: "'DM Mono', monospace", fontWeight: 500, border: '1px solid rgba(248,113,113,0.25)', background: 'rgba(248,113,113,0.08)', color: 'rgba(248,113,113,0.75)', textDecoration: 'none', transition: 'all 0.2s' }}
+                        >
                           <img src={TECH_ICONS['npm']} style={{ width: 13, height: 13 }} alt="npm" />
                           npm ↗
                         </a>
@@ -704,11 +781,36 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                     <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 10 }}>{p.title}</h3>
                     <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.75, marginBottom: 22, flex: 1 }}>{p.desc}</p>
                     <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                      <a href={p.live === '#' ? p.github : p.live} target="_blank" rel="noreferrer" className="btn-live">
+                      {/* TRACKED: project primary link (View Site / GitHub / Docs) */}
+                      <a
+                        href={p.live === '#' ? p.github : p.live}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn-live"
+                        onClick={() => track('project_link_clicked', {
+                          project: p.title,
+                          type: p.title === 'phantomit' ? 'docs' : p.live === '#' ? 'github' : 'live',
+                        })}
+                      >
                         {p.title === 'phantomit' ? 'Docs ↗' : p.live === '#' ? 'GitHub ↗' : 'View Site ↗'}
                       </a>
-                      {!p.closedSource && p.github && p.live !== '#' && <a href={p.github} target="_blank" rel="noreferrer" className="btn-gh">GitHub</a>}
-                      {p.closedSource && <span style={{ display: 'inline-block', border: '1px solid rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.2)', fontFamily: "'DM Mono', monospace", fontSize: 11, padding: '9px 16px', borderRadius: 7, cursor: 'default' }}>Closed Source</span>}
+                      {/* TRACKED: project GitHub secondary button */}
+                      {!p.closedSource && p.github && p.live !== '#' && (
+                        <a
+                          href={p.github}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="btn-gh"
+                          onClick={() => track('project_link_clicked', { project: p.title, type: 'github' })}
+                        >
+                          GitHub
+                        </a>
+                      )}
+                      {p.closedSource && (
+                        <span style={{ display: 'inline-block', border: '1px solid rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.2)', fontFamily: "'DM Mono', monospace", fontSize: 11, padding: '9px 16px', borderRadius: 7, cursor: 'default' }}>
+                          Closed Source
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -753,7 +855,12 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   {['Next.js', 'Three.js', 'TypeScript', 'Tailwind'].map(t => <TechTag key={t} label={t} gold />)}
                   <TechTag label='WebGL' gold />
                 </div>
-                <a href="https://ring-view.vercel.app/" style={{ display: 'inline-flex', alignItems: 'center', background: '#ca8a04', color: '#0a0806', fontFamily: "'DM Mono', monospace", fontSize: 11, fontWeight: 700, letterSpacing: '0.07em', padding: '11px 22px', borderRadius: 8, textDecoration: 'none', boxShadow: '0 0 24px rgba(201,168,76,0.2)', transition: 'all 0.2s', alignSelf: 'flex-start' }}>
+                {/* TRACKED: 3D ring viewer demo link */}
+                <a
+                  href="https://ring-view.vercel.app/"
+                  onClick={() => track('ring_demo_clicked')}
+                  style={{ display: 'inline-flex', alignItems: 'center', background: '#ca8a04', color: '#0a0806', fontFamily: "'DM Mono', monospace", fontSize: 11, fontWeight: 700, letterSpacing: '0.07em', padding: '11px 22px', borderRadius: 8, textDecoration: 'none', boxShadow: '0 0 24px rgba(201,168,76,0.2)', transition: 'all 0.2s', alignSelf: 'flex-start' }}
+                >
                   View Demo ↗
                 </a>
               </div>
@@ -780,7 +887,13 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 14, lineHeight: 1.1 }}>From the Blog</h2>
             <div>
               {posts.slice(0, 2).map(post => (
-                <a key={post.slug} href={`/blog/${post.slug}`} className="blog-row">
+                // TRACKED: individual blog post clicks
+                <a
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
+                  className="blog-row"
+                  onClick={() => track('blog_post_clicked', { slug: post.slug, title: post.title })}
+                >
                   <span className="blog-date" style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(232,224,208,0.22)', letterSpacing: '0.08em', minWidth: 96, paddingTop: 3, flexShrink: 0 }}>{post.date}</span>
                   <div style={{ flex: 1 }}>
                     <div className="blog-title">{post.title}</div>
@@ -790,7 +903,12 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                 </a>
               ))}
             </div>
-            <a href="/blog" style={{ display: 'inline-block', marginTop: 32, fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.1em', color: '#6366f1', textDecoration: 'none', borderBottom: '1px solid rgba(99,102,241,0.35)', paddingBottom: 2, transition: 'all 0.2s' }}>
+            {/* TRACKED: "All posts" link */}
+            <a
+              href="/blog"
+              onClick={() => track('blog_all_posts_clicked')}
+              style={{ display: 'inline-block', marginTop: 32, fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.1em', color: '#6366f1', textDecoration: 'none', borderBottom: '1px solid rgba(99,102,241,0.35)', paddingBottom: 2, transition: 'all 0.2s' }}
+            >
               All posts →
             </a>
           </div>
@@ -814,11 +932,24 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   Open to remote roles, freelance contracts, and interesting problems. If you have one, let's talk.
                 </p>
                 <div className="contact-links-row">
-                  <a href="mailto:samuelraphael925@gmail.com" style={{ display: 'inline-block', background: '#6366f1', color: '#fff', fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.06em', padding: '12px 22px', borderRadius: 10, textDecoration: 'none', boxShadow: '0 0 28px rgba(99,102,241,0.3)', transition: 'all 0.2s' }}>
+                  {/* TRACKED: contact section email */}
+                  <a
+                    href="mailto:samuelraphael925@gmail.com"
+                    onClick={() => track('email_clicked', { source: 'contact' })}
+                    style={{ display: 'inline-block', background: '#6366f1', color: '#fff', fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.06em', padding: '12px 22px', borderRadius: 10, textDecoration: 'none', boxShadow: '0 0 28px rgba(99,102,241,0.3)', transition: 'all 0.2s' }}
+                  >
                     samuelraphael925@gmail.com
                   </a>
+                  {/* TRACKED: GitHub and LinkedIn social links */}
                   {[['https://github.com/var-raphael','GitHub'],['https://www.linkedin.com/in/samuel-raphael-7679313a2','LinkedIn']].map(([href, label]) => (
-                    <a key={label} href={href} target="_blank" rel="noreferrer" style={{ display: 'inline-block', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(232,224,208,0.45)', fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.06em', padding: '12px 22px', borderRadius: 10, textDecoration: 'none', transition: 'all 0.2s' }}>
+                    <a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noreferrer"
+                      onClick={() => track('social_clicked', { platform: label })}
+                      style={{ display: 'inline-block', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(232,224,208,0.45)', fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.06em', padding: '12px 22px', borderRadius: 10, textDecoration: 'none', transition: 'all 0.2s' }}
+                    >
                       {label}
                     </a>
                   ))}
