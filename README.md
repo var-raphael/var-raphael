@@ -74,7 +74,7 @@ Git · Docker · npm · CLI tooling · Linux
 
 ---
 
-### [Interactive 3D Ring Viewer](https://github.com/var-raphael)
+### [Interactive 3D Ring Viewer](https://ring-view.vercel.app/)
 > Real-time 3D ring configurator for jewelry e-commerce.
 
 - 360° rotation, zoom and pan via mouse and touch
