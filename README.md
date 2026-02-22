@@ -64,7 +64,7 @@ Git · Docker · npm · CLI tooling · Linux
 
 ---
 
-### [Go Rate Limiter](https://github.com/var-raphael)
+### [Go Rate Limiter](https://github.com/var-raphael/Ratelimiter)
 > High-performance rate limiting library in Go.
 
 - Handles 10,000+ requests per second

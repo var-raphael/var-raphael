@@ -307,7 +307,7 @@ const PROJECTS = [
     visual: 'img' as const,
     images: ['/portfolio-images/img/rate1.jpg', '/portfolio-images/img/rate2.jpg'],
     live: '#',
-    github: 'https://github.com/var-raphael',
+    github: 'https://github.com/var-raphael/Ratelimiter',
     closedSource: false,
     tags: ['Go'],
   },
@@ -319,28 +319,28 @@ const JEWELRY_COLLECTIONS = [
     name: 'Aqua Collection',
     desc: 'Cool-toned jewelry store with a crisp aqua palette. Showcases rings and accessories in an airy, modern layout with smooth hover transitions and a streamlined checkout experience.',
     images: ['/portfolio-images/img/ecomm-aqua1.jpg', '/portfolio-images/img/ecomm-aqua2.jpg'],
-    live: '#',
+    live: 'https://phantom-demos.vercel.app/jewelry-teal',
     tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion'],
   },
   {
     name: 'Coal Collection',
     desc: 'Bold, dark-mode e-commerce experience built for high-end prestige jewelry. Deep charcoal tones, dramatic product lighting, and an editorial grid that commands attention.',
     images: ['/portfolio-images/img/ecomm-coal1.jpg', '/portfolio-images/img/ecomm-coal2.jpg'],
-    live: '#',
+    live: 'https://phantom-demos.vercel.app/watch-coal',
     tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion'],
   },
   {
     name: 'Floral Collection',
     desc: 'Nature-inspired jewelry storefront with warm, organic aesthetics. Floral motifs woven into the layout guide customers through curated collections with an elegant, botanical feel.',
     images: ['/portfolio-images/img/ecomm-flw1.jpg', '/portfolio-images/img/ecomm-flw2.jpg'],
-    live: '#',
+    live: 'https://phantom-demos.vercel.app',
     tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion'],
   },
   {
     name: 'Ice Collection',
     desc: 'Glacial, ultra-clean jewelry landing page inspired by diamonds and frost. Minimal white space, sharp typography, and a sleek product showcase built to highlight icy, brilliant pieces.',
     images: ['/portfolio-images/img/ecomm-ice1.jpg', '/portfolio-images/img/ecomm-ice2.jpg'],
-    live: '#',
+    live: 'https://phantom-demos.vercel.app/iced',
     tags: ['Next.js', 'TypeScript', 'Tailwind', 'Framer Motion'],
   },
 ];
@@ -753,7 +753,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   {['Next.js', 'Three.js', 'TypeScript', 'Tailwind'].map(t => <TechTag key={t} label={t} gold />)}
                   <TechTag label='WebGL' gold />
                 </div>
-                <a href="#" style={{ display: 'inline-flex', alignItems: 'center', background: '#ca8a04', color: '#0a0806', fontFamily: "'DM Mono', monospace", fontSize: 11, fontWeight: 700, letterSpacing: '0.07em', padding: '11px 22px', borderRadius: 8, textDecoration: 'none', boxShadow: '0 0 24px rgba(201,168,76,0.2)', transition: 'all 0.2s', alignSelf: 'flex-start' }}>
+                <a href="https://ring-view.vercel.app/" style={{ display: 'inline-flex', alignItems: 'center', background: '#ca8a04', color: '#0a0806', fontFamily: "'DM Mono', monospace", fontSize: 11, fontWeight: 700, letterSpacing: '0.07em', padding: '11px 22px', borderRadius: 8, textDecoration: 'none', boxShadow: '0 0 24px rgba(201,168,76,0.2)', transition: 'all 0.2s', alignSelf: 'flex-start' }}>
                   View Demo ↗
                 </a>
               </div>
