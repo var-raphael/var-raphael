@@ -280,7 +280,7 @@ function PhantomitTerminal() {
 const PROJECTS = [
   {
     title: 'phantomit',
-    desc: 'CLI tool that watches your code, diffs changes, and generates professional git commit messages via Groq AI. Live on npm.',
+    desc: 'Tired of writing lazy git commit messages like "fix stuff" or forgetting to push entirely? phantomit watches your code, diffs every change, and generates a meaningful commit message automatically via Groq AI. One command replaces the part of your workflow you keep procrastinating on. Published on npm, works with any Node.js project.',
     visual: 'terminal' as const,
     images: [] as string[],
     live: 'https://phantomit-docs.vercel.app',
@@ -290,7 +290,7 @@ const PROJECTS = [
   },
   {
     title: 'PhantomTrack',
-    desc: 'Privacy-first web analytics SaaS. No cookies, no signup. One script tag — instant insights. AI weekly review, 7 export formats. 10+ active users.',
+    desc: 'Google Analytics is a cockpit when you need a light switch. Fathom and Plausible cost $14/month before you have a single paying user. PhantomTrack gives you everything that matters — visitors, pages, clicks, session duration, referrers — on one scrollable page, no cookies, no data sold, no noise. One script tag. Works on any site including React and Next.js SPAs. 10+ active users including developers from the US.',
     visual: 'img' as const,
     images: ['/portfolio-images/img/phantomtrack1.jpg', '/portfolio-images/img/phantomtrack2.jpg'],
     live: 'https://phantomtrack-docs.vercel.app',
@@ -300,7 +300,7 @@ const PROJECTS = [
   },
   {
     title: 'ClassFlow',
-    desc: 'Assignment management platform for teachers and students. Real-time grading, file uploads, comment threads, and visual dashboards.',
+    desc: 'Managing assignments over WhatsApp and email is chaos for both teachers and students. ClassFlow replaces that with a clean platform where teachers post assignments, students submit work, and grading happens in one place. Real-time grading, file uploads, threaded comments, and dashboards that show who submitted and who did not. Built for schools that cannot afford expensive tools.',
     visual: 'img' as const,
     images: ['/portfolio-images/img/classflow1.jpg', '/portfolio-images/img/classflow2.jpg'],
     live: 'https://myclassflow.vercel.app',
@@ -310,7 +310,7 @@ const PROJECTS = [
   },
   {
     title: 'Go Rate Limiter',
-    desc: 'High-performance rate limiting library in Go. Handles 10k+ req/s. DDoS tested. Token bucket and sliding window algorithms.',
+    desc: 'Most rate limiting middleware adds overhead you cannot afford at scale. This library is built in Go from the ground up for raw performance — token bucket and sliding window algorithms, tested against DDoS traffic patterns, handles 10k+ requests per second without breaking a sweat. Drop it into any Go service and your API is protected in minutes. No external dependencies.',
     visual: 'img' as const,
     images: ['/portfolio-images/img/rate1.jpg', '/portfolio-images/img/rate2.jpg'],
     live: '#',
@@ -602,7 +602,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
 
           {/* Desktop links */}
           <div className="nav-desktop-links">
-            {[['#projects','Projects'],['#frontend','Frontend'],['#blog','Blog'],['#contact','Contact']].map(([href, label]) => (
+            {[['#projects','Projects'],['#frontend','Frontend'],['#why','Why Me'],['#blog','Blog'],['#contact','Contact']].map(([href, label]) => (
               // TRACKED: desktop nav section links
               <a
                 key={href}
@@ -911,6 +911,63 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
             >
               All posts →
             </a>
+          </div>
+        </section>
+
+        <div className="divider" />
+
+        {/* ── Why Hire Me ── */}
+        <section id="why" style={{ padding: '96px 0' }}>
+          <div className="section-inner">
+            <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#6366f1', marginBottom: 12 }}>Why Work With Me</p>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 16, lineHeight: 1.1 }}>Not just another developer.</h2>
+            <p style={{ fontSize: 15, fontWeight: 300, color: 'rgba(232,224,208,0.45)', lineHeight: 1.85, marginBottom: 56, maxWidth: 620 }}>
+              I started coding at 12 on a 1GB RAM phone with stolen midnight data. Six years later I ship tools that real people use and pay to keep running. Here is what that actually means for a team.
+            </p>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+              {[
+                {
+                  icon: '⚡',
+                  title: 'I ship, not just code',
+                  body: 'PhantomTrack has 10+ active users. phantomit-cli is live on npm. ClassFlow is live. These are not tutorial projects — they are products I built, deployed, and maintain. I know what it takes to go from idea to something real people depend on.',
+                },
+                {
+                  icon: '🧠',
+                  title: 'I think before I type',
+                  body: 'Coding on a phone for 6 years with limited resources taught me to design logic on paper before writing a line. I map edge cases, question assumptions, and build things that are less buggy from the start — not after three rounds of fixes.',
+                },
+                {
+                  icon: '🔧',
+                  title: 'I fix real problems',
+                  body: 'When PhantomTrack broke on React and Next.js sites because of SPA routing, I rebuilt the tracking engine from scratch. When CORS blocked my server setup, I bought a dedicated server to keep my users running. I do not abandon problems.',
+                },
+                {
+                  icon: '📈',
+                  title: 'I learn at uncommon speed',
+                  body: 'I picked up TypeScript and Go in 2023 simultaneously while already knowing PHP and JavaScript. I was building real projects in both within weeks. New stacks, new tools, new environments — I iterate fast because I love this more than anything.',
+                },
+                {
+                  icon: '🌍',
+                  title: 'I work remotely by default',
+                  body: 'I have been self-directed since age 12 with no classroom, no bootcamp, no one looking over my shoulder. Remote work is not a perk I am adjusting to — it is the environment I have always operated in and where I do my best work.',
+                },
+                {
+                  icon: '🤝',
+                  title: 'I contribute beyond my role',
+                  body: 'I mentor students, lead a small startup team, and teach free coding classes on WhatsApp, Facebook, and Telegram. I show up fully wherever I am. A team that hires me gets someone who adds energy to the room, not just code to the repo.',
+                },
+              ].map(({ icon, title, body }) => (
+                <div key={title} style={{ background: '#141310', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 16, padding: '28px 28px 32px', transition: 'all 0.3s' }}
+                  onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(99,102,241,0.25)'; (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-3px)'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(255,255,255,0.07)'; (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'; }}
+                >
+                  <div style={{ fontSize: 24, marginBottom: 14 }}>{icon}</div>
+                  <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 700, color: 'rgba(232,224,208,0.88)', letterSpacing: '-0.01em', marginBottom: 10 }}>{title}</h3>
+                  <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.38)', lineHeight: 1.8 }}>{body}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 

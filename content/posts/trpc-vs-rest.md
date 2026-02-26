@@ -33,6 +33,6 @@ No more guessing. Your editor tells you exactly what each call needs and returns
 
 ## When I'd Still Use REST
 
-tRPC is tightly coupled to TypeScript on both ends. If you're building a public API, integrating with mobile apps, or your backend isn't Node — REST is still the right call.
+tRPC is tightly coupled to TypeScript on both ends. If you're building a public API, integrating with mobile apps, or your backend isn't Node,REST is still the right call.
 
 But for internal Next.js tools? tRPC wins every time.
