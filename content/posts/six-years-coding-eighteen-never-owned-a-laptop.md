@@ -19,7 +19,7 @@ I had no laptop. I had a version 5 Huawei Android phone. 1GB RAM. 8GB storage. U
 
 I bought a dedicated notebook, not a computer, a physical paper notebook, and started copying. HTML. CSS. JavaScript. PHP. The entire W3Schools curriculum, written out by hand, at midnight, while the rest of the house slept.
 
-Don't ask me why midnight. I couldn't afford data during peak hours.
+Don't ask me why midnight. I couldn't afford data during peak hours, yh thats it.
 
 ---
 
