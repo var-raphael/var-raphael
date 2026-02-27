@@ -4,7 +4,7 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import Lenis from 'lenis';
 import type { PostMeta } from '@/lib/posts';
 
-// ── Phantom tracking helper ───────────────────────────────────────────────────
+// Phantom tracking helper ───────────────────────────────────────────────────
 function track(event: string, props?: Record<string, string>) {
   if (typeof window !== 'undefined' && (window as any).phantom?.track) {
     (window as any).phantom.track(event, props ?? {});
