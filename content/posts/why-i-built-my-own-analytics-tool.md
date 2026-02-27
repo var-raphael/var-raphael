@@ -1,4 +1,9 @@
-# I Got Tired of Paying for Analytics I Didn't Need. So I Built My Own 📊
+---
+title: "I Got Tired of Paying for Analytics I Didn't Need. So I Built My Own"
+date: "2026-25-26"
+excerpt: "Google Analytics was overkill. Fathom and Plausible were too pricey for indie projects. So I built PhantomTrack — one page, everything you need, nothing you don't."
+tags: ["Analytics", "Privacy", "PHP", "SideProject", "IndieHacker"]
+---
 
 Analytics should be simple.
 

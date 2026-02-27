@@ -290,7 +290,7 @@ const PROJECTS = [
   },
   {
     title: 'PhantomTrack',
-    desc: 'Google Analytics is a cockpit when you need a light switch. Fathom and Plausible cost $14/month before you have a single paying user. PhantomTrack gives you everything that matters — visitors, pages, clicks, session duration, referrers — on one scrollable page, no cookies, no data sold, no noise. One script tag. Works on any site including React and Next.js SPAs. 10+ active users including developers from the US.',
+    desc: 'Google Analytics is a cockpit when you need a light switch. Fathom and Plausible cost $14/month before you have a single paying user. PhantomTrack gives you everything that matters: visitors, pages, clicks, session duration, referrers. All on one scrollable page, no cookies, no data sold, no noise. One script tag. Works on any site including React and Next.js SPAs. 10+ active users including developers from the US.',
     visual: 'img' as const,
     images: ['/portfolio-images/img/phantomtrack1.jpg', '/portfolio-images/img/phantomtrack2.jpg'],
     live: 'https://phantomtrack-docs.vercel.app',
@@ -304,13 +304,13 @@ const PROJECTS = [
     visual: 'img' as const,
     images: ['/portfolio-images/img/classflow1.jpg', '/portfolio-images/img/classflow2.jpg'],
     live: 'https://myclassflow.vercel.app',
-    github: 'https://github.com/var-raphael',
+    github: 'https://github.com/var-raphael/classflow',
     closedSource: false,
     tags: ['Next.js', 'TypeScript', 'PostgreSQL'],
   },
   {
     title: 'Go Rate Limiter',
-    desc: 'Most rate limiting middleware adds overhead you cannot afford at scale. This library is built in Go from the ground up for raw performance — token bucket and sliding window algorithms, tested against DDoS traffic patterns, handles 10k+ requests per second without breaking a sweat. Drop it into any Go service and your API is protected in minutes. No external dependencies.',
+    desc: 'Most rate limiting middleware adds overhead you cannot afford at scale. This library is built in Go from the ground up for raw performance: token bucket and sliding window algorithms, tested against DDoS traffic patterns, handles 10k+ requests per second without breaking a sweat. Drop it into any Go service and your API is protected in minutes. No external dependencies.',
     visual: 'img' as const,
     images: ['/portfolio-images/img/rate1.jpg', '/portfolio-images/img/rate2.jpg'],
     live: '#',
@@ -433,32 +433,44 @@ function JewelryCarousel() {
           <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.75 }}>{item.desc}</p>
         </div>
 
-        <div style={{ marginTop: 24 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 18 }}>
-            {/* TRACKED: jewelry carousel "View Site" */}
-            <a
-              href={item.live}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => track('jewelry_view_site_clicked', { collection: item.name })}
-              style={{ display: 'inline-flex', alignItems: 'center', background: '#6366f1', color: '#fff', fontFamily: "'DM Mono', monospace", fontSize: 11, fontWeight: 500, padding: '9px 18px', borderRadius: 8, textDecoration: 'none', letterSpacing: '0.06em', boxShadow: '0 0 20px rgba(99,102,241,0.3)', transition: 'all 0.2s' }}
-            >
-              View Site ↗
-            </a>
-            <div style={{ display: 'flex', gap: 8 }}>
-              {(['prev', 'next'] as const).map(dir => (
-                <button key={dir} onClick={() => go(dir)} style={{ width: 38, height: 38, borderRadius: 8, border: '1px solid rgba(255,255,255,0.12)', background: 'transparent', color: 'rgba(255,255,255,0.4)', fontSize: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>
-                  {dir === 'prev' ? '←' : '→'}
-                </button>
+          <div style={{ marginTop: 24 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 18 }}>
+              <div style={{ display: 'flex', gap: 8 }}>
+                {/* TRACKED: jewelry carousel "View Site" */}
+                <a
+                  href={item.live}
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => track('jewelry_view_site_clicked', { collection: item.name })}
+                  style={{ display: 'inline-flex', alignItems: 'center', background: '#6366f1', color: '#fff', fontFamily: "'DM Mono', monospace", fontSize: 11, fontWeight: 500, padding: '9px 18px', borderRadius: 8, textDecoration: 'none', letterSpacing: '0.06em', boxShadow: '0 0 20px rgba(99,102,241,0.3)', transition: 'all 0.2s' }}
+                >
+                  View Site ↗
+                </a>
+                {/* TRACKED: jewelry carousel GitHub */}
+                <a
+                  href="https://github.com/var-raphael/phantom-demo"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => track('jewelry_github_clicked', { collection: item.name })}
+                  className="btn-gh"
+                >
+                  GitHub
+                </a>
+              </div>
+              <div style={{ display: 'flex', gap: 8 }}>
+                {(['prev', 'next'] as const).map(dir => (
+                  <button key={dir} onClick={() => go(dir)} style={{ width: 38, height: 38, borderRadius: 8, border: '1px solid rgba(255,255,255,0.12)', background: 'transparent', color: 'rgba(255,255,255,0.4)', fontSize: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>
+                    {dir === 'prev' ? '←' : '→'}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: 7 }}>
+              {JEWELRY_COLLECTIONS.map((_, i) => (
+                <button key={i} onClick={() => goTo(i)} style={{ height: 6, width: i === current ? 24 : 6, borderRadius: 9999, border: 'none', padding: 0, cursor: 'pointer', background: i === current ? '#6366f1' : 'rgba(255,255,255,0.18)', transition: 'all 0.25s' }} aria-label={`Go to ${i + 1}`} />
               ))}
             </div>
           </div>
-          <div style={{ display: 'flex', gap: 7 }}>
-            {JEWELRY_COLLECTIONS.map((_, i) => (
-              <button key={i} onClick={() => goTo(i)} style={{ height: 6, width: i === current ? 24 : 6, borderRadius: 9999, border: 'none', padding: 0, cursor: 'pointer', background: i === current ? '#6366f1' : 'rgba(255,255,255,0.18)', transition: 'all 0.25s' }} aria-label={`Go to ${i + 1}`} />
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   );
@@ -508,14 +520,14 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         .section-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
         .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); margin: 0 40px; }
 
-        /* ── Project cards — full-width standalone ── */
+        /* ── Project cards , full-width standalone ── */
         .projects-grid { display: flex; flex-direction: column; gap: 20px; }
         .project-card { background: #141310; border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; overflow: hidden; display: grid; grid-template-columns: 380px 1fr; transition: all 0.3s; }
         .project-card:hover { border-color: rgba(255,255,255,0.14); transform: translateY(-3px); box-shadow: 0 24px 64px rgba(0,0,0,0.55); }
         .project-card-media { height: 100%; min-height: 240px; }
         .project-card-body { padding: 32px 40px; display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.06); }
 
-        /* ── Ring card — asymmetric 2-col ── */
+        /* ── Ring card , asymmetric 2-col ── */
         .ring-card { display: grid; grid-template-columns: 5fr 7fr; background: #141310; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; transition: all 0.3s; }
         .ring-card:hover { border-color: rgba(234,179,8,0.2); box-shadow: 0 0 80px rgba(201,168,76,0.08); }
 
@@ -564,6 +576,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
           .carousel-info-panel { padding: 28px 24px; }
           .contact-row { flex-direction: column; gap: 32px; align-items: center; text-align: center; }
           .contact-links-row { justify-content: center; }
+          .about-inner-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
           .section-inner { padding: 0 28px; }
           .nav-desktop-links { display: none; }
           .nav-hamburger { display: flex; }
@@ -602,7 +615,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
 
           {/* Desktop links */}
           <div className="nav-desktop-links">
-            {[['#projects','Projects'],['#frontend','Frontend'],['#why','Why Me'],['#blog','Blog'],['#contact','Contact']].map(([href, label]) => (
+            {[['#about','About'],['#projects','Projects'],['#frontend','Frontend'],['#why','Why Me'],['#blog','Blog'],['#contact','Contact']].map(([href, label]) => (
               // TRACKED: desktop nav section links
               <a
                 key={href}
@@ -638,7 +651,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
 
         {/* Mobile dropdown */}
         <div className={`nav-mobile-menu${menuOpen ? ' open' : ''}`}>
-          {[['#projects','Projects'],['#frontend','Frontend'],['#blog','Blog'],['#contact','Contact']].map(([href, label]) => (
+          {[['#about','About'],['#projects','Projects'],['#frontend','Frontend'],['#why','Why Me'],['#blog','Blog'],['#contact','Contact']].map(([href, label]) => (
             // TRACKED: mobile nav section links
             <a
               key={href}
@@ -673,9 +686,9 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
           </h1>
 
           <p style={{ fontSize: 'clamp(15px, 2vw, 18px)', fontWeight: 300, color: 'rgba(232,224,208,0.45)', letterSpacing: '0.02em', marginTop: 20, marginBottom: 40, maxWidth: 500 }}>
-            6 years of code.{' '}
+            Fullstack developer.{' '}
             <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.28)', color: '#a5b4fc', borderRadius: 4, padding: '3px 10px', margin: '0 4px' }}>18 yrs old</span>
-            {' '}Building backends that scale, frontends that ship.
+            {' '}4 shipped products. Real users. No excuses.
           </p>
 
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 20 }}>
@@ -715,7 +728,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
           </div>
 
           <div style={{ display: 'flex', gap: 56, flexWrap: 'wrap', justifyContent: 'center' }}>
-            {[{ val: '6', unit: '+', label: 'Years Coding' }, { val: '4', unit: '+', label: 'Live Projects' }, { val: '10', unit: '+', label: 'Active Users' }].map(({ val, unit, label }) => (
+            {[{ val: '6', unit: '+', label: 'Years Coding' }, { val: '4', unit: '', label: 'Shipped Products' }, { val: '10', unit: '+', label: 'Users in the US' }].map(({ val, unit, label }) => (
               <div key={label} style={{ textAlign: 'center' }}>
                 <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 38, fontWeight: 700, color: '#e8e0d0', letterSpacing: '-0.03em', lineHeight: 1 }}>
                   {val}<span style={{ color: '#6366f1' }}>{unit}</span>
@@ -723,6 +736,75 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                 <div style={{ fontSize: 11, fontWeight: 400, color: 'rgba(232,224,208,0.32)', marginTop: 7, letterSpacing: '0.07em', textTransform: 'uppercase' }}>{label}</div>
               </div>
             ))}
+          </div>
+        </section>
+
+        <div className="divider" />
+
+        {/* ── About ── */}
+        <section id="about" style={{ padding: '80px 0' }}>
+          <div className="section-inner">
+            <div className="about-inner-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+              <div>
+                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#6366f1', marginBottom: 12 }}>About</p>
+                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 24 }}>
+                  I build things<br /><em style={{ fontStyle: 'italic', color: 'rgba(165,180,252,0.8)' }}>people actually use.</em>
+                </h2>
+                <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.45)', lineHeight: 1.9, marginBottom: 16 }}>
+                  I am a fullstack developer with 6 years of experience across PHP, TypeScript, Go, and Node.js. I have shipped four real products, not demos, not clones, tools with real users, real infrastructure, and real problems I had to solve to keep them running.
+                </p>
+                <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.45)', lineHeight: 1.9, marginBottom: 32 }}>
+                  I finished high school last year and I am applying to study Computer Science next January. In the meantime I have not been waiting around. Every product in this portfolio was designed, built, and maintained by me alone.
+                </p>
+                <a
+                  href="#projects"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.08em', color: '#a5b4fc', textDecoration: 'none', borderBottom: '1px solid rgba(165,180,252,0.3)', paddingBottom: 2, transition: 'all 0.2s' }}
+                >
+                  See the work →
+                </a>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                {[
+                  {
+                    icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>,
+                    label: 'Primary Stack',
+                    pills: ['TypeScript', 'Next.js', 'PHP', 'Go'],
+                  },
+                  {
+                    icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>,
+                    label: 'Databases',
+                    pills: ['PostgreSQL', 'MySQL'],
+                  },
+                  {
+                    icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>,
+                    label: 'Currently',
+                    pills: ['Open to remote roles worldwide'],
+                  },
+                  {
+                    icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>,
+                    label: 'Location',
+                    pills: ['Nigeria', 'UTC+1'],
+                  },
+                  {
+                    icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+                    label: 'Response time',
+                    pills: ['Within 24 hours'],
+                  },
+                ].map(({ icon, label, pills }) => (
+                  <div key={label} style={{ display: 'flex', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid rgba(255,255,255,0.05)', gap: 16 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 7, minWidth: 140, flexShrink: 0 }}>
+                      <span style={{ color: 'rgba(99,102,241,0.6)', display: 'flex', alignItems: 'center' }}>{icon}</span>
+                      <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(232,224,208,0.25)' }}>{label}</span>
+                    </div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                      {pills.map(p => (
+                        <span key={p} style={{ display: 'inline-flex', alignItems: 'center', fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.04em', color: 'rgba(232,224,208,0.5)', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 99, padding: '3px 10px' }}>{p}</span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 
@@ -838,10 +920,10 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                 <span style={{ position: 'absolute', top: 16, left: 16, fontFamily: "'DM Mono', monospace", fontSize: 10, background: 'rgba(234,179,8,0.1)', border: '1px solid rgba(234,179,8,0.25)', color: 'rgba(234,179,8,0.65)', borderRadius: 4, padding: '4px 10px', letterSpacing: '0.1em', textTransform: 'uppercase' }}>3D Interactive</span>
               </div>
               <div style={{ padding: '48px 52px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(234,179,8,0.55)', marginBottom: 14 }}>Featured — 3D Viewer</p>
+                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(234,179,8,0.55)', marginBottom: 14 }}>Featured: 3D Viewer</p>
                 <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 16, lineHeight: 1.2 }}>Interactive 3D Ring Viewer</h3>
                 <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.8, marginBottom: 24 }}>
-                  A real-time 3D ring viewer for jewelry e-commerce. Customers rotate, zoom and inspect rings from every angle before buying — reducing returns and building confidence.
+                  A real-time 3D ring viewer for jewelry e-commerce. Customers rotate, zoom and inspect rings from every angle before buying, reducing returns and building confidence.
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginBottom: 26 }}>
                   {['360° rotation with mouse and touch', 'Real-time zoom and pan controls', 'Multiple material & finish previews', 'Embeddable in any store page'].map(f => (
@@ -855,6 +937,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   {['Next.js', 'Three.js', 'TypeScript', 'Tailwind'].map(t => <TechTag key={t} label={t} gold />)}
                   <TechTag label='WebGL' gold />
                 </div>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                 {/* TRACKED: 3D ring viewer demo link */}
                 <a
                   href="https://ring-view.vercel.app/"
@@ -863,6 +946,18 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                 >
                   View Demo ↗
                 </a>
+                {/* TRACKED: 3D ring viewer GitHub */}
+                <a
+                  href="https://github.com/var-raphael/atelier"
+                  target="_blank"
+                  rel="noreferrer"
+                  onClick={() => track('ring_github_clicked')}
+                  className="btn-gh"
+                  style={{ alignSelf: 'flex-start' }}
+                >
+                  GitHub
+                </a>
+                </div>
               </div>
             </div>
 
@@ -886,7 +981,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
             <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#6366f1', marginBottom: 12 }}>Recent Writing</p>
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 14, lineHeight: 1.1 }}>From the Blog</h2>
             <div>
-              {posts.slice(0, 2).map(post => (
+              {posts.slice(0, 3).map(post => (
                 // TRACKED: individual blog post clicks
                 <a
                   key={post.slug}
@@ -909,7 +1004,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
               onClick={() => track('blog_all_posts_clicked')}
               style={{ display: 'inline-block', marginTop: 32, fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.1em', color: '#6366f1', textDecoration: 'none', borderBottom: '1px solid rgba(99,102,241,0.35)', paddingBottom: 2, transition: 'all 0.2s' }}
             >
-              All posts →
+              All posts ({posts.length}) →
             </a>
           </div>
         </section>
@@ -922,38 +1017,62 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
             <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#6366f1', marginBottom: 12 }}>Why Work With Me</p>
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 16, lineHeight: 1.1 }}>Not just another developer.</h2>
             <p style={{ fontSize: 15, fontWeight: 300, color: 'rgba(232,224,208,0.45)', lineHeight: 1.85, marginBottom: 56, maxWidth: 620 }}>
-              I started coding at 12 on a 1GB RAM phone with stolen midnight data. Six years later I ship tools that real people use and pay to keep running. Here is what that actually means for a team.
+              I started coding at 12 on a 1GB RAM phone with no laptop, no mentor, and no shortcuts. Six years later I ship tools that real people use and pay to keep running. Here is what that actually means for a team.
             </p>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
               {[
                 {
-                  icon: '⚡',
+                  icon: (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                    </svg>
+                  ),
                   title: 'I ship, not just code',
-                  body: 'PhantomTrack has 10+ active users. phantomit-cli is live on npm. ClassFlow is live. These are not tutorial projects — they are products I built, deployed, and maintain. I know what it takes to go from idea to something real people depend on.',
+                  body: 'PhantomTrack has 10+ active users. phantomit-cli is live on npm. ClassFlow is live. These are not tutorial projects. They are products I built, deployed, and maintain. I know what it takes to go from idea to something real people depend on.',
                 },
                 {
-                  icon: '🧠',
+                  icon: (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><circle cx="12" cy="12" r="10" /><line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                  ),
                   title: 'I think before I type',
-                  body: 'Coding on a phone for 6 years with limited resources taught me to design logic on paper before writing a line. I map edge cases, question assumptions, and build things that are less buggy from the start — not after three rounds of fixes.',
+                  body: 'Coding on a phone for 6 years with limited resources taught me to design logic on paper before writing a line. I map edge cases, question assumptions, and build things that are less buggy from the start. Not after three rounds of fixes.',
                 },
                 {
-                  icon: '🔧',
+                  icon: (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                    </svg>
+                  ),
                   title: 'I fix real problems',
                   body: 'When PhantomTrack broke on React and Next.js sites because of SPA routing, I rebuilt the tracking engine from scratch. When CORS blocked my server setup, I bought a dedicated server to keep my users running. I do not abandon problems.',
                 },
                 {
-                  icon: '📈',
+                  icon: (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" /><polyline points="17 6 23 6 23 12" />
+                    </svg>
+                  ),
                   title: 'I learn at uncommon speed',
-                  body: 'I picked up TypeScript and Go in 2023 simultaneously while already knowing PHP and JavaScript. I was building real projects in both within weeks. New stacks, new tools, new environments — I iterate fast because I love this more than anything.',
+                  body: 'I picked up TypeScript and Go in 2023 simultaneously while already knowing PHP and JavaScript. I was building real projects in both within weeks. New stacks, new tools, new environments. I iterate fast because I love this more than anything.',
                 },
                 {
-                  icon: '🌍',
+                  icon: (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                    </svg>
+                  ),
                   title: 'I work remotely by default',
-                  body: 'I have been self-directed since age 12 with no classroom, no bootcamp, no one looking over my shoulder. Remote work is not a perk I am adjusting to — it is the environment I have always operated in and where I do my best work.',
+                  body: 'I have been self-directed since age 12 with no classroom, no bootcamp, no one looking over my shoulder. Remote work is not a perk I am adjusting to. It is the environment I have always operated in and where I do my best work.',
                 },
                 {
-                  icon: '🤝',
+                  icon: (
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                  ),
                   title: 'I contribute beyond my role',
                   body: 'I mentor students, lead a small startup team, and teach free coding classes on WhatsApp, Facebook, and Telegram. I show up fully wherever I am. A team that hires me gets someone who adds energy to the room, not just code to the repo.',
                 },
@@ -962,7 +1081,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(99,102,241,0.25)'; (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-3px)'; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(255,255,255,0.07)'; (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'; }}
                 >
-                  <div style={{ fontSize: 24, marginBottom: 14 }}>{icon}</div>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#a5b4fc', marginBottom: 16 }}>{icon}</div>
                   <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 700, color: 'rgba(232,224,208,0.88)', letterSpacing: '-0.01em', marginBottom: 10 }}>{title}</h3>
                   <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.38)', lineHeight: 1.8 }}>{body}</p>
                 </div>
@@ -985,9 +1104,30 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                 <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 4vw, 48px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 16 }}>
                   Let's build something worth shipping.
                 </h2>
-                <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.85, marginBottom: 32, maxWidth: 420 }}>
+                <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.85, marginBottom: 16, maxWidth: 420 }}>
                   Open to remote roles, freelance contracts, and interesting problems. If you have one, let's talk.
                 </p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 32 }}>
+                  {[
+                    {
+                      icon: <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>,
+                      label: 'Nigeria',
+                    },
+                    {
+                      icon: <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+                      label: 'UTC+1',
+                    },
+                    {
+                      icon: <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>,
+                      label: 'Remote worldwide',
+                    },
+                  ].map(({ icon, label }) => (
+                    <span key={label} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.06em', color: 'rgba(232,224,208,0.4)', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 99, padding: '4px 10px' }}>
+                      <span style={{ color: 'rgba(165,180,252,0.6)', display: 'flex', alignItems: 'center' }}>{icon}</span>
+                      {label}
+                    </span>
+                  ))}
+                </div>
                 <div className="contact-links-row">
                   {/* TRACKED: contact section email */}
                   <a
@@ -1017,7 +1157,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         </section>
 
         <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '26px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-          <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(232,224,208,0.2)', letterSpacing: '0.06em' }}>© 2026 Raphael Samuel — var-raphael</p>
+          <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(232,224,208,0.2)', letterSpacing: '0.06em' }}>© 2026 Raphael Samuel / var-raphael</p>
           <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(232,224,208,0.2)', letterSpacing: '0.06em' }}>Built with Next.js + TypeScript</p>
         </footer>
 

@@ -1,4 +1,9 @@
-# How I Built a CLI Tool That Writes Git Commit Messages Using AI ⚡
+---
+title: "How I Built a CLI Tool That Writes Git Commit Messages Using AI"
+date: "2026-27-26"
+excerpt: "I was tired of typing 'fix stuff' as a commit message. So I built phantomit-cli — a tool that reads your Git diff and generates meaningful commit messages automatically."
+tags: ["CLI", "AI", "Git", "npm", "DevTools"]
+---
 
 Every developer has been there.
 
