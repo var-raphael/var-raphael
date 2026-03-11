@@ -1,6 +1,6 @@
 ---
 title: "I've Been Coding for 6 Years. I'm 18. I've Never Owned a Laptop."
-date: "2026-27-26"
+date: "2026-3-1"
 excerpt: "No laptop. No stable internet. No mentor. Just a Huawei Android phone, an obsession I couldn't explain, and a notebook filled cover to cover with code I copied by hand at midnight."
 tags: ["Story", "Career", "SelfTaught", "MobileCoding", "Developer"]
 ---

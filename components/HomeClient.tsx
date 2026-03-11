@@ -19,6 +19,9 @@ const TECH_ICONS: Record<string, string> = {
   'React':      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
   'PHP':        'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg',
   'Go':         'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/go/go-original-wordmark.svg',
+  'Python':     'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
+  'Ethereum':   'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/ethereum.svg',
+  'HTMX':       'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/htmx.svg',
   'PostgreSQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
   'MySQL':      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',
   'Docker':     'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
@@ -39,7 +42,7 @@ const TECH_ICONS: Record<string, string> = {
 // ── TechTag ───────────────────────────────────────────────────────────────────
 function TechTag({ label, gold = false }: { label: string; gold?: boolean }) {
   const icon = TECH_ICONS[label];
-  const needsInvert = label === 'Next.js' || label === 'Three.js' || label === 'Framer Motion' || label === 'WebGL';
+  const needsInvert = label === 'Next.js' || label === 'Three.js' || label === 'Framer Motion' || label === 'WebGL' || label === 'Ethereum' || label === 'HTMX';
 
   const style: React.CSSProperties = {
     display: 'inline-flex',
@@ -309,6 +312,38 @@ const PROJECTS = [
     tags: ['Next.js', 'TypeScript', 'PostgreSQL'],
   },
   {
+    title: 'NaijaStock',
+    desc: 'A Nigerian stock market platform for purchasing and exchanging stocks built for the local market. Real-time trading, portfolio tracking, and blockchain-backed transactions via Ethereum. Designed to make Nigerian equities accessible to everyday investors without the friction of traditional brokers.',
+    visual: 'img' as const,
+    images: ['/portfolio-images/img/stockvel1.jpg', '/portfolio-images/img/stockvel2.jpg'],
+    live: '#',
+    github: 'https://github.com/var-raphael/nigeria-stock',
+    closedSource: false,
+    wip: true,
+    tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'Ethereum'],
+  },
+  {
+    title: 'PhantomScrape',
+    desc: 'Most scraping tools are either too heavy to self-host or charge per request. PhantomScrape lets you bulk-scrape any list of URLs, clean the raw HTML into structured data using Groq AI, and export results in JSON, CSV, XML, HTML, or TXT. Live status tracking per URL, keyless auth, and a clean dashboard. Flask backend on Render, Next.js frontend on Vercel, Supabase for storage.',
+    visual: 'img' as const,
+    images: ['/portfolio-images/img/phantomscrape1.jpg', '/portfolio-images/img/phantomscrape2.jpg'],
+    live: 'https://phantomscrape.vercel.app',
+    github: 'https://github.com/var-raphael/phantomscrape-frontend',
+    closedSource: false,
+    wip: false,
+    tags: ['Python', 'Next.js', 'TypeScript', 'PostgreSQL'],
+  },
+  {
+    title: 'PhantomNotes',
+    desc: 'Uploading a 40-page PDF to get a wall of text back is not useful. PhantomNotes lets you choose how you want your document summarized: student study notes, business action items, legal clause extraction, research methodology, meeting decisions, and more. Ten specialized summary types, PDF and text input, multiple export formats, and documents are never stored permanently.',
+    visual: 'img' as const,
+    images: ['/portfolio-images/img/phantomnotes1.jpg', '/portfolio-images/img/phantomnotes2.jpg'],
+    live: 'https://phantom-notes.onrender.com',
+    github: 'https://github.com/var-raphael/phantomNotes',
+    closedSource: false,
+    tags: ['Python', 'HTMX', 'JavaScript', 'CSS3'],
+  },
+  {
     title: 'Go Rate Limiter',
     desc: 'Most rate limiting middleware adds overhead you cannot afford at scale. This library is built in Go from the ground up for raw performance: token bucket and sliding window algorithms, tested against DDoS traffic patterns, handles 10k+ requests per second without breaking a sweat. Drop it into any Go service and your API is protected in minutes. No external dependencies.',
     visual: 'img' as const,
@@ -352,7 +387,7 @@ const JEWELRY_COLLECTIONS = [
   },
 ];
 
-const STACK = ['Next.js', 'TypeScript', 'PHP', 'PostgreSQL', 'MySQL', 'Go', 'Node.js', 'Git'];
+const STACK = ['Next.js', 'TypeScript', 'PHP', 'Python', 'PostgreSQL', 'MySQL', 'Go', 'Node.js', 'Git'];
 
 function useLenis() {
   useEffect(() => {
@@ -688,7 +723,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
           <p style={{ fontSize: 'clamp(15px, 2vw, 18px)', fontWeight: 300, color: 'rgba(232,224,208,0.45)', letterSpacing: '0.02em', marginTop: 20, marginBottom: 40, maxWidth: 500 }}>
             Fullstack developer.{' '}
             <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.28)', color: '#a5b4fc', borderRadius: 4, padding: '3px 10px', margin: '0 4px' }}>18 yrs old</span>
-            {' '}4 shipped products. Real users. No excuses.
+            {' '}6 shipped products. Real users. No excuses.
           </p>
 
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 20 }}>
@@ -728,7 +763,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
           </div>
 
           <div style={{ display: 'flex', gap: 56, flexWrap: 'wrap', justifyContent: 'center' }}>
-            {[{ val: '6', unit: '+', label: 'Years Coding' }, { val: '4', unit: '', label: 'Shipped Products' }, { val: '10', unit: '+', label: 'Users in the US' }].map(({ val, unit, label }) => (
+            {[{ val: '6', unit: '+', label: 'Years Coding' }, { val: '6', unit: '', label: 'Shipped Products' }, { val: '10', unit: '+', label: 'Users in the US' }].map(({ val, unit, label }) => (
               <div key={label} style={{ textAlign: 'center' }}>
                 <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 38, fontWeight: 700, color: '#e8e0d0', letterSpacing: '-0.03em', lineHeight: 1 }}>
                   {val}<span style={{ color: '#6366f1' }}>{unit}</span>
@@ -751,7 +786,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   I build things<br /><em style={{ fontStyle: 'italic', color: 'rgba(165,180,252,0.8)' }}>people actually use.</em>
                 </h2>
                 <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.45)', lineHeight: 1.9, marginBottom: 16 }}>
-                  I am a fullstack developer with 6 years of experience across PHP, TypeScript, Go, and Node.js. I have shipped four real products, not demos, not clones, tools with real users, real infrastructure, and real problems I had to solve to keep them running.
+                  I am a fullstack developer with 6 years of experience across PHP, TypeScript, Python, Go, and Node.js. I have shipped six real products, not demos, not clones, tools with real users, real infrastructure, and real problems I had to solve to keep them running.
                 </p>
                 <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.45)', lineHeight: 1.9, marginBottom: 32 }}>
                   I finished high school last year and I am applying to study Computer Science next January. In the meantime I have not been waiting around. Every product in this portfolio was designed, built, and maintained by me alone.
@@ -768,7 +803,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   {
                     icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>,
                     label: 'Primary Stack',
-                    pills: ['TypeScript', 'Next.js', 'PHP', 'Go'],
+                    pills: ['TypeScript', 'Next.js', 'PHP', 'Python', 'Go'],
                   },
                   {
                     icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>,
@@ -891,6 +926,12 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                       {p.closedSource && (
                         <span style={{ display: 'inline-block', border: '1px solid rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.2)', fontFamily: "'DM Mono', monospace", fontSize: 11, padding: '9px 16px', borderRadius: 7, cursor: 'default' }}>
                           Closed Source
+                        </span>
+                      )}
+                      {p.wip && (
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, border: '1px solid rgba(234,179,8,0.25)', color: 'rgba(234,179,8,0.75)', background: 'rgba(234,179,8,0.07)', fontFamily: "'DM Mono', monospace", fontSize: 11, padding: '9px 16px', borderRadius: 7, cursor: 'default' }}>
+                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(234,179,8,0.8)', boxShadow: '0 0 6px rgba(234,179,8,0.5)', animation: 'pulse 2s ease-in-out infinite' }} />
+                          Currently Working On
                         </span>
                       )}
                     </div>
