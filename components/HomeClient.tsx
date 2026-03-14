@@ -521,7 +521,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         {/* Hero */}
         <section style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 24px 80px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(232,224,208,0.3)', marginBottom: 28 }}>
-            <span>Fullstack Developer</span>
+            <span>AI Tooling & Data Infrastructure Engineer</span>
             <span style={{ display: 'block', width: 40, height: 1, background: '#6366f1', opacity: 0.5 }} />
           </div>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(58px, 10vw, 112px)', fontWeight: 800, lineHeight: 0.92, letterSpacing: '-0.03em', color: '#e8e0d0', marginBottom: 8 }}>
@@ -529,7 +529,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
             <em style={{ fontStyle: 'italic', background: 'linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Samuel</em>
           </h1>
           <p style={{ fontSize: 'clamp(15px, 2vw, 18px)', fontWeight: 300, color: 'rgba(232,224,208,0.45)', letterSpacing: '0.02em', marginTop: 20, marginBottom: 40, maxWidth: 500 }}>
-            Fullstack developer.{' '}
+            AI Tooling & Data Infrastructure Engineer.{' '}
             <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.28)', color: '#a5b4fc', borderRadius: 4, padding: '3px 10px', margin: '0 4px' }}>18 yrs old</span>
             {' '}7 shipped products. Real users. No excuses.
           </p>
@@ -568,7 +568,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   I build things<br /><em style={{ fontStyle: 'italic', color: 'rgba(165,180,252,0.8)' }}>people actually use.</em>
                 </h2>
                 <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.45)', lineHeight: 1.9, marginBottom: 16 }}>
-                  I am a fullstack developer with 6 years of experience across PHP, TypeScript, Python, Go, and Node.js. I have shipped seven real products, not demos, not clones, tools with real users, real infrastructure, and real problems I had to solve to keep them running.
+                  I am an AI tooling and data infrastructure engineer with 6 years of experience across PHP, TypeScript, Python, Go, and Node.js. I have shipped seven real products, not demos, not clones, tools with real users, real infrastructure, and real problems I had to solve to keep them running.
                 </p>
                 <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.45)', lineHeight: 1.9, marginBottom: 32 }}>
                   I finished high school last year and I am applying to study Computer Science next January. In the meantime I have not been waiting around. Every product in this portfolio was designed, built, and maintained by me alone.
