@@ -5,7 +5,7 @@ import Lenis from 'lenis';
 import type { PostMeta } from '@/lib/posts';
 import {
   TECH_ICONS, STACK, TERMINAL_LINES, PHANTOMCRAWL_LINES,
-  PROJECTS, JEWELRY_COLLECTIONS,
+  PROJECTS, JEWELRY_COLLECTIONS, PHANTOMCLEAN_LINES,
 } from './data';
 
 // ── Phantom tracking helper ───────────────────────────────────────────────────
@@ -277,6 +277,56 @@ function PhantomCrawlTerminal() {
       </div>
       <div ref={ref} style={{ padding: '14px 18px', minHeight: 165, maxHeight: 205, overflowY: 'auto' }}>
         {PHANTOMCRAWL_LINES.map((line, i) => visible.includes(i) && (
+          <div key={i} style={{ marginBottom: 5, color: lineColor(line.type), lineHeight: 1.65 }}>
+            {line.type === 'thinking'
+              ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                  <span>{line.text}</span>
+                  {[0,1,2].map(d => <span key={d} style={{ width: 3, height: 3, borderRadius: '50%', background: '#a78bfa', display: 'inline-block', opacity: 0.5, animation: `pulse 1s ${d*0.2}s ease-in-out infinite` }} />)}
+                </span>
+              : line.text}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ── PhantomClean Terminal ────────────────────────────────────────────────────
+function PhantomCleanTerminal() {
+  const [visible, setVisible] = useState<number[]>([]);
+  const [tick, setTick] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    setVisible([]);
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    PHANTOMCLEAN_LINES.forEach((line, i) => {
+      const t = setTimeout(() => { setVisible(prev => [...prev, i]); if (ref.current) ref.current.scrollTop = ref.current.scrollHeight; }, line.delay);
+      timers.push(t);
+    });
+    timers.push(setTimeout(() => setTick(t => t + 1), 9500));
+    return () => timers.forEach(clearTimeout);
+  }, [tick]);
+
+  const lineColor = (type: string) => {
+    if (type === 'success') return '#4ade80';
+    if (type === 'thinking') return '#a78bfa';
+    if (type === 'label') return 'rgba(232,224,208,0.65)';
+    if (type === 'dim') return 'rgba(232,224,208,0.3)';
+    return '#e8e0d0';
+  };
+
+  return (
+    <div style={{ background: '#08080e', borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(124,106,247,0.15)', fontFamily: "'DM Mono', monospace", fontSize: 11 }}>
+      <div style={{ background: '#0d0d14', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: 6, borderBottom: '1px solid rgba(124,106,247,0.08)' }}>
+        {['#ff5f57','#febc2e','#28c840'].map(c => <div key={c} style={{ width: 10, height: 10, borderRadius: '50%', background: c }} />)}
+        <span style={{ marginLeft: 8, color: 'rgba(124,106,247,0.4)', fontSize: 10, letterSpacing: '0.06em' }}>phantomclean</span>
+        <span style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 9, color: 'rgba(124,106,247,0.6)', background: 'rgba(124,106,247,0.08)', border: '1px solid rgba(124,106,247,0.18)', borderRadius: 4, padding: '2px 7px', letterSpacing: '0.1em' }}>
+          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#7c6af7', boxShadow: '0 0 6px #7c6af7', animation: 'pulse 2s ease-in-out infinite' }} />
+          LIVE
+        </span>
+      </div>
+      <div ref={ref} style={{ padding: '14px 18px', minHeight: 165, maxHeight: 205, overflowY: 'auto' }}>
+        {PHANTOMCLEAN_LINES.map((line, i) => visible.includes(i) && (
           <div key={i} style={{ marginBottom: 5, color: lineColor(line.type), lineHeight: 1.65 }}>
             {line.type === 'thinking'
               ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
@@ -613,9 +663,9 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
 
             <div className="projects-grid">
               {PROJECTS.map(p => (
-                <div key={p.title} className={`project-card${p.title === 'PhantomCrawl' ? ' phantomcrawl-card' : ''}`}>
+                <div key={p.title} className={`project-card${p.title === 'PhantomCrawl' ? ' phantomcrawl-card' : ''}${p.title === 'PhantomClean' ? ' phantomclean-card' : ''}`}>
                   {/* Media */}
-                  <div className="project-card-media" style={{ background: p.title === 'PhantomCrawl' ? '#080a08' : '#0e0d0c', overflow: 'hidden', display: 'flex', alignItems: 'stretch' }}>
+                  <div className="project-card-media" style={{ background: p.title === 'PhantomCrawl' ? '#080a08' : p.title === 'PhantomClean' ? '#08080e' : '#0e0d0c', overflow: 'hidden', display: 'flex', alignItems: 'stretch' }}>
                     {p.visual === 'terminal' ? (
                       <div style={{ padding: 20, background: '#1a1815', width: '100%', display: 'flex', alignItems: 'center' }}>
                         <PhantomitTerminal />
@@ -623,6 +673,10 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                     ) : p.visual === 'phantomcrawl' ? (
                       <div style={{ padding: 20, background: '#080a08', width: '100%', display: 'flex', alignItems: 'center' }}>
                         <PhantomCrawlTerminal />
+                      </div>
+                    ) : p.visual === 'phantomclean' ? (
+                      <div style={{ padding: 20, background: '#08080e', width: '100%', display: 'flex', alignItems: 'center' }}>
+                        <PhantomCleanTerminal />
                       </div>
                     ) : p.images.length > 0 ? (
                       <CyclingImage images={p.images} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
@@ -648,12 +702,18 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                           v1.0.0
                         </span>
                       )}
+                      {p.title === 'PhantomClean' && (
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 5, fontSize: 10, fontFamily: "'DM Mono', monospace", fontWeight: 500, border: '1px solid rgba(124,106,247,0.25)', background: 'rgba(124,106,247,0.07)', color: 'rgba(165,180,252,0.75)' }}>
+                          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#7c6af7', boxShadow: '0 0 5px #7c6af7', animation: 'pulse 2s ease-in-out infinite' }} />
+                          v1.0.0
+                        </span>
+                      )}
                     </div>
-                    <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: p.title === 'PhantomCrawl' ? 'rgba(200,255,200,0.9)' : 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 10 }}>{p.title}</h3>
+                    <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: p.title === 'PhantomCrawl' ? 'rgba(200,255,200,0.9)' : p.title === 'PhantomClean' ? 'rgba(196,181,253,0.9)' : 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 10 }}>{p.title}</h3>
                     <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.75, marginBottom: 22, flex: 1 }}>{p.desc}</p>
                     <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                       <a href={p.live} target="_blank" rel="noreferrer" className="btn-live" onClick={() => track('project_link_clicked', { project: p.title, type: 'docs' })}>
-                        {p.title === 'PhantomCrawl' ? 'Docs ↗' : p.title === 'phantomit' ? 'Docs ↗' : p.live === '#' ? 'GitHub ↗' : 'View Site ↗'}
+                        {p.title === 'PhantomCrawl' || p.title === 'PhantomClean' || p.title === 'phantomit' ? 'Docs ↗' : p.live === '#' ? 'GitHub ↗' : 'View Site ↗'}
                       </a>
                       {!p.closedSource && p.github && (
                         <a href={p.github} target="_blank" rel="noreferrer" className="btn-gh" onClick={() => track('project_link_clicked', { project: p.title, type: 'github' })}>GitHub</a>
@@ -759,7 +819,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
               {[
-                { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>, title: 'I ship, not just code', body: 'PhantomTrack has 10+ active users. phantomit-cli is live on npm. ClassFlow is live. PhantomCrawl scraped Cloudflare.com across 100+ pages with zero blocks. These are not tutorial projects. They are products I built, deployed, and maintain.' },
+                { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>, title: 'I ship, not just code', body: 'PhantomTrack has 10+ active users. phantomit-cli is live on npm. ClassFlow is live. PhantomCrawl scraped Cloudflare.com across 100+ pages with zero blocks. PhantomClean is the companion cleaner that turns raw scraped data into clean AI-ready datasets. These are not tutorial projects. They are products I built, deployed, and maintain.' },
                 { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="12" r="10"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>, title: 'I think before I type', body: 'Coding on a phone for 6 years with limited resources taught me to design logic on paper before writing a line. I map edge cases, question assumptions, and build things that are less buggy from the start. Not after three rounds of fixes.' },
                 { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>, title: 'I fix real problems', body: 'When PhantomTrack broke on React and Next.js sites because of SPA routing, I rebuilt the tracking engine from scratch. When CORS blocked my server setup, I bought a dedicated server to keep my users running. I do not abandon problems.' },
                 { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>, title: 'I learn at uncommon speed', body: 'I picked up TypeScript and Go in 2023 simultaneously while already knowing PHP and JavaScript. I was building real projects in both within weeks. New stacks, new tools, new environments. I iterate fast because I love this more than anything.' },

@@ -59,17 +59,44 @@ export const PHANTOMCRAWL_LINES = [
   { delay: 7100, text: 'Output : ~/phantomcrawl/scraped', type: 'dim' },
 ];
 
+export const PHANTOMCLEAN_LINES = [
+  { delay: 0,    text: '$ phantomclean start', type: 'cmd' },
+  { delay: 600,  text: 'Scanning existing files...', type: 'dim' },
+  { delay: 1100, text: '  → Found 47 folders - processing in batches of 3 (16 batches total)', type: 'dim' },
+  { delay: 1700, text: '  → Batch 1/16', type: 'label' },
+  { delay: 2000, text: '    → cloudflare.com', type: 'dim' },
+  { delay: 2300, text: '    → anthropic.com', type: 'dim' },
+  { delay: 2600, text: '    → openai.com', type: 'dim' },
+  { delay: 3800, text: '  ✓ [1] cloudflare.com (groq/llama-3.3-70b) score:0.94 words:1842', type: 'success' },
+  { delay: 4200, text: '  ✓ [2] anthropic.com (groq/llama-3.3-70b) score:0.97 words:2103', type: 'success' },
+  { delay: 4600, text: '  ✓ [3] openai.com (rules) score:1.00 words:948', type: 'success' },
+  { delay: 5000, text: '  → Batch 2/16', type: 'label' },
+  { delay: 5600, text: '  ✓ [4] huggingface.co (groq/llama-3.3-70b) score:0.91 words:517', type: 'success' },
+  { delay: 6200, text: '✓ Initial scan complete.', type: 'success' },
+  { delay: 6800, text: '→ Watching for new files (debounce: 2s)...', type: 'thinking' },
+];
+
 // ── Projects ──────────────────────────────────────────────────────────────────
 export const PROJECTS = [
   {
     title: 'PhantomCrawl',
-    desc: 'Most scrapers get blocked the moment they hit a protected site. PhantomCrawl does not. It uses a 4-layer escalation engine: TLS fingerprinting that mimics Chrome at the handshake level, network hijacking to extract embedded JSON before the page even renders, XHR/fetch interception to capture live API responses, and headless browser fallback via go-rod or Browserless. It scraped Cloudflare.com — a site protected by Cloudflare itself — across 100+ pages at depth 1, zero blocks, all Layer 1. Includes AI cleaning via Groq or OpenAI, proxy rotation tunneled through the TLS transport, SQLite state tracking with full resume, and cross-platform binaries for Linux, Mac, and Windows. No runtime required.',
+    desc: 'Most scrapers get blocked the moment they hit a protected site. PhantomCrawl does not. It uses a 4-layer escalation engine: TLS fingerprinting that mimics Chrome at the handshake level, network hijacking to extract embedded JSON before the page even renders, XHR/fetch interception to capture live API responses, and headless browser fallback via go-rod or Browserless. It scraped Cloudflare.com - a site protected by Cloudflare itself - across 100+ pages at depth 1, zero blocks, all Layer 1. Includes AI cleaning via Groq or OpenAI, proxy rotation tunneled through the TLS transport, SQLite state tracking with full resume, and cross-platform binaries for Linux, Mac, and Windows. No runtime required.',
     visual: 'phantomcrawl' as const,
     images: [] as string[],
     live: 'https://phantomcrawl.vercel.app',
     github: 'https://github.com/var-raphael/PhantomCrawl',
     closedSource: false,
     proof: 'https://github.com/var-raphael/PhantomCrawl/tree/main/scraped_data_real_samples',
+    tags: ['Go', 'SQLite', 'CLI'],
+  },
+  {
+    title: 'PhantomClean',
+    desc: 'The companion data cleaner to PhantomCrawl. Takes raw scraped JSON and runs it through a 4-layer pipeline: regex stripping with custom patterns, boilerplate frequency detection across files, quality scoring, and a multi-provider AI cascade (Groq → OpenAI → Anthropic) with automatic fallback. Processes folders in concurrent batches, watches for new files in real time as the scraper runs, auto-chunks large documents so token limits are never hit, and exports clean datasets in JSON, CSV, XML, TXT, or HTML. SQLite state tracking with full resume support.',
+    visual: 'phantomclean' as const,
+    images: [] as string[],
+    live: 'https://phantom-suite-docs.vercel.app',
+    github: 'https://github.com/var-raphael/PhantomClean',
+    closedSource: false,
     tags: ['Go', 'SQLite', 'CLI'],
   },
   {
