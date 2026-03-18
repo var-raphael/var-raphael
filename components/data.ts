@@ -86,7 +86,7 @@ export const PROJECTS = [
     live: 'https://phantomcrawl.vercel.app',
     github: 'https://github.com/var-raphael/PhantomCrawl',
     closedSource: false,
-    proof: 'https://github.com/var-raphael/PhantomCrawl/tree/main/scraped_data_real_samples',
+    proof: 'https://github.com/var-raphael/cloudflare-dataset',
     tags: ['Go', 'SQLite', 'CLI'],
   },
   {
@@ -97,6 +97,7 @@ export const PROJECTS = [
     live: 'https://phantom-suite-docs.vercel.app',
     github: 'https://github.com/var-raphael/PhantomClean',
     closedSource: false,
+    dataset: 'https://github.com/var-raphael/cloudflare-dataset',
     tags: ['Go', 'SQLite', 'CLI'],
   },
   {

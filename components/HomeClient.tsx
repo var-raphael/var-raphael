@@ -723,6 +723,11 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                           Scraped Cloudflare ↗
                         </a>
                       )}
+                      {(p as any).dataset && (
+                        <a href={(p as any).dataset} target="_blank" rel="noreferrer" className="btn-proof" onClick={() => track('project_link_clicked', { project: p.title, type: 'dataset' })}>
+                          Cloudflare Dataset ↗
+                        </a>
+                      )}
                       {p.closedSource && (
                         <span style={{ display: 'inline-block', border: '1px solid rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.2)', fontFamily: "'DM Mono', monospace", fontSize: 11, padding: '9px 16px', borderRadius: 7, cursor: 'default' }}>Closed Source</span>
                       )}
