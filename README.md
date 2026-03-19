@@ -1,102 +1,63 @@
 # Raphael Samuel
 
-**Fullstack Developer** — building backends that scale and frontends that ship.
+**AI Tooling & Data Infrastructure Engineer** - building pipelines, tools, and products that actually ship.
 
-6 years of code. 18 years old. Based remotely.  
-I care about performance, clean architecture, and products that feel finished.
+6 years of code. 18 years old. Lagos, Nigeria. Open to remote worldwide.
+
+---
+
+## Phantom Suite
+
+Two tools I built that work together as a complete data pipeline:
+
+### [PhantomCrawl](https://github.com/var-raphael/PhantomCrawl) - 4-layer web scraper
+> TLS fingerprinting, anti-bot evasion, XHR interception, headless browser fallback. Scraped Cloudflare.com across 100+ pages with zero blocks. Ships as a single binary under 20MB.
+
+### [PhantomClean](https://github.com/var-raphael/PhantomClean) - data cleaning pipeline
+> Regex stripping, boilerplate frequency detection, quality scoring, and a multi-provider AI cascade (Groq, OpenAI, Anthropic). Watches the scraped folder in real time, processes in batches, exports clean datasets. Single binary under 20MB.
+
+**[Cloudflare Dataset](https://github.com/var-raphael/cloudflare-dataset)** - scraped and cleaned overnight. Free.
+
+---
+
+## Other Projects
+
+### [phantomit](https://github.com/var-raphael/phantomit) - `npm i -g phantomit-cli`
+> Watches your code, diffs changes on save, generates professional git commit messages via Groq AI. Live on npm.
+
+### [PhantomTrack](https://phantomtrack-docs.vercel.app)
+> Privacy-first web analytics. No cookies, one script tag. 10+ active users in the US. Built with PHP + MySQL.
+
+### [ClassFlow](https://myclassflow.vercel.app)
+> Assignment management platform for teachers and students. Real-time grading, file uploads, dashboards. Next.js + TypeScript + PostgreSQL.
+
+### [Go Rate Limiter](https://github.com/var-raphael/Ratelimiter)
+> High-performance rate limiting library. Token bucket and sliding window. 10k+ requests/second. Zero dependencies.
+
+### [Interactive 3D Ring Viewer](https://ring-view.vercel.app)
+> Real-time 3D ring configurator for jewelry e-commerce. 360 rotation, live material swapping. Next.js + Three.js + WebGL.
 
 ---
 
 ## Tech Stack
 
-**Frontend**
-```
-Next.js · React · TypeScript · Tailwind CSS · Framer Motion · Three.js
-```
+**Languages:** Go · TypeScript · Python · PHP · JavaScript
 
-**Backend**
-```
-Node.js · Go · PHP · REST APIs
-```
+**Frontend:** Next.js · React · Tailwind · Three.js · Framer Motion
 
-**Databases**
-```
-PostgreSQL · MySQL
-```
+**Backend:** Node.js · FastAPI · REST APIs · CLI tooling
 
-**Tooling**
-```
-Git · Docker · npm · CLI tooling · Linux
-```
+**Databases:** PostgreSQL · MySQL · SQLite
 
----
-
-## Projects
-
-### [phantomit](https://github.com/var-raphael/phantomit) — `npm i -g phantomit-cli`
-> CLI tool that watches your code, diffs changes on save, and generates professional git commit messages via Groq AI.
-
-- Hooks into your file system in real-time
-- Diffs changes and sends context to an LLM
-- Generates conventional commit messages instantly
-- Live on npm · Built with Node.js + TypeScript
-
----
-
-### [PhantomTrack](https://phantomtrack-docs.vercel.app)
-> Privacy-first web analytics SaaS. No cookies, no signup required.
-
-- Drop in one `<script>` tag and get instant insights
-- AI-powered weekly review of your traffic
-- 7 export formats
-- 10+ active users in production
-- Built with PHP + MySQL · Closed source
-
----
-
-### [ClassFlow](https://myclassflow.vercel.app)
-> Assignment management platform for teachers and students.
-
-- Real-time grading and submission tracking
-- File uploads, comment threads per assignment
-- Visual dashboards for teachers
-- Built with Next.js · TypeScript · PostgreSQL
-
----
-
-### [Go Rate Limiter](https://github.com/var-raphael/Ratelimiter)
-> High-performance rate limiting library in Go.
-
-- Handles 10,000+ requests per second
-- DDoS tested under sustained load
-- Token bucket and sliding window algorithms
-- Built with Go · Zero dependencies
-
----
-
-### [Interactive 3D Ring Viewer](https://ring-view.vercel.app/)
-> Real-time 3D ring configurator for jewelry e-commerce.
-
-- 360° rotation, zoom and pan via mouse and touch
-- Live band and diamond colour swapping without remounting
-- Embeddable as a drop-in component in any store page
-- Built with Next.js · Three.js · TypeScript · Tailwind · WebGL
+**Tooling:** Git · Docker · Linux · npm
 
 ---
 
 ## Currently
 
-- Deepening TypeScript — generics, conditional types, strict inference patterns
-- Expanding Go backend work — REST APIs, concurrency, PostgreSQL with `pgx`
-- Building and shipping real products, not tutorials
-
----
-
-## Open To
-
-- Remote fullstack or backend roles
-- Freelance contracts
-- Interesting problems worth solving
+- Publishing free AI training datasets at [Phantom Datasets](https://github.com/var-raphael/cloudflare-dataset)
+- Building in public - tools, pipelines, real products
+- Open to remote fullstack or backend roles
 
 ---
 
@@ -104,10 +65,10 @@ Git · Docker · npm · CLI tooling · Linux
 
 | | |
 |---|---|
+| Portfolio | [var-raphael.vercel.app](https://var-raphael.vercel.app) |
 | Email | [samuelraphael925@gmail.com](mailto:samuelraphael925@gmail.com) |
-| Portfolio | [var-raphal](https://var-raphael.vercel.app) |
-| LinkedIn | [https://www.linkedin.com/in/samuel-raphael-7679313a2](https://www.linkedin.com/in/samuel-raphael-7679313a2) |
+| LinkedIn | [samuel-raphael](https://www.linkedin.com/in/samuel-raphael-7679313a2) |
 
 ---
 
-<sub>Available for work · Open to remote · Building in public</sub>
+<sub>Available for work · Remote worldwide · Building in public</sub>
