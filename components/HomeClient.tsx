@@ -458,8 +458,8 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         .btn-cv { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: rgba(232,224,208,0.75); background: transparent; border: 1px solid rgba(232,224,208,0.14); padding: 8px 16px; border-radius: 7px; text-decoration: none; transition: all 0.2s; }
         .btn-cv:hover { border-color: #6366f1; color: #a5b4fc; box-shadow: 0 0 14px rgba(99,102,241,0.3); }
 
-        .btn-primary { background: #6366f1; color: #fff; font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600; padding: 13px 30px; border-radius: 10px; text-decoration: none; box-shadow: 0 0 32px rgba(99,102,241,0.35); transition: all 0.2s; display: inline-block; }
-        .btn-primary:hover { background: #5254cc; box-shadow: 0 0 48px rgba(99,102,241,0.55); transform: translateY(-1px); }
+        .btn-primary { background: #6366f1; color: #fff; font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600; padding: 13px 30px; border-radius: 10px; text-decoration: none; box-shadow: 0 0 32px rgba(99,102,241,0.35); transition: all 0.25s cubic-bezier(0.22,1,0.36,1); display: inline-block; }
+        .btn-primary:hover { background: #5254cc; box-shadow: 0 0 52px rgba(99,102,241,0.6); transform: translateY(-2px); }
         .btn-ghost { border: 1px solid rgba(232,224,208,0.14); color: rgba(232,224,208,0.5); font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 500; padding: 13px 30px; border-radius: 10px; text-decoration: none; transition: all 0.2s; display: inline-block; }
         .btn-ghost:hover { border-color: rgba(232,224,208,0.3); color: rgba(232,224,208,0.9); }
         .btn-live { display: inline-block; background: #6366f1; color: #fff; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; padding: 9px 16px; border-radius: 7px; text-decoration: none; transition: all 0.2s; box-shadow: 0 0 18px rgba(99,102,241,0.28); }
@@ -470,12 +470,13 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         .btn-proof:hover { border-color: rgba(0,255,65,0.4); color: rgba(0,255,65,0.9); background: rgba(0,255,65,0.08); }
 
         .section-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
-        .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent); margin: 0 40px; }
+        .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07) 20%, rgba(255,255,255,0.07) 80%, transparent); margin: 0 40px; }
 
         .projects-grid { display: flex; flex-direction: column; gap: 20px; }
-        .project-card { background: #141310; border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; overflow: hidden; display: grid; grid-template-columns: 380px 1fr; transition: all 0.3s; }
-        .project-card:hover { border-color: rgba(255,255,255,0.14); transform: translateY(-3px); box-shadow: 0 24px 64px rgba(0,0,0,0.55); }
-        .project-card.phantomcrawl-card:hover { border-color: rgba(0,255,65,0.2); box-shadow: 0 24px 64px rgba(0,0,0,0.55), 0 0 40px rgba(0,255,65,0.05); }
+        .project-card { background: #141310; border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; overflow: hidden; display: grid; grid-template-columns: 380px 1fr; transition: all 0.35s cubic-bezier(0.22,1,0.36,1); }
+        .project-card:hover { border-color: rgba(255,255,255,0.14); transform: translateY(-4px); box-shadow: 0 28px 72px rgba(0,0,0,0.6); }
+        .project-card.phantomcrawl-card:hover { border-color: rgba(0,255,65,0.2); box-shadow: 0 28px 72px rgba(0,0,0,0.6), 0 0 40px rgba(0,255,65,0.05); }
+        .project-card.vexaro-card:hover { border-color: rgba(99,102,241,0.3); box-shadow: 0 28px 72px rgba(0,0,0,0.6), 0 0 50px rgba(99,102,241,0.08); }
         .project-card-media { height: 100%; min-height: 240px; }
         .project-card-body { padding: 32px 40px; display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.06); }
 
@@ -663,7 +664,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
 
             <div className="projects-grid">
               {PROJECTS.map(p => (
-                <div key={p.title} className={`project-card${p.title === 'PhantomCrawl' ? ' phantomcrawl-card' : ''}${p.title === 'PhantomClean' ? ' phantomclean-card' : ''}`}>
+                <div key={p.title} className={`project-card${p.title === 'PhantomCrawl' ? ' phantomcrawl-card' : ''}${p.title === 'PhantomClean' ? ' phantomclean-card' : ''}${p.title === 'Vexaro' ? ' vexaro-card' : ''}`}>
                   {/* Media */}
                   <div className="project-card-media" style={{ background: p.title === 'PhantomCrawl' ? '#080a08' : p.title === 'PhantomClean' ? '#08080e' : '#0e0d0c', overflow: 'hidden', display: 'flex', alignItems: 'stretch' }}>
                     {p.visual === 'terminal' ? (
@@ -688,7 +689,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   </div>
 
                   {/* Body */}
-                  <div className="project-card-body" style={{ borderLeft: p.title === 'PhantomCrawl' ? '1px solid rgba(0,255,65,0.08)' : '1px solid rgba(255,255,255,0.06)' }}>
+                  <div className="project-card-body" style={{ borderLeft: p.title === 'PhantomCrawl' ? '1px solid rgba(0,255,65,0.08)' : p.title === 'Vexaro' ? '1px solid rgba(99,102,241,0.12)' : '1px solid rgba(255,255,255,0.06)' }}>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
                       {p.tags.map(t => <TechTag key={t} label={t} />)}
                       {p.title === 'phantomit' && (
@@ -708,8 +709,14 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                           v1.0.0
                         </span>
                       )}
+                      {p.title === 'Vexaro' && (
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 5, fontSize: 10, fontFamily: "'DM Mono', monospace", fontWeight: 500, border: '1px solid rgba(99,102,241,0.28)', background: 'rgba(99,102,241,0.08)', color: 'rgba(165,180,252,0.8)' }}>
+                          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#6366f1', boxShadow: '0 0 5px #6366f1', animation: 'pulse 2s ease-in-out infinite' }} />
+                          In Development
+                        </span>
+                      )}
                     </div>
-                    <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: p.title === 'PhantomCrawl' ? 'rgba(200,255,200,0.9)' : p.title === 'PhantomClean' ? 'rgba(196,181,253,0.9)' : 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 10 }}>{p.title}</h3>
+                    <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: p.title === 'PhantomCrawl' ? 'rgba(200,255,200,0.9)' : p.title === 'PhantomClean' ? 'rgba(196,181,253,0.9)' : p.title === 'Vexaro' ? 'rgba(165,180,252,0.95)' : 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 10 }}>{p.title}</h3>
                     <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.75, marginBottom: 22, flex: 1 }}>{p.desc}</p>
                     <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                       <a href={p.live} target="_blank" rel="noreferrer" className="btn-live" onClick={() => track('project_link_clicked', { project: p.title, type: 'docs' })}>
