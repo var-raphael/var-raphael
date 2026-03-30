@@ -95,7 +95,7 @@ export const PROJECTS = [
     visual: 'img' as const,
     images: ['https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80', 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80'],
     live: '#',
-    github: 'https://github.com/var-raphael',
+    github: 'https://github.com/var-raphael/vexaro',
     closedSource: false,
     wip: true,
     tags: ['Go', 'Next.js', 'TypeScript', 'MySQL', 'SQLite'],
