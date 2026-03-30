@@ -94,7 +94,7 @@ export const PROJECTS = [
     desc: 'Turn any website into a clean API and AI dataset — ready in hours. Vexaro is a public web data infrastructure platform that gives developers ready-made APIs across movies, news, music, crypto, and sports, a custom API builder where you describe what you want and Vexaro maintains the live endpoint, and a URL import system for full control. Built on a 3-layer crawling engine: TLS HTTP fetch with Chrome-level fingerprinting, embedded JSON/JSON-LD extraction, and full Browserless rendering for JS-heavy sites. Think GitHub for web data.',
     visual: 'img' as const,
     images: ['https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80', 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80'],
-    live: '#',
+    live: '',
     github: 'https://github.com/var-raphael/vexaro',
     closedSource: false,
     wip: true,

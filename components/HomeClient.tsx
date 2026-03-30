@@ -719,9 +719,11 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                     <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: p.title === 'PhantomCrawl' ? 'rgba(200,255,200,0.9)' : p.title === 'PhantomClean' ? 'rgba(196,181,253,0.9)' : p.title === 'Vexaro' ? 'rgba(165,180,252,0.95)' : 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 10 }}>{p.title}</h3>
                     <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.75, marginBottom: 22, flex: 1 }}>{p.desc}</p>
                     <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                      {p.live && p.live !== '#' && (
                       <a href={p.live} target="_blank" rel="noreferrer" className="btn-live" onClick={() => track('project_link_clicked', { project: p.title, type: 'docs' })}>
-                        {p.title === 'PhantomCrawl' || p.title === 'PhantomClean' || p.title === 'phantomit' ? 'Docs ↗' : p.live === '#' ? 'GitHub ↗' : 'View Site ↗'}
+                        {p.title === 'PhantomCrawl' || p.title === 'PhantomClean' || p.title === 'phantomit' ? 'Docs ↗' : 'View Site ↗'}
                       </a>
+                      )}
                       {!p.closedSource && p.github && (
                         <a href={p.github} target="_blank" rel="noreferrer" className="btn-gh" onClick={() => track('project_link_clicked', { project: p.title, type: 'github' })}>GitHub</a>
                       )}
