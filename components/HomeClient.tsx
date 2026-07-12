@@ -4,8 +4,8 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import Lenis from 'lenis';
 import type { PostMeta } from '@/lib/posts';
 import {
-  TECH_ICONS, STACK, TERMINAL_LINES, PHANTOMCRAWL_LINES,
-  PROJECTS, JEWELRY_COLLECTIONS, PHANTOMCLEAN_LINES,
+  TECH_ICONS, STACK,
+  PROJECTS, JEWELRY_COLLECTIONS,
 } from './data';
 
 // ── Phantom tracking helper ───────────────────────────────────────────────────
@@ -195,152 +195,6 @@ function useCanvas() {
   return canvasRef;
 }
 
-// ── Phantomit Terminal ────────────────────────────────────────────────────────
-function PhantomitTerminal() {
-  const [visible, setVisible] = useState<number[]>([]);
-  const [tick, setTick] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    setVisible([]);
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    TERMINAL_LINES.forEach((line, i) => {
-      const t = setTimeout(() => { setVisible(prev => [...prev, i]); if (ref.current) ref.current.scrollTop = ref.current.scrollHeight; }, line.delay);
-      timers.push(t);
-    });
-    timers.push(setTimeout(() => setTick(t => t + 1), 9200));
-    return () => timers.forEach(clearTimeout);
-  }, [tick]);
-
-  const lineColor = (type: string) => {
-    if (type === 'success') return '#4ade80';
-    if (type === 'message' || type === 'thinking') return '#a78bfa';
-    if (type === 'label') return 'rgba(232,224,208,0.65)';
-    if (type === 'dim') return 'rgba(232,224,208,0.3)';
-    return '#e8e0d0';
-  };
-
-  return (
-    <div style={{ background: '#0a0908', borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)', fontFamily: "'DM Mono', monospace", fontSize: 11 }}>
-      <div style={{ background: '#141210', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: 6, borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-        {['#ff5f57','#febc2e','#28c840'].map(c => <div key={c} style={{ width: 10, height: 10, borderRadius: '50%', background: c }} />)}
-        <span style={{ marginLeft: 8, color: 'rgba(255,255,255,0.15)', fontSize: 10, letterSpacing: '0.06em' }}>phantomit-cli</span>
-      </div>
-      <div ref={ref} style={{ padding: '14px 18px', minHeight: 165, maxHeight: 205, overflowY: 'auto' }}>
-        {TERMINAL_LINES.map((line, i) => visible.includes(i) && (
-          <div key={i} style={{ marginBottom: 5, color: lineColor(line.type), lineHeight: 1.65 }}>
-            {line.type === 'thinking'
-              ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                  <span>{line.text}</span>
-                  {[0,1,2].map(d => <span key={d} style={{ width: 3, height: 3, borderRadius: '50%', background: '#a78bfa', display: 'inline-block', opacity: 0.5, animation: `pulse 1s ${d*0.2}s ease-in-out infinite` }} />)}
-                </span>
-              : line.text}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── PhantomCrawl Terminal ─────────────────────────────────────────────────────
-function PhantomCrawlTerminal() {
-  const [visible, setVisible] = useState<number[]>([]);
-  const [tick, setTick] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    setVisible([]);
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    PHANTOMCRAWL_LINES.forEach((line, i) => {
-      const t = setTimeout(() => { setVisible(prev => [...prev, i]); if (ref.current) ref.current.scrollTop = ref.current.scrollHeight; }, line.delay);
-      timers.push(t);
-    });
-    timers.push(setTimeout(() => setTick(t => t + 1), 10000));
-    return () => timers.forEach(clearTimeout);
-  }, [tick]);
-
-  const lineColor = (type: string) => {
-    if (type === 'success') return '#4ade80';
-    if (type === 'thinking') return '#a78bfa';
-    if (type === 'label') return 'rgba(232,224,208,0.65)';
-    if (type === 'dim') return 'rgba(232,224,208,0.3)';
-    return '#e8e0d0';
-  };
-
-  return (
-    <div style={{ background: '#080a08', borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(0,255,65,0.12)', fontFamily: "'DM Mono', monospace", fontSize: 11 }}>
-      <div style={{ background: '#0d110d', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: 6, borderBottom: '1px solid rgba(0,255,65,0.08)' }}>
-        {['#ff5f57','#febc2e','#28c840'].map(c => <div key={c} style={{ width: 10, height: 10, borderRadius: '50%', background: c }} />)}
-        <span style={{ marginLeft: 8, color: 'rgba(0,255,65,0.25)', fontSize: 10, letterSpacing: '0.06em' }}>phantomcrawl</span>
-        <span style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 9, color: 'rgba(0,255,65,0.5)', background: 'rgba(0,255,65,0.07)', border: '1px solid rgba(0,255,65,0.15)', borderRadius: 4, padding: '2px 7px', letterSpacing: '0.1em' }}>
-          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#00ff41', boxShadow: '0 0 6px #00ff41', animation: 'pulse 2s ease-in-out infinite' }} />
-          LIVE
-        </span>
-      </div>
-      <div ref={ref} style={{ padding: '14px 18px', minHeight: 165, maxHeight: 205, overflowY: 'auto' }}>
-        {PHANTOMCRAWL_LINES.map((line, i) => visible.includes(i) && (
-          <div key={i} style={{ marginBottom: 5, color: lineColor(line.type), lineHeight: 1.65 }}>
-            {line.type === 'thinking'
-              ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                  <span>{line.text}</span>
-                  {[0,1,2].map(d => <span key={d} style={{ width: 3, height: 3, borderRadius: '50%', background: '#a78bfa', display: 'inline-block', opacity: 0.5, animation: `pulse 1s ${d*0.2}s ease-in-out infinite` }} />)}
-                </span>
-              : line.text}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── PhantomClean Terminal ────────────────────────────────────────────────────
-function PhantomCleanTerminal() {
-  const [visible, setVisible] = useState<number[]>([]);
-  const [tick, setTick] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    setVisible([]);
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    PHANTOMCLEAN_LINES.forEach((line, i) => {
-      const t = setTimeout(() => { setVisible(prev => [...prev, i]); if (ref.current) ref.current.scrollTop = ref.current.scrollHeight; }, line.delay);
-      timers.push(t);
-    });
-    timers.push(setTimeout(() => setTick(t => t + 1), 9500));
-    return () => timers.forEach(clearTimeout);
-  }, [tick]);
-
-  const lineColor = (type: string) => {
-    if (type === 'success') return '#4ade80';
-    if (type === 'thinking') return '#a78bfa';
-    if (type === 'label') return 'rgba(232,224,208,0.65)';
-    if (type === 'dim') return 'rgba(232,224,208,0.3)';
-    return '#e8e0d0';
-  };
-
-  return (
-    <div style={{ background: '#08080e', borderRadius: 10, overflow: 'hidden', border: '1px solid rgba(124,106,247,0.15)', fontFamily: "'DM Mono', monospace", fontSize: 11 }}>
-      <div style={{ background: '#0d0d14', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: 6, borderBottom: '1px solid rgba(124,106,247,0.08)' }}>
-        {['#ff5f57','#febc2e','#28c840'].map(c => <div key={c} style={{ width: 10, height: 10, borderRadius: '50%', background: c }} />)}
-        <span style={{ marginLeft: 8, color: 'rgba(124,106,247,0.4)', fontSize: 10, letterSpacing: '0.06em' }}>phantomclean</span>
-        <span style={{ marginLeft: 'auto', display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 9, color: 'rgba(124,106,247,0.6)', background: 'rgba(124,106,247,0.08)', border: '1px solid rgba(124,106,247,0.18)', borderRadius: 4, padding: '2px 7px', letterSpacing: '0.1em' }}>
-          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#7c6af7', boxShadow: '0 0 6px #7c6af7', animation: 'pulse 2s ease-in-out infinite' }} />
-          LIVE
-        </span>
-      </div>
-      <div ref={ref} style={{ padding: '14px 18px', minHeight: 165, maxHeight: 205, overflowY: 'auto' }}>
-        {PHANTOMCLEAN_LINES.map((line, i) => visible.includes(i) && (
-          <div key={i} style={{ marginBottom: 5, color: lineColor(line.type), lineHeight: 1.65 }}>
-            {line.type === 'thinking'
-              ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-                  <span>{line.text}</span>
-                  {[0,1,2].map(d => <span key={d} style={{ width: 3, height: 3, borderRadius: '50%', background: '#a78bfa', display: 'inline-block', opacity: 0.5, animation: `pulse 1s ${d*0.2}s ease-in-out infinite` }} />)}
-                </span>
-              : line.text}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 // ── Jewelry Carousel ──────────────────────────────────────────────────────────
 function JewelryCarousel() {
   const [current, setCurrent] = useState(0);
@@ -466,8 +320,6 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         .btn-live:hover { box-shadow: 0 0 30px rgba(99,102,241,0.5); }
         .btn-gh { display: inline-block; border: 1px solid rgba(255,255,255,0.12); color: rgba(232,224,208,0.4); font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; padding: 9px 16px; border-radius: 7px; text-decoration: none; transition: all 0.2s; }
         .btn-gh:hover { border-color: rgba(255,255,255,0.28); color: rgba(232,224,208,0.85); }
-        .btn-proof { display: inline-block; border: 1px solid rgba(0,255,65,0.2); color: rgba(0,255,65,0.6); font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; padding: 9px 16px; border-radius: 7px; text-decoration: none; transition: all 0.2s; background: rgba(0,255,65,0.04); }
-        .btn-proof:hover { border-color: rgba(0,255,65,0.4); color: rgba(0,255,65,0.9); background: rgba(0,255,65,0.08); }
 
         .section-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
         .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07) 20%, rgba(255,255,255,0.07) 80%, transparent); margin: 0 40px; }
@@ -475,8 +327,6 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         .projects-grid { display: flex; flex-direction: column; gap: 20px; }
         .project-card { background: #141310; border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; overflow: hidden; display: grid; grid-template-columns: 380px 1fr; transition: all 0.35s cubic-bezier(0.22,1,0.36,1); }
         .project-card:hover { border-color: rgba(255,255,255,0.14); transform: translateY(-4px); box-shadow: 0 28px 72px rgba(0,0,0,0.6); }
-        .project-card.phantomcrawl-card:hover { border-color: rgba(0,255,65,0.2); box-shadow: 0 28px 72px rgba(0,0,0,0.6), 0 0 40px rgba(0,255,65,0.05); }
-        .project-card.vexaro-card:hover { border-color: rgba(99,102,241,0.3); box-shadow: 0 28px 72px rgba(0,0,0,0.6), 0 0 50px rgba(99,102,241,0.08); }
         .project-card-media { height: 100%; min-height: 240px; }
         .project-card-body { padding: 32px 40px; display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.06); }
 
@@ -580,9 +430,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
             <em style={{ fontStyle: 'italic', background: 'linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Samuel</em>
           </h1>
           <p style={{ fontSize: 'clamp(15px, 2vw, 18px)', fontWeight: 300, color: 'rgba(232,224,208,0.45)', letterSpacing: '0.02em', marginTop: 20, marginBottom: 40, maxWidth: 500 }}>
-            AI Tooling & Data Infrastructure Engineer.{' '}
-            <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.28)', color: '#a5b4fc', borderRadius: 4, padding: '3px 10px', margin: '0 4px' }}>18 yrs old</span>
-            {' '}7 shipped products. Real users. No excuses.
+            AI Tooling & Data Infrastructure Engineer. Building products with real users, real infrastructure, and no shortcuts.
           </p>
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 20 }}>
             <a href="#projects" className="btn-primary" onClick={() => track('hero_cta_clicked', { button: 'view_projects' })}>View Projects</a>
@@ -596,7 +444,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
             <a href="mailto:samuelraphael925@gmail.com" className="hero-email" onClick={() => track('email_clicked', { source: 'hero' })}>samuelraphael925@gmail.com</a>
           </div>
           <div style={{ display: 'flex', gap: 56, flexWrap: 'wrap', justifyContent: 'center' }}>
-            {[{ val: '6', unit: '+', label: 'Years Coding' }, { val: '7', unit: '', label: 'Shipped Products' }, { val: '10', unit: '+', label: 'Users in the US' }].map(({ val, unit, label }) => (
+            {[{ val: '6', unit: '+', label: 'Years Coding' }, { val: '3', unit: '', label: 'Live Products' }, { val: '2', unit: '', label: 'Startups Founded' }].map(({ val, unit, label }) => (
               <div key={label} style={{ textAlign: 'center' }}>
                 <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 38, fontWeight: 700, color: '#e8e0d0', letterSpacing: '-0.03em', lineHeight: 1 }}>
                   {val}<span style={{ color: '#6366f1' }}>{unit}</span>
@@ -619,16 +467,16 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   I build things<br /><em style={{ fontStyle: 'italic', color: 'rgba(165,180,252,0.8)' }}>people actually use.</em>
                 </h2>
                 <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.45)', lineHeight: 1.9, marginBottom: 16 }}>
-                  I am an AI tooling and data infrastructure engineer with 6 years of experience across PHP, TypeScript, Python, Go, and Node.js. I have shipped seven real products, not demos, not clones, tools with real users, real infrastructure, and real problems I had to solve to keep them running.
+                  I am an AI tooling and data infrastructure engineer with 6 years of experience across Python, Go, TypeScript, and Next.js. I have built and shipped real products, not demos, not clones, tools with real users, real infrastructure, and real problems I had to solve to keep them running.
                 </p>
                 <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.45)', lineHeight: 1.9, marginBottom: 32 }}>
-                  I finished high school last year and I am applying to study Computer Science next January. In the meantime I have not been waiting around. Every product in this portfolio was designed, built, and maintained by me alone.
+                  Two of the projects below are my own startups, built end to end, from the schema to the UI to the infrastructure keeping them online. Every product in this portfolio was designed, built, and maintained by me alone.
                 </p>
                 <a href="#projects" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.08em', color: '#a5b4fc', textDecoration: 'none', borderBottom: '1px solid rgba(165,180,252,0.3)', paddingBottom: 2, transition: 'all 0.2s' }}>See the work →</a>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                 {[
-                  { icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>, label: 'Primary Stack', pills: ['TypeScript', 'Next.js', 'PHP', 'Python', 'Go'] },
+                  { icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>, label: 'Primary Stack', pills: ['Python', 'Go', 'TypeScript', 'Next.js'] },
                   { icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>, label: 'Databases', pills: ['PostgreSQL', 'MySQL'] },
                   { icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>, label: 'Currently', pills: ['Open to remote roles worldwide'] },
                   { icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>, label: 'Location', pills: ['Nigeria', 'UTC+1'] },
@@ -664,22 +512,10 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
 
             <div className="projects-grid">
               {PROJECTS.map(p => (
-                <div key={p.title} className={`project-card${p.title === 'PhantomCrawl' ? ' phantomcrawl-card' : ''}${p.title === 'PhantomClean' ? ' phantomclean-card' : ''}${p.title === 'Vexaro' ? ' vexaro-card' : ''}`}>
+                <div key={p.title} className="project-card">
                   {/* Media */}
-                  <div className="project-card-media" style={{ background: p.title === 'PhantomCrawl' ? '#080a08' : p.title === 'PhantomClean' ? '#08080e' : '#0e0d0c', overflow: 'hidden', display: 'flex', alignItems: 'stretch' }}>
-                    {p.visual === 'terminal' ? (
-                      <div style={{ padding: 20, background: '#1a1815', width: '100%', display: 'flex', alignItems: 'center' }}>
-                        <PhantomitTerminal />
-                      </div>
-                    ) : p.visual === 'phantomcrawl' ? (
-                      <div style={{ padding: 20, background: '#080a08', width: '100%', display: 'flex', alignItems: 'center' }}>
-                        <PhantomCrawlTerminal />
-                      </div>
-                    ) : p.visual === 'phantomclean' ? (
-                      <div style={{ padding: 20, background: '#08080e', width: '100%', display: 'flex', alignItems: 'center' }}>
-                        <PhantomCleanTerminal />
-                      </div>
-                    ) : p.images.length > 0 ? (
+                  <div className="project-card-media" style={{ background: '#0e0d0c', overflow: 'hidden', display: 'flex', alignItems: 'stretch' }}>
+                    {p.images.length > 0 ? (
                       <CyclingImage images={p.images} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                     ) : (
                       <div style={{ width: '100%', height: '100%', minHeight: 240, background: 'linear-gradient(135deg, #1a1815, #0e0d0c)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -689,62 +525,21 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   </div>
 
                   {/* Body */}
-                  <div className="project-card-body" style={{ borderLeft: p.title === 'PhantomCrawl' ? '1px solid rgba(0,255,65,0.08)' : p.title === 'Vexaro' ? '1px solid rgba(99,102,241,0.12)' : '1px solid rgba(255,255,255,0.06)' }}>
+                  <div className="project-card-body">
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
                       {p.tags.map(t => <TechTag key={t} label={t} />)}
-                      {p.title === 'phantomit' && (
-                        <a href="https://www.npmjs.com/package/phantomit-cli" target="_blank" rel="noreferrer" onClick={() => track('npm_badge_clicked', { project: 'phantomit' })} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 5, fontSize: 10, fontFamily: "'DM Mono', monospace", fontWeight: 500, border: '1px solid rgba(248,113,113,0.25)', background: 'rgba(248,113,113,0.08)', color: 'rgba(248,113,113,0.75)', textDecoration: 'none', transition: 'all 0.2s' }}>
-                          <img src={TECH_ICONS['npm']} style={{ width: 13, height: 13 }} alt="npm" />npm ↗
-                        </a>
-                      )}
-                      {p.title === 'PhantomCrawl' && (
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 5, fontSize: 10, fontFamily: "'DM Mono', monospace", fontWeight: 500, border: '1px solid rgba(0,255,65,0.2)', background: 'rgba(0,255,65,0.06)', color: 'rgba(0,255,65,0.7)' }}>
-                          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#00ff41', boxShadow: '0 0 5px #00ff41', animation: 'pulse 2s ease-in-out infinite' }} />
-                          v1.0.0
-                        </span>
-                      )}
-                      {p.title === 'PhantomClean' && (
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 5, fontSize: 10, fontFamily: "'DM Mono', monospace", fontWeight: 500, border: '1px solid rgba(124,106,247,0.25)', background: 'rgba(124,106,247,0.07)', color: 'rgba(165,180,252,0.75)' }}>
-                          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#7c6af7', boxShadow: '0 0 5px #7c6af7', animation: 'pulse 2s ease-in-out infinite' }} />
-                          v1.0.0
-                        </span>
-                      )}
-                      {p.title === 'Vexaro' && (
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 5, fontSize: 10, fontFamily: "'DM Mono', monospace", fontWeight: 500, border: '1px solid rgba(99,102,241,0.28)', background: 'rgba(99,102,241,0.08)', color: 'rgba(165,180,252,0.8)' }}>
-                          <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#6366f1', boxShadow: '0 0 5px #6366f1', animation: 'pulse 2s ease-in-out infinite' }} />
-                          In Development
-                        </span>
-                      )}
                     </div>
-                    <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: p.title === 'PhantomCrawl' ? 'rgba(200,255,200,0.9)' : p.title === 'PhantomClean' ? 'rgba(196,181,253,0.9)' : p.title === 'Vexaro' ? 'rgba(165,180,252,0.95)' : 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 10 }}>{p.title}</h3>
+                    <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 10 }}>{p.title}</h3>
                     <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.75, marginBottom: 22, flex: 1 }}>{p.desc}</p>
                     <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                       {p.live && p.live !== '#' && (
-                      <a href={p.live} target="_blank" rel="noreferrer" className="btn-live" onClick={() => track('project_link_clicked', { project: p.title, type: 'docs' })}>
-                        {p.title === 'PhantomCrawl' || p.title === 'PhantomClean' || p.title === 'phantomit' ? 'Docs ↗' : 'View Site ↗'}
-                      </a>
+                        <a href={p.live} target="_blank" rel="noreferrer" className="btn-live" onClick={() => track('project_link_clicked', { project: p.title, type: 'live' })}>View Site ↗</a>
                       )}
                       {!p.closedSource && p.github && (
                         <a href={p.github} target="_blank" rel="noreferrer" className="btn-gh" onClick={() => track('project_link_clicked', { project: p.title, type: 'github' })}>GitHub</a>
                       )}
-                      {(p as any).proof && (
-                        <a href={(p as any).proof} target="_blank" rel="noreferrer" className="btn-proof" onClick={() => track('project_link_clicked', { project: p.title, type: 'proof' })}>
-                          Scraped Cloudflare ↗
-                        </a>
-                      )}
-                      {(p as any).dataset && (
-                        <a href={(p as any).dataset} target="_blank" rel="noreferrer" className="btn-proof" onClick={() => track('project_link_clicked', { project: p.title, type: 'dataset' })}>
-                          Cloudflare Dataset ↗
-                        </a>
-                      )}
                       {p.closedSource && (
                         <span style={{ display: 'inline-block', border: '1px solid rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.2)', fontFamily: "'DM Mono', monospace", fontSize: 11, padding: '9px 16px', borderRadius: 7, cursor: 'default' }}>Closed Source</span>
-                      )}
-                      {(p as any).wip && (
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, border: '1px solid rgba(234,179,8,0.25)', color: 'rgba(234,179,8,0.75)', background: 'rgba(234,179,8,0.07)', fontFamily: "'DM Mono', monospace", fontSize: 11, padding: '9px 16px', borderRadius: 7, cursor: 'default' }}>
-                          <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'rgba(234,179,8,0.8)', boxShadow: '0 0 6px rgba(234,179,8,0.5)', animation: 'pulse 2s ease-in-out infinite' }} />
-                          Currently Working On
-                        </span>
                       )}
                     </div>
                   </div>
@@ -833,9 +628,9 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
             </p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
               {[
-                { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>, title: 'I ship, not just code', body: 'PhantomTrack has 10+ active users. phantomit-cli is live on npm. ClassFlow is live. PhantomCrawl scraped Cloudflare.com across 100+ pages with zero blocks. PhantomClean is the companion cleaner that turns raw scraped data into clean AI-ready datasets. These are not tutorial projects. They are products I built, deployed, and maintain.' },
+                { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>, title: 'I ship, not just code', body: 'Quorel and VarsityLine are live, self-built startups, from schema to UI to the infrastructure keeping them running. Skim is a working AI tool with real users summarizing real documents. These are not tutorial projects. They are products I designed, deployed, and maintain.' },
                 { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="12" r="10"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>, title: 'I think before I type', body: 'Coding on a phone for 6 years with limited resources taught me to design logic on paper before writing a line. I map edge cases, question assumptions, and build things that are less buggy from the start. Not after three rounds of fixes.' },
-                { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>, title: 'I fix real problems', body: 'When PhantomTrack broke on React and Next.js sites because of SPA routing, I rebuilt the tracking engine from scratch. When CORS blocked my server setup, I bought a dedicated server to keep my users running. I do not abandon problems.' },
+                { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>, title: 'I fix real problems', body: 'Running Quorel and VarsityLine means I am the one who gets paged when something breaks, whether it is a scraping layer, a payment webhook, or a data pipeline going stale. I do not abandon problems, I own them until they are fixed.' },
                 { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>, title: 'I learn at uncommon speed', body: 'I picked up TypeScript and Go in 2023 simultaneously while already knowing PHP and JavaScript. I was building real projects in both within weeks. New stacks, new tools, new environments. I iterate fast because I love this more than anything.' },
                 { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>, title: 'I work remotely by default', body: 'I have been self-directed since age 12 with no classroom, no bootcamp, no one looking over my shoulder. Remote work is not a perk I am adjusting to. It is the environment I have always operated in and where I do my best work.' },
                 { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>, title: 'I contribute beyond my role', body: 'I mentor students, lead a small startup team, and teach free coding classes on WhatsApp, Facebook, and Telegram. I show up fully wherever I am. A team that hires me gets someone who adds energy to the room, not just code to the repo.' },
