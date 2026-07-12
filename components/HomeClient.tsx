@@ -309,13 +309,9 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
 
         .nav-link { font-size: 13px; font-weight: 500; color: rgba(232,224,208,0.45); text-decoration: none; transition: color 0.2s; letter-spacing: 0.04em; }
         .nav-link:hover { color: rgba(232,224,208,0.9); }
-        .btn-cv { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: rgba(232,224,208,0.75); background: transparent; border: 1px solid rgba(232,224,208,0.14); padding: 8px 16px; border-radius: 7px; text-decoration: none; transition: all 0.2s; }
-        .btn-cv:hover { border-color: #6366f1; color: #a5b4fc; box-shadow: 0 0 14px rgba(99,102,241,0.3); }
 
         .btn-primary { background: #6366f1; color: #fff; font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600; padding: 13px 30px; border-radius: 10px; text-decoration: none; box-shadow: 0 0 32px rgba(99,102,241,0.35); transition: all 0.25s cubic-bezier(0.22,1,0.36,1); display: inline-block; }
         .btn-primary:hover { background: #5254cc; box-shadow: 0 0 52px rgba(99,102,241,0.6); transform: translateY(-2px); }
-        .btn-ghost { border: 1px solid rgba(232,224,208,0.14); color: rgba(232,224,208,0.5); font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 500; padding: 13px 30px; border-radius: 10px; text-decoration: none; transition: all 0.2s; display: inline-block; }
-        .btn-ghost:hover { border-color: rgba(232,224,208,0.3); color: rgba(232,224,208,0.9); }
         .btn-live { display: inline-block; background: #6366f1; color: #fff; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; padding: 9px 16px; border-radius: 7px; text-decoration: none; transition: all 0.2s; box-shadow: 0 0 18px rgba(99,102,241,0.28); }
         .btn-live:hover { box-shadow: 0 0 30px rgba(99,102,241,0.5); }
         .btn-gh { display: inline-block; border: 1px solid rgba(255,255,255,0.12); color: rgba(232,224,208,0.4); font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; padding: 9px 16px; border-radius: 7px; text-decoration: none; transition: all 0.2s; }
@@ -357,8 +353,6 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         .nav-mobile-link { font-size: 15px; font-weight: 500; color: rgba(232,224,208,0.5); text-decoration: none; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); letter-spacing: 0.04em; transition: color 0.2s; }
         .nav-mobile-link:last-child { border-bottom: none; }
         .nav-mobile-link:hover { color: rgba(232,224,208,0.9); }
-        .nav-mobile-cv { display: inline-block; margin-top: 8px; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; color: rgba(232,224,208,0.75); background: transparent; border: 1px solid rgba(232,224,208,0.14); padding: 10px 18px; border-radius: 7px; text-decoration: none; transition: all 0.2s; text-align: center; }
-        .nav-mobile-cv:hover { border-color: #6366f1; color: #a5b4fc; }
 
         @media (max-width: 900px) {
           .projects-grid { gap: 16px; }
@@ -403,7 +397,6 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
             {[['#about','About'],['#projects','Projects'],['#frontend','Frontend'],['#why','Why Me'],['#blog','Blog'],['#contact','Contact']].map(([href, label]) => (
               <a key={href} href={href} className="nav-link" onClick={() => track('nav_link_clicked', { label, device: 'desktop' })}>{label}</a>
             ))}
-            <a href="/portfolio-images/img/var-raphael-cv.pdf" download className="btn-cv" onClick={() => track('cv_downloaded', { source: 'navbar' })}>Download CV</a>
           </div>
           <button className="nav-hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Toggle menu">
             <span style={{ transform: menuOpen ? 'rotate(45deg) translateY(7px)' : 'none' }} />
@@ -416,13 +409,12 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
           {[['#about','About'],['#projects','Projects'],['#frontend','Frontend'],['#why','Why Me'],['#blog','Blog'],['#contact','Contact']].map(([href, label]) => (
             <a key={href} href={href} className="nav-mobile-link" onClick={() => { setMenuOpen(false); track('nav_link_clicked', { label, device: 'mobile' }); }}>{label}</a>
           ))}
-          <a href="/portfolio-images/img/var-raphael-cv.pdf" download className="nav-mobile-cv" onClick={() => track('cv_downloaded', { source: 'mobile_menu' })}>Download CV</a>
         </div>
 
         {/* Hero */}
         <section style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 24px 80px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(232,224,208,0.3)', marginBottom: 28 }}>
-            <span>AI Tooling & Data Infrastructure Engineer</span>
+            <span>Full-Stack Engineer</span>
             <span style={{ display: 'block', width: 40, height: 1, background: '#6366f1', opacity: 0.5 }} />
           </div>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(58px, 10vw, 112px)', fontWeight: 800, lineHeight: 0.92, letterSpacing: '-0.03em', color: '#e8e0d0', marginBottom: 8 }}>
@@ -430,11 +422,10 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
             <em style={{ fontStyle: 'italic', background: 'linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Samuel</em>
           </h1>
           <p style={{ fontSize: 'clamp(15px, 2vw, 18px)', fontWeight: 300, color: 'rgba(232,224,208,0.45)', letterSpacing: '0.02em', marginTop: 20, marginBottom: 40, maxWidth: 500 }}>
-            AI Tooling & Data Infrastructure Engineer. Building products with real users, real infrastructure, and no shortcuts.
+            Building products end to end. Two of my own, plus client work.
           </p>
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 20 }}>
             <a href="#projects" className="btn-primary" onClick={() => track('hero_cta_clicked', { button: 'view_projects' })}>View Projects</a>
-            <a href="/portfolio-images/img/var-raphael-cv.pdf" download className="btn-ghost" onClick={() => track('cv_downloaded', { source: 'hero' })}>Download CV</a>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 56, flexWrap: 'wrap', justifyContent: 'center' }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(74,222,128,0.85)', background: 'rgba(74,222,128,0.07)', border: '1px solid rgba(74,222,128,0.2)', borderRadius: 99, padding: '5px 12px' }}>
@@ -467,7 +458,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   I build things<br /><em style={{ fontStyle: 'italic', color: 'rgba(165,180,252,0.8)' }}>people actually use.</em>
                 </h2>
                 <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.45)', lineHeight: 1.9, marginBottom: 16 }}>
-                  I am an AI tooling and data infrastructure engineer with 6 years of experience across Python, Go, TypeScript, and Next.js. I have built and shipped real products, not demos, not clones, tools with real users, real infrastructure, and real problems I had to solve to keep them running.
+                  I have 6 years of experience across Python, Go, TypeScript, and Next.js. I have built and shipped real products, not demos, not clones, tools with real users, real infrastructure, and real problems I had to solve to keep them running.
                 </p>
                 <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.45)', lineHeight: 1.9, marginBottom: 32 }}>
                   Two of the projects below are my own startups, built end to end, from the schema to the UI to the infrastructure keeping them online. Every product in this portfolio was designed, built, and maintained by me alone.
@@ -546,6 +537,27 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <div className="divider" />
+
+        {/* More on GitHub */}
+        <section style={{ padding: '48px 0' }}>
+          <div className="section-inner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20 }}>
+            <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.7, maxWidth: 480 }}>
+              These are the projects I'm most proud of. There's more experimentation, smaller tools, and older work on my GitHub if you want to dig deeper.
+            </p>
+            <a
+              href="https://github.com/var-raphael"
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => track('github_more_projects_clicked')}
+              className="btn-gh"
+              style={{ padding: '11px 22px', fontSize: 12, flexShrink: 0 }}
+            >
+              See more on GitHub ↗
+            </a>
           </div>
         </section>
 

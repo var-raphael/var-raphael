@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
-  title: "Raphael Samuel — Fullstack Developer",
-  description: "Fullstack developer specialising in backends that scale and frontends that ship. 6 years of code, 18 years old.",
-  keywords: ["Fullstack Developer", "Next.js", "TypeScript", "Go", "PHP", "PostgreSQL"],
+  title: "Raphael Samuel — Full-Stack Engineer",
+  description: "Full-stack engineer building products end to end. Two of my own startups, plus client work, across Python, Go, TypeScript, and Next.js.",
+  keywords: ["Full-Stack Engineer", "Next.js", "TypeScript", "Go", "Python", "PostgreSQL", "MySQL"],
   authors: [{ name: "Raphael Samuel", url: "https://github.com/var-raphael" }],
   manifest: "/manifest.json",
   icons: {
@@ -13,16 +14,16 @@ export const metadata: Metadata = {
     apple: "/portfolio-images/img/avatar.jpg",
   },
   openGraph: {
-    title: "Raphael Samuel — Fullstack Developer",
-    description: "Fullstack developer specialising in backends that scale and frontends that ship.",
+    title: "Raphael Samuel — Full-Stack Engineer",
+    description: "Full-stack engineer building products end to end. Two of my own startups, plus client work.",
     url: "https://var-raphael.vercel.app",
     siteName: "Raphael Samuel",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Raphael Samuel — Fullstack Developer",
-    description: "Fullstack developer specialising in backends that scale and frontends that ship.",
+    title: "Raphael Samuel — Full-Stack Engineer",
+    description: "Full-stack engineer building products end to end. Two of my own startups, plus client work.",
   },
 };
 
@@ -42,6 +43,7 @@ export default function RootLayout({
       </head>
       <body>
         {children}
+        <Analytics />
         <Script
           src="https://phantomtrack-cdn.vercel.app/phantom.v1.0.0.js?trackid=track_wn48o57cfg7ytynr7355sd"
           strategy="afterInteractive"
