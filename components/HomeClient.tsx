@@ -429,9 +429,11 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 56, flexWrap: 'wrap', justifyContent: 'center' }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(74,222,128,0.85)', background: 'rgba(74,222,128,0.07)', border: '1px solid rgba(74,222,128,0.2)', borderRadius: 99, padding: '5px 12px' }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 8px #4ade80', flexShrink: 0, animation: 'pulse 2s ease-in-out infinite' }} />
-              Available for work
-            </span>
+           
+           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(74,222,128,0.85)', background: 'rgba(74,222,128,0.07)', border: '1px solid rgba(74,222,128,0.2)', borderRadius: 99, padding: '5px 12px' }}>
+  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 8px #4ade80', flexShrink: 0, animation: 'pulse 2s ease-in-out infinite' }} />
+  Open to joining an early-stage startup
+</span>
             <a href="mailto:samuelraphael925@gmail.com" className="hero-email" onClick={() => track('email_clicked', { source: 'hero' })}>samuelraphael925@gmail.com</a>
           </div>
           <div style={{ display: 'flex', gap: 56, flexWrap: 'wrap', justifyContent: 'center' }}>
