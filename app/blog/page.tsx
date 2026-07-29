@@ -133,7 +133,7 @@ export default function BlogPage() {
         <p className="eyebrow">Writing</p>
         <h1 className="page-title">The Blog</h1>
         <p className="page-sub">
-          Thoughts on backend architecture, TypeScript, databases, and whatever I'm currently breaking.
+          Thoughts on software architecture, Code & Coffee, and whatever I'm currently breaking.
         </p>
 
         <div className="post-list">
