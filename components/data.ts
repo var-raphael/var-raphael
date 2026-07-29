@@ -46,7 +46,7 @@ export const PROJECTS = [
   {
     title: 'VarsityLine',
     stat: '24 universities covered · verified cut-offs & courses · Paystack-powered alerts',
-    desc: 'Nigerian students figure out admission cut-offs from group chats and outdated PDFs. VarsityLine fixes that: verified cut-off marks, courses, and screening dates for every Nigerian university, cross-checked against each school\'s own admissions office, with a "last confirmed" timestamp on every entry. Search by university, by course, or both with state and type filters, export results as a PDF, and subscribe for email or Telegram alerts on admission updates.',
+    desc: 'Nigerian students figure out admission cut-offs from group chats and outdated PDFs. VarsityLine fixes that: verified cut-off marks, courses, and screening dates for every Nigerian university, cross-checked against each school\'s own admissions office, with a "last confirmed" timestamp on every entry. Search by university, by course, or both with state and type filters, export results as a PDF, and subscribe for access to search and compare feature for decsion making.',
     images: ['/portfolio-images/img/varsityline1.jpg', '/portfolio-images/img/varsityline2.jpg'],
     live: 'https://varsityline.vercel.app',
     github: 'https://github.com/var-raphael/varsityline',
