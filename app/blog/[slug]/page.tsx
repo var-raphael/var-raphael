@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = await getPostBySlug(slug).catch(() => null);
   if (!post) return {};
-  return { title: `${post.title} — Raphael Samuel` };
+  return { title: `${post.title}, Raphael Samuel` };
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -31,13 +31,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-          --bg:        #0e0d0c;
-          --cream:     #e8e0d0;
-          --cream-dim: rgba(232,224,208,0.55);
-          --cream-xs:  rgba(232,224,208,0.2);
-          --indigo:    #6366f1;
-          --border:    rgba(232,224,208,0.08);
-          --border-md: rgba(232,224,208,0.14);
+          --bg:        #000000;
+          --cream:     #ffffff;
+          --cream-dim: rgba(255,255,255,0.5);
+          --cream-xs:  rgba(255,255,255,0.3);
+          --gold:      #FFD700;
+          --border:    rgba(255,215,0,0.15);
+          --border-md: rgba(255,215,0,0.3);
         }
 
         body {
@@ -54,13 +54,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           font-family: 'DM Mono', monospace; font-size: 13px;
           letter-spacing: 0.12em; color: var(--cream-dim); text-decoration: none;
         }
-        .nav-logo span { color: var(--indigo); }
+        .nav-logo span { color: var(--gold); }
         .nav-back {
           font-family: 'DM Mono', monospace; font-size: 12px;
           letter-spacing: 0.08em; color: var(--cream-dim);
           text-decoration: none; transition: color 0.2s;
         }
-        .nav-back:hover { color: var(--cream); }
+        .nav-back:hover { color: var(--gold); }
 
         .article { max-width: 680px; margin: 0 auto; padding: 72px 40px 120px; }
 
@@ -68,8 +68,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         .post-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
         .post-tag {
           font-family: 'DM Mono', monospace; font-size: 10px;
-          background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2);
-          color: #a5b4fc; border-radius: 3px; padding: 3px 8px;
+          background: rgba(255,215,0,0.06); border: 1px solid rgba(255,215,0,0.3);
+          color: var(--gold); border-radius: 0; padding: 3px 8px;
         }
         .post-title {
           font-family: 'Playfair Display', serif;
@@ -97,7 +97,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           margin: 36px 0 12px;
         }
         .prose p { margin-bottom: 24px; }
-        .prose a { color: var(--indigo); text-decoration: underline; text-underline-offset: 3px; }
+        .prose a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
         .prose strong { color: var(--cream); font-weight: 600; }
         .prose em { font-style: italic; }
         .prose ul, .prose ol {
@@ -105,21 +105,21 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         }
         .prose li { color: var(--cream-dim); }
         .prose pre {
-          background: #141310; border: 1px solid var(--border-md);
-          border-radius: 10px; padding: 24px 28px; overflow-x: auto;
+          background: #0a0a0a; border: 1px solid var(--border-md);
+          border-radius: 0; padding: 24px 28px; overflow-x: auto;
           margin: 0 0 28px; font-family: 'DM Mono', monospace;
-          font-size: 13px; line-height: 1.7; color: #a5b4fc;
+          font-size: 13px; line-height: 1.7; color: var(--gold);
         }
         .prose code {
           font-family: 'DM Mono', monospace; font-size: 13px;
-          background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2);
-          color: #a5b4fc; border-radius: 4px; padding: 2px 7px;
+          background: rgba(255,215,0,0.06); border: 1px solid rgba(255,215,0,0.3);
+          color: var(--gold); border-radius: 0; padding: 2px 7px;
         }
         .prose pre code {
           background: none; border: none; padding: 0; color: inherit;
         }
         .prose blockquote {
-          border-left: 2px solid var(--indigo);
+          border-left: 2px solid var(--gold);
           margin: 0 0 24px; padding: 4px 0 4px 24px;
           color: var(--cream-dim); font-style: italic;
         }
@@ -140,7 +140,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           letter-spacing: 0.08em; color: var(--cream-dim);
           text-decoration: none; transition: color 0.2s;
         }
-        .back-link:hover { color: var(--indigo); }
+        .back-link:hover { color: var(--gold); }
 
         footer {
           border-top: 1px solid var(--border); padding: 24px 48px;
@@ -174,7 +174,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         />
         <div className="post-footer">
           <Link href="/blog" className="back-link">← Back to all posts</Link>
-          <Link href="/#contact" className="back-link">Get in touch →</Link>
+          <Link href="/#about" className="back-link">Get in touch →</Link>
         </div>
       </article>
 
