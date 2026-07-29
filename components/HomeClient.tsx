@@ -123,7 +123,7 @@ const WHY_ME = [
   { title: 'I ship, not just code', body: 'Quorel and VarsityLine are live, self-built startups, from schema to UI to the infrastructure keeping them running. These are not tutorial projects. They are products I designed, deployed, and maintain.' },
   { title: 'I think before I type', body: 'Years of working with limited resources taught me to design logic before writing a line. I map edge cases and question assumptions early, so things ship less buggy from the start.' },
   { title: 'I fix real problems', body: 'Running Quorel and VarsityLine means I am the one who gets paged when something breaks, whether it is a scraping layer, a payment webhook, or a data pipeline going stale. I own problems until they are fixed.' },
-  { title: 'I learn at uncommon speed', body: 'I picked up TypeScript and Go in 2023 simultaneously while already knowing PHP and JavaScript, and was building real projects in both within weeks.' },
+  { title: 'I learn at uncommon speed', body: 'I picked up TypeScript and Go in 2022 simultaneously while already knowing PHP and JavaScript, and was building real projects in both within weeks.' },
   { title: 'I work remotely by default', body: 'I have been self-directed for years with no classroom, no bootcamp, no one looking over my shoulder. Remote work is the environment I have always operated in.' },
   { title: 'I contribute beyond my role', body: 'I mentor students and teach free coding classes online. A team that hires me gets someone who adds energy to the room, not just code to the repo.' },
 ];
