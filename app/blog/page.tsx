@@ -1,10 +1,27 @@
 import Link from 'next/link';
-import { getAllPosts } from '@/lib/posts';
+import { getPostBySlug, getAllSlugs } from '@/lib/posts';
+import { notFound } from 'next/navigation';
 
-export const metadata = { title: 'Blog — Raphael Samuel' };
+export async function generateStaticParams() {
+  return getAllSlugs().map((slug) => ({ slug }));
+}
 
-export default function BlogPage() {
-  const posts = getAllPosts();
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug).catch(() => null);
+  if (!post) return {};
+  return { title: `${post.title}, Raphael Samuel` };
+}
+
+export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+
+  let post;
+  try {
+    post = await getPostBySlug(slug);
+  } catch {
+    notFound();
+  }
 
   return (
     <>
@@ -14,150 +31,152 @@ export default function BlogPage() {
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-          --bg:        #0e0d0c;
-          --bg2:       #141310;
-          --cream:     #e8e0d0;
-          --cream-dim: rgba(232,224,208,0.55);
-          --cream-xs:  rgba(232,224,208,0.2);
-          --indigo:    #6366f1;
-          --border:    rgba(232,224,208,0.08);
-          --border-md: rgba(232,224,208,0.14);
+          --bg:        #000000;
+          --cream:     #ffffff;
+          --cream-dim: rgba(255,255,255,0.5);
+          --cream-xs:  rgba(255,255,255,0.3);
+          --gold:      #FFD700;
+          --border:    rgba(255,215,0,0.15);
+          --border-md: rgba(255,215,0,0.3);
         }
 
         body {
-          background: var(--bg);
-          color: var(--cream);
+          background: var(--bg); color: var(--cream);
           font-family: 'Outfit', sans-serif;
           -webkit-font-smoothing: antialiased;
         }
 
         .nav {
           display: flex; align-items: center; justify-content: space-between;
-          padding: 24px 48px;
-          border-bottom: 1px solid var(--border);
+          padding: 24px 48px; border-bottom: 1px solid var(--border);
         }
         .nav-logo {
           font-family: 'DM Mono', monospace; font-size: 13px;
           letter-spacing: 0.12em; color: var(--cream-dim); text-decoration: none;
         }
-        .nav-logo span { color: var(--indigo); }
+        .nav-logo span { color: var(--gold); }
         .nav-back {
           font-family: 'DM Mono', monospace; font-size: 12px;
           letter-spacing: 0.08em; color: var(--cream-dim);
           text-decoration: none; transition: color 0.2s;
         }
-        .nav-back:hover { color: var(--cream); }
+        .nav-back:hover { color: var(--gold); }
 
-        .page { max-width: 720px; margin: 0 auto; padding: 80px 40px 120px; }
+        .article { max-width: 680px; margin: 0 auto; padding: 72px 40px 120px; }
 
-        .eyebrow {
-          font-family: 'DM Mono', monospace; font-size: 11px;
-          letter-spacing: 0.2em; text-transform: uppercase;
-          color: var(--indigo); margin-bottom: 12px;
-        }
-        .page-title {
-          font-family: 'Playfair Display', serif; font-size: clamp(40px, 6vw, 60px);
-          font-weight: 800; color: var(--cream); letter-spacing: -0.03em;
-          line-height: 1; margin-bottom: 16px;
-        }
-        .page-sub {
-          font-size: 15px; font-weight: 300; color: var(--cream-dim);
-          line-height: 1.7; margin-bottom: 64px;
-        }
-
-        .post-list { display: flex; flex-direction: column; }
-        .post-item {
-          display: flex; align-items: flex-start; gap: 24px;
-          padding: 32px 0;
-          border-bottom: 1px solid var(--border);
-          text-decoration: none;
-          transition: all 0.2s;
-        }
-        .post-item:first-child { border-top: 1px solid var(--border); }
-        .post-item:hover .post-title { color: var(--indigo); }
-        .post-item:hover .post-arrow { transform: translateX(6px); color: var(--indigo); }
-
-        .post-date {
-          font-family: 'DM Mono', monospace; font-size: 11px;
-          color: var(--cream-xs); letter-spacing: 0.08em;
-          min-width: 96px; padding-top: 5px;
-        }
-        .post-body { flex: 1; }
-        .post-title {
-          font-family: 'Playfair Display', serif; font-size: 22px;
-          font-weight: 700; color: var(--cream); letter-spacing: -0.02em;
-          margin-bottom: 8px; line-height: 1.3; transition: color 0.2s;
-        }
-        .post-excerpt {
-          font-size: 14px; font-weight: 300; color: var(--cream-dim);
-          line-height: 1.7; margin-bottom: 14px;
-        }
-        .post-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+        /* Header */
+        .post-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
         .post-tag {
           font-family: 'DM Mono', monospace; font-size: 10px;
-          background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2);
-          color: #a5b4fc; border-radius: 3px; padding: 3px 8px;
+          background: rgba(255,215,0,0.06); border: 1px solid rgba(255,215,0,0.3);
+          color: var(--gold); border-radius: 0; padding: 3px 8px;
         }
-        .post-arrow {
-          font-size: 18px; color: var(--cream-xs);
-          transition: all 0.2s; padding-top: 4px;
+        .post-title {
+          font-family: 'Playfair Display', serif;
+          font-size: clamp(32px, 5vw, 52px); font-weight: 800;
+          color: var(--cream); letter-spacing: -0.03em; line-height: 1.1;
+          margin-bottom: 20px;
+        }
+        .post-meta {
+          font-family: 'DM Mono', monospace; font-size: 11px;
+          letter-spacing: 0.1em; color: var(--cream-xs);
+          margin-bottom: 56px; padding-bottom: 40px;
+          border-bottom: 1px solid var(--border);
         }
 
-        .empty {
-          font-family: 'DM Mono', monospace; font-size: 13px;
-          color: var(--cream-xs); padding: 48px 0;
+        /* Prose */
+        .prose { font-size: 16px; font-weight: 300; line-height: 1.85; color: var(--cream-dim); }
+        .prose h2 {
+          font-family: 'Playfair Display', serif; font-size: 26px;
+          font-weight: 700; color: var(--cream); letter-spacing: -0.02em;
+          margin: 48px 0 16px; line-height: 1.2;
         }
+        .prose h3 {
+          font-family: 'Outfit', sans-serif; font-size: 18px;
+          font-weight: 600; color: var(--cream);
+          margin: 36px 0 12px;
+        }
+        .prose p { margin-bottom: 24px; }
+        .prose a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
+        .prose strong { color: var(--cream); font-weight: 600; }
+        .prose em { font-style: italic; }
+        .prose ul, .prose ol {
+          margin: 0 0 24px 24px; display: flex; flex-direction: column; gap: 8px;
+        }
+        .prose li { color: var(--cream-dim); }
+        .prose pre {
+          background: #0a0a0a; border: 1px solid var(--border-md);
+          border-radius: 0; padding: 24px 28px; overflow-x: auto;
+          margin: 0 0 28px; font-family: 'DM Mono', monospace;
+          font-size: 13px; line-height: 1.7; color: var(--gold);
+        }
+        .prose code {
+          font-family: 'DM Mono', monospace; font-size: 13px;
+          background: rgba(255,215,0,0.06); border: 1px solid rgba(255,215,0,0.3);
+          color: var(--gold); border-radius: 0; padding: 2px 7px;
+        }
+        .prose pre code {
+          background: none; border: none; padding: 0; color: inherit;
+        }
+        .prose blockquote {
+          border-left: 2px solid var(--gold);
+          margin: 0 0 24px; padding: 4px 0 4px 24px;
+          color: var(--cream-dim); font-style: italic;
+        }
+        .prose hr {
+          border: none; border-top: 1px solid var(--border);
+          margin: 48px 0;
+        }
+
+        /* Footer */
+        .post-footer {
+          margin-top: 72px; padding-top: 40px;
+          border-top: 1px solid var(--border);
+          display: flex; justify-content: space-between; align-items: center;
+          flex-wrap: wrap; gap: 16px;
+        }
+        .back-link {
+          font-family: 'DM Mono', monospace; font-size: 12px;
+          letter-spacing: 0.08em; color: var(--cream-dim);
+          text-decoration: none; transition: color 0.2s;
+        }
+        .back-link:hover { color: var(--gold); }
 
         footer {
-          border-top: 1px solid var(--border);
-          padding: 24px 48px;
+          border-top: 1px solid var(--border); padding: 24px 48px;
           font-family: 'DM Mono', monospace; font-size: 11px;
           color: var(--cream-xs); letter-spacing: 0.06em;
         }
 
         @media (max-width: 600px) {
           .nav { padding: 16px 20px; }
-          .page { padding: 48px 20px 80px; }
-          .post-item { flex-direction: column; gap: 8px; }
-          .post-date { min-width: unset; }
+          .article { padding: 48px 20px 80px; }
           footer { padding: 20px; }
         }
       `}</style>
 
       <nav className="nav">
         <Link href="/" className="nav-logo">var<span>-</span>raphael</Link>
-        <Link href="/" className="nav-back">← Back home</Link>
+        <Link href="/blog" className="nav-back">← All posts</Link>
       </nav>
 
-      <main className="page">
-        <p className="eyebrow">Writing</p>
-        <h1 className="page-title">The Blog</h1>
-        <p className="page-sub">
-          Thoughts on backend architecture, TypeScript, databases, and whatever I'm currently breaking.
-        </p>
-
-        <div className="post-list">
-          {posts.length === 0 ? (
-            <p className="empty">No posts yet — check back soon.</p>
-          ) : (
-            posts.map((post) => (
-              <Link key={post.slug} href={`/blog/${post.slug}`} className="post-item">
-                <span className="post-date">{post.date}</span>
-                <div className="post-body">
-                  <div className="post-title">{post.title}</div>
-                  <p className="post-excerpt">{post.excerpt}</p>
-                  {post.tags && post.tags.length > 0 && (
-                    <div className="post-tags">
-                      {post.tags.map((t) => <span key={t} className="post-tag">{t}</span>)}
-                    </div>
-                  )}
-                </div>
-                <span className="post-arrow">→</span>
-              </Link>
-            ))
-          )}
+      <article className="article">
+        {post.tags && post.tags.length > 0 && (
+          <div className="post-tags">
+            {post.tags.map((t) => <span key={t} className="post-tag">{t}</span>)}
+          </div>
+        )}
+        <h1 className="post-title">{post.title}</h1>
+        <p className="post-meta">{post.date}</p>
+        <div
+          className="prose"
+          dangerouslySetInnerHTML={{ __html: post.contentHtml }}
+        />
+        <div className="post-footer">
+          <Link href="/blog" className="back-link">← Back to all posts</Link>
+          <Link href="/#about" className="back-link">Get in touch →</Link>
         </div>
-      </main>
+      </article>
 
       <footer>© 2026 Raphael Samuel</footer>
     </>
