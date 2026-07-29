@@ -231,7 +231,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
           .section-inner { padding: 0 28px; }
           .nav-desktop-links { display: none; }
           .nav-hamburger { display: flex; }
-          .cv-btn-label { display: none; }
+          .btn-gold-fill { padding: 9px 14px; font-size: 10px; }
         }
         @media (max-width: 680px) {
           .section-inner { padding: 0 20px; }

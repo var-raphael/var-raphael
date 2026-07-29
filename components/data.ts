@@ -33,7 +33,7 @@ export const STACK = ['Python', 'Go', 'TypeScript', 'Next.js', 'Tailwind', 'MySQ
 export const PROJECTS = [
   {
     title: 'Quorel',
-    stat: '4 live datasets · MCP tool on every plan · full version history, nothing overwritten',
+    stat: '4 live datasets · full version history, nothing overwritten',
     desc: 'Gives your AI agent a live, versioned view of any website. Describe the fields you want in plain English, Quorel extracts them nightly and keeps every past version permanently queryable. Every dataset ships with an MCP server, so Claude or any MCP-compatible agent can query it, catch what changed since last week, and even fix bad rows itself, publishing the correction as a new, reversible version.',
     images: ['/portfolio-images/img/quorel1.jpg', '/portfolio-images/img/quorel2.jpg'],
     live: 'https://quorel.vercel.app',
