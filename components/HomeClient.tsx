@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Lenis from 'lenis';
 import type { PostMeta } from '@/lib/posts';
 import {
@@ -8,33 +8,23 @@ import {
   PROJECTS, MORE_PROJECTS, JEWELRY_COLLECTIONS,
 } from './data';
 
-// ── Phantom tracking helper ───────────────────────────────────────────────────
 function track(event: string, props?: Record<string, string>) {
   if (typeof window !== 'undefined' && (window as any).phantom?.track) {
     (window as any).phantom.track(event, props ?? {});
   }
 }
 
-// ── TechTag ───────────────────────────────────────────────────────────────────
 function TechTag({ label }: { label: string }) {
   const icon = TECH_ICONS[label];
   const needsInvert = label === 'Next.js' || label === 'Three.js' || label === 'Framer Motion' || label === 'WebGL' || label === 'Ethereum' || label === 'HTMX';
-
   return (
     <span className="tech-tag">
-      {icon && (
-        <img
-          src={icon}
-          alt={label}
-          style={{ width: 13, height: 13, objectFit: 'contain', flexShrink: 0, filter: needsInvert ? 'invert(1)' : undefined }}
-        />
-      )}
+      {icon && <img src={icon} alt={label} style={{ width: 13, height: 13, objectFit: 'contain', flexShrink: 0, filter: needsInvert ? 'invert(1)' : undefined }} />}
       {label}
     </span>
   );
 }
 
-// ── Static cross-fade image (no Ken Burns motion — restraint over decoration) ──
 function CyclingImage({ images, alt, style }: { images: string[]; alt: string; style?: React.CSSProperties }) {
   const [idx, setIdx] = useState(0);
   const [fading, setFading] = useState(false);
@@ -43,26 +33,18 @@ function CyclingImage({ images, alt, style }: { images: string[]; alt: string; s
     if (images.length <= 1) return;
     const interval = setInterval(() => {
       setFading(true);
-      setTimeout(() => {
-        setIdx(i => (i + 1) % images.length);
-        setFading(false);
-      }, 400);
+      setTimeout(() => { setIdx(i => (i + 1) % images.length); setFading(false); }, 400);
     }, 4000);
     return () => clearInterval(interval);
   }, [images.length]);
 
   return (
     <div style={{ ...style, position: 'relative', overflow: 'hidden' }}>
-      <img
-        src={images[idx]}
-        alt={alt}
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', opacity: fading ? 0 : 1, transition: 'opacity 0.4s ease' }}
-      />
+      <img src={images[idx]} alt={alt} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', opacity: fading ? 0 : 1, transition: 'opacity 0.4s ease' }} />
     </div>
   );
 }
 
-// ── Jewelry Carousel ──────────────────────────────────────────────────────────
 function JewelryCarousel() {
   const [current, setCurrent] = useState(0);
   const [animating, setAnimating] = useState(false);
@@ -71,14 +53,11 @@ function JewelryCarousel() {
 
   const go = (dir: 'prev' | 'next') => {
     if (animating) return;
-    const next = dir === 'next'
-      ? (current + 1) % JEWELRY_COLLECTIONS.length
-      : (current - 1 + JEWELRY_COLLECTIONS.length) % JEWELRY_COLLECTIONS.length;
+    const next = dir === 'next' ? (current + 1) % JEWELRY_COLLECTIONS.length : (current - 1 + JEWELRY_COLLECTIONS.length) % JEWELRY_COLLECTIONS.length;
     setDirection(dir === 'next' ? 'right' : 'left');
     setAnimating(true);
     setTimeout(() => { setCurrent(next); setDisplayed(next); setAnimating(false); }, 280);
   };
-
   const goTo = (i: number) => {
     if (animating || i === current) return;
     setDirection(i > current ? 'right' : 'left');
@@ -111,14 +90,10 @@ function JewelryCarousel() {
         </div>
         <div style={{ marginTop: 24 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 18 }}>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <a href={item.live} target="_blank" rel="noreferrer" onClick={() => track('jewelry_view_site_clicked', { collection: item.name })} className="btn-gold-fill">View Site ↗</a>
-            </div>
+            <a href={item.live} target="_blank" rel="noreferrer" onClick={() => track('jewelry_view_site_clicked', { collection: item.name })} className="btn-gold-fill">View Site ↗</a>
             <div style={{ display: 'flex', gap: 8 }}>
               {(['prev', 'next'] as const).map(dir => (
-                <button key={dir} onClick={() => go(dir)} className="carousel-nav-btn" aria-label={dir}>
-                  {dir === 'prev' ? '←' : '→'}
-                </button>
+                <button key={dir} onClick={() => go(dir)} className="carousel-nav-btn" aria-label={dir}>{dir === 'prev' ? '←' : '→'}</button>
               ))}
             </div>
           </div>
@@ -142,7 +117,7 @@ function useLenis() {
   }, []);
 }
 
-const NAV_LINKS: [string, string][] = [['#contact', 'Contact'], ['#why', 'Why Me'], ['#projects', 'Projects'], ['#frontend', 'Frontend'], ['#blog', 'Blog']];
+const NAV_LINKS: [string, string][] = [['#about', 'About'], ['#contact', 'Contact'], ['#projects', 'Projects'], ['#frontend', 'Frontend'], ['#why', 'Why Me'], ['#blog', 'Blog']];
 
 const WHY_ME = [
   { title: 'I ship, not just code', body: 'Quorel and VarsityLine are live, self-built startups, from schema to UI to the infrastructure keeping them running. These are not tutorial projects. They are products I designed, deployed, and maintain.' },
@@ -153,7 +128,6 @@ const WHY_ME = [
   { title: 'I contribute beyond my role', body: 'I mentor students and teach free coding classes online. A team that hires me gets someone who adds energy to the room, not just code to the repo.' },
 ];
 
-// ── Component ─────────────────────────────────────────────────────────────────
 export default function Portfolio({ posts }: { posts: PostMeta[] }) {
   useLenis();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -164,94 +138,97 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap');
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #0e0d0c; color: #e8e0d0; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+        body { background: #000; color: #eee; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
         html { scroll-behavior: smooth; }
         @keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
 
-        /* ── Gold accent system ── */
-        .gold-text { color: #c9a84c; }
-        .eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #c9a84c; margin-bottom: 12px; }
-        .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(201,168,76,0.18) 20%, rgba(201,168,76,0.18) 80%, transparent); margin: 0 40px; }
-        .section-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+        .gold-text { color: #FFD700; }
+        .eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #FFD700; margin-bottom: 12px; }
+        .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,215,0,0.2) 20%, rgba(255,215,0,0.2) 80%, transparent); margin: 0 40px; }
+        .section-inner { max-width: 1160px; margin: 0 auto; padding: 0 48px; }
 
-        .nav-link { font-size: 13px; font-weight: 500; color: rgba(232,224,208,0.45); text-decoration: none; transition: color 0.2s; letter-spacing: 0.04em; }
-        .nav-link:hover { color: #c9a84c; }
+        .nav-link { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.5); text-decoration: none; transition: color 0.2s; letter-spacing: 0.04em; }
+        .nav-link:hover { color: #FFD700; }
 
-        .btn-gold-fill { display: inline-flex; align-items: center; background: #c9a84c; color: #0a0806; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; padding: 11px 22px; border-radius: 8px; text-decoration: none; box-shadow: 0 0 20px rgba(201,168,76,0.22); transition: all 0.2s; border: none; cursor: pointer; }
-        .btn-gold-fill:hover { box-shadow: 0 0 32px rgba(201,168,76,0.4); transform: translateY(-1px); }
-        .btn-gold-outline { display: inline-block; border: 1px solid rgba(201,168,76,0.35); color: rgba(201,168,76,0.85); font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; padding: 10px 20px; border-radius: 7px; text-decoration: none; transition: all 0.2s; background: transparent; }
-        .btn-gold-outline:hover { border-color: rgba(201,168,76,0.7); background: rgba(201,168,76,0.06); }
+        /* Square-edge buttons, no rounding anywhere */
+        .btn-gold-fill { display: inline-flex; align-items: center; background: #FFD700; color: #000; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; padding: 12px 24px; border-radius: 0; text-decoration: none; transition: all 0.15s; border: 1px solid #FFD700; cursor: pointer; }
+        .btn-gold-fill:hover { background: #000; color: #FFD700; }
+        .btn-gold-outline { display: inline-block; border: 1px solid #FFD700; color: #FFD700; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; padding: 11px 22px; border-radius: 0; text-decoration: none; transition: all 0.15s; background: transparent; }
+        .btn-gold-outline:hover { background: #FFD700; color: #000; }
 
-        .tech-tag { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 5px; font-size: 10px; font-family: 'DM Mono', monospace; font-weight: 500; border: 1px solid rgba(201,168,76,0.22); background: rgba(201,168,76,0.06); color: rgba(201,168,76,0.8); line-height: 1.6; }
+        .tech-tag { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 0; font-size: 10px; font-family: 'DM Mono', monospace; font-weight: 500; border: 1px solid rgba(255,215,0,0.35); background: rgba(255,215,0,0.05); color: #FFD700; line-height: 1.6; }
 
-        .stat-line { font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(201,168,76,0.75); letter-spacing: 0.02em; margin-bottom: 14px; line-height: 1.6; }
+        .stat-line { font-family: 'DM Mono', monospace; font-size: 11px; color: #FFD700; letter-spacing: 0.02em; margin-bottom: 14px; line-height: 1.6; }
 
-        .project-card { background: #141310; border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; overflow: hidden; display: grid; grid-template-columns: 340px 1fr; transition: all 0.3s ease; }
-        .project-card:hover { border-color: rgba(201,168,76,0.25); transform: translateY(-3px); box-shadow: 0 24px 60px rgba(0,0,0,0.5); }
-        .project-card-media { min-height: 220px; background: #0e0d0c; }
-        .project-card-body { padding: 30px 36px; display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.06); }
-        .projects-grid { display: flex; flex-direction: column; gap: 18px; }
+        /* Projects grid — 2 columns on desktop */
+        .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .project-card { background: #0a0a0a; border: 1px solid rgba(255,215,0,0.15); border-radius: 0; overflow: hidden; display: flex; flex-direction: column; transition: all 0.2s ease; }
+        .project-card:hover { border-color: rgba(255,215,0,0.5); }
+        .project-card-media { height: 200px; background: #050505; flex-shrink: 0; }
+        .project-card-body { padding: 26px 28px; display: flex; flex-direction: column; flex: 1; border-top: 1px solid rgba(255,215,0,0.1); }
 
-        .more-project-card { background: #141310; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 22px 24px; transition: all 0.2s; }
-        .more-project-card:hover { border-color: rgba(201,168,76,0.2); }
+        .more-project-card { background: #0a0a0a; border: 1px solid rgba(255,215,0,0.12); border-radius: 0; padding: 22px 24px; transition: all 0.15s; }
+        .more-project-card:hover { border-color: rgba(255,215,0,0.4); }
 
-        .ring-card { display: grid; grid-template-columns: 5fr 7fr; background: #141310; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; }
-        .ring-visual { position: relative; min-height: 300px; border-right: 1px solid rgba(255,255,255,0.07); background: #0a0806; overflow: hidden; }
-        .ring-badge { position: absolute; top: 16px; left: 16px; font-family: 'DM Mono', monospace; font-size: 10px; background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3); color: rgba(201,168,76,0.85); border-radius: 4px; padding: 4px 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+        .ring-card { display: grid; grid-template-columns: 5fr 7fr; background: #0a0a0a; border: 1px solid rgba(255,215,0,0.15); border-radius: 0; overflow: hidden; }
+        .ring-visual { position: relative; min-height: 300px; border-right: 1px solid rgba(255,215,0,0.15); background: #050505; overflow: hidden; }
+        .ring-badge { position: absolute; top: 16px; left: 16px; font-family: 'DM Mono', monospace; font-size: 10px; background: rgba(255,215,0,0.1); border: 1px solid rgba(255,215,0,0.4); color: #FFD700; border-radius: 0; padding: 4px 10px; letter-spacing: 0.1em; text-transform: uppercase; }
 
-        .carousel-grid { display: grid; grid-template-columns: 1fr 1fr; background: #141310; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; }
-        .carousel-image-panel { position: relative; min-height: 260px; border-right: 1px solid rgba(255,255,255,0.07); background: #0e0d0c; overflow: hidden; }
+        .carousel-grid { display: grid; grid-template-columns: 1fr 1fr; background: #0a0a0a; border: 1px solid rgba(255,215,0,0.15); border-radius: 0; overflow: hidden; }
+        .carousel-image-panel { position: relative; min-height: 260px; border-right: 1px solid rgba(255,215,0,0.15); background: #050505; overflow: hidden; }
         .carousel-info-panel { padding: 32px 36px; display: flex; flex-direction: column; justify-content: space-between; min-height: 240px; }
-        .carousel-counter { position: absolute; bottom: 14px; left: 14px; display: flex; align-items: baseline; gap: 3px; background: rgba(0,0,0,0.65); backdrop-filter: blur(8px); border: 1px solid rgba(201,168,76,0.2); border-radius: 8px; padding: 5px 11px; font-family: 'DM Mono', monospace; font-size: 11px; color: #c9a84c; }
-        .carousel-title { font-family: 'Playfair Display', serif; font-size: clamp(17px, 2vw, 22px); font-weight: 700; color: rgba(232,224,208,0.9); letter-spacing: -0.02em; margin-bottom: 9px; }
-        .carousel-desc { font-size: 12.5px; font-weight: 300; color: rgba(232,224,208,0.4); line-height: 1.7; }
-        .carousel-nav-btn { width: 36px; height: 36px; border-radius: 8px; border: 1px solid rgba(201,168,76,0.25); background: transparent; color: rgba(201,168,76,0.7); font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-        .carousel-nav-btn:hover { border-color: rgba(201,168,76,0.6); color: #c9a84c; }
-        .carousel-dot { height: 6px; width: 6px; border-radius: 9999px; border: none; padding: 0; cursor: pointer; background: rgba(255,255,255,0.15); transition: all 0.25s; }
-        .carousel-dot[data-active="true"] { width: 22px; background: #c9a84c; }
+        .carousel-counter { position: absolute; bottom: 14px; left: 14px; display: flex; align-items: baseline; gap: 3px; background: rgba(0,0,0,0.75); border: 1px solid rgba(255,215,0,0.3); border-radius: 0; padding: 5px 11px; font-family: 'DM Mono', monospace; font-size: 11px; color: #FFD700; }
+        .carousel-title { font-family: 'Playfair Display', serif; font-size: clamp(17px, 2vw, 22px); font-weight: 700; color: #fff; letter-spacing: -0.02em; margin-bottom: 9px; }
+        .carousel-desc { font-size: 12.5px; font-weight: 300; color: rgba(255,255,255,0.45); line-height: 1.7; }
+        .carousel-nav-btn { width: 36px; height: 36px; border-radius: 0; border: 1px solid rgba(255,215,0,0.4); background: transparent; color: #FFD700; font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+        .carousel-nav-btn:hover { background: #FFD700; color: #000; }
+        .carousel-dot { height: 6px; width: 6px; border-radius: 0; border: none; padding: 0; cursor: pointer; background: rgba(255,255,255,0.2); transition: all 0.2s; }
+        .carousel-dot[data-active="true"] { width: 22px; background: #FFD700; }
 
-        .why-card { border-bottom: 1px solid rgba(255,255,255,0.06); padding: 18px 0; }
-        .why-card:last-child { border-bottom: none; }
-        .why-title { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: rgba(232,224,208,0.88); margin-bottom: 6px; }
-        .why-body { font-size: 12.5px; font-weight: 300; color: rgba(232,224,208,0.4); line-height: 1.7; }
+        .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .why-card { background: #0a0a0a; border: 1px solid rgba(255,215,0,0.12); border-radius: 0; padding: 24px 26px; transition: all 0.15s; }
+        .why-card:hover { border-color: rgba(255,215,0,0.4); }
+        .why-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+        .why-body { font-size: 12.5px; font-weight: 300; color: rgba(255,255,255,0.45); line-height: 1.7; }
 
-        .blog-row { display: block; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.06); text-decoration: none; transition: all 0.2s; }
-        .blog-row:last-child { border-bottom: none; }
-        .blog-row:hover .blog-title { color: #c9a84c; }
-        .blog-date { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(232,224,208,0.25); letter-spacing: 0.06em; }
-        .blog-title { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: rgba(232,224,208,0.85); letter-spacing: -0.01em; margin: 4px 0 5px; line-height: 1.3; transition: color 0.2s; }
-        .blog-excerpt { font-size: 12px; font-weight: 300; color: rgba(232,224,208,0.38); line-height: 1.6; }
+        .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+        .blog-row { display: block; background: #0a0a0a; border: 1px solid rgba(255,215,0,0.12); border-radius: 0; padding: 22px 24px; text-decoration: none; transition: all 0.15s; }
+        .blog-row:hover { border-color: rgba(255,215,0,0.4); }
+        .blog-row:hover .blog-title { color: #FFD700; }
+        .blog-date { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 0.06em; }
+        .blog-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: #fff; letter-spacing: -0.01em; margin: 6px 0 8px; line-height: 1.3; transition: color 0.2s; }
+        .blog-excerpt { font-size: 12px; font-weight: 300; color: rgba(255,255,255,0.4); line-height: 1.6; }
 
-        .hero-email { font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(232,224,208,0.35); text-decoration: none; letter-spacing: 0.04em; border-bottom: 1px solid rgba(232,224,208,0.12); padding-bottom: 1px; transition: color 0.2s; }
-        .hero-email:hover { color: #c9a84c; border-bottom-color: rgba(201,168,76,0.4); }
+        .hero-email { font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.45); text-decoration: none; letter-spacing: 0.04em; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 1px; transition: color 0.2s; }
+        .hero-email:hover { color: #FFD700; border-bottom-color: #FFD700; }
 
         .contact-row { display: flex; align-items: flex-start; gap: 56px; }
-        .contact-links-row { display: flex; gap: 12px; flex-wrap: wrap; }
+        .contact-links-row { display: flex; gap: 10px; flex-wrap: wrap; }
 
-        .two-col { display: grid; grid-template-columns: 340px 1fr; gap: 48px; align-items: start; }
-        .left-sticky { position: sticky; top: 88px; }
+        /* Hero: left-aligned, photo + text side by side */
+        .hero-grid { display: grid; grid-template-columns: 260px 1fr; gap: 56px; align-items: center; }
+        .hero-photo { width: 100%; aspect-ratio: 1; border: 1px solid rgba(255,215,0,0.3); border-radius: 0; overflow: hidden; background: #0a0a0a; }
 
         .nav-desktop-links { display: flex; align-items: center; gap: 26px; }
         .nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; background: transparent; border: none; cursor: pointer; padding: 4px; }
-        .nav-hamburger span { display: block; width: 22px; height: 2px; background: rgba(232,224,208,0.6); border-radius: 2px; }
-        .nav-mobile-menu { display: none; position: fixed; top: 57px; left: 0; right: 0; background: rgba(14,13,12,0.97); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); padding: 20px 24px; flex-direction: column; gap: 4px; z-index: 99; }
+        .nav-hamburger span { display: block; width: 22px; height: 2px; background: rgba(255,255,255,0.7); }
+        .nav-mobile-menu { display: none; position: fixed; top: 57px; left: 0; right: 0; background: rgba(0,0,0,0.98); border-bottom: 1px solid rgba(255,215,0,0.15); padding: 20px 24px; flex-direction: column; gap: 4px; z-index: 99; }
         .nav-mobile-menu.open { display: flex; }
-        .nav-mobile-link { font-size: 15px; font-weight: 500; color: rgba(232,224,208,0.5); text-decoration: none; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); letter-spacing: 0.04em; }
+        .nav-mobile-link { font-size: 15px; font-weight: 500; color: rgba(255,255,255,0.6); text-decoration: none; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.08); letter-spacing: 0.04em; }
         .nav-mobile-link:last-child { border-bottom: none; }
 
         @media (max-width: 900px) {
-          .two-col { grid-template-columns: 1fr; gap: 56px; }
-          .left-sticky { position: static; }
-          .project-card { grid-template-columns: 1fr; }
-          .project-card-body { border-left: none; border-top: 1px solid rgba(255,255,255,0.06); padding: 22px 22px 26px; }
+          .projects-grid { grid-template-columns: 1fr; }
           .ring-card { grid-template-columns: 1fr; }
-          .ring-visual { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.07) !important; }
+          .ring-visual { border-right: none !important; border-bottom: 1px solid rgba(255,215,0,0.15) !important; }
           .carousel-grid { grid-template-columns: 1fr; }
-          .carousel-image-panel { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+          .carousel-image-panel { border-right: none; border-bottom: 1px solid rgba(255,215,0,0.15); }
           .carousel-info-panel { padding: 26px 22px; }
           .contact-row { flex-direction: column; gap: 28px; align-items: center; text-align: center; }
           .contact-links-row { justify-content: center; }
           .about-inner-grid { grid-template-columns: 1fr !important; gap: 36px !important; }
+          .hero-grid { grid-template-columns: 1fr !important; text-align: center; gap: 28px !important; }
+          .hero-photo { width: 160px; margin: 0 auto; }
           .section-inner { padding: 0 28px; }
           .nav-desktop-links { display: none; }
           .nav-hamburger { display: flex; }
@@ -263,15 +240,10 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         }
       `}</style>
 
-      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
-        <div style={{ position: 'absolute', top: '8%', left: '50%', transform: 'translateX(-50%)', width: 700, height: 400, borderRadius: '50%', filter: 'blur(90px)', background: 'radial-gradient(ellipse, rgba(201,168,76,0.06) 0%, transparent 70%)' }} />
-      </div>
-
       <div style={{ position: 'relative', zIndex: 2 }}>
 
-        {/* Nav */}
-        <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 24px 18px 48px', background: 'rgba(14,13,12,0.75)', backdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-          <a href="#" onClick={() => track('nav_logo_clicked')} style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, letterSpacing: '0.12em', color: 'rgba(232,224,208,0.5)', textDecoration: 'none' }}>var-raphael</a>
+        <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 24px 18px 48px', background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(255,215,0,0.12)' }}>
+          <a href="#" onClick={() => track('nav_logo_clicked')} style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>var-raphael</a>
           <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
             <div className="nav-desktop-links">
               {NAV_LINKS.map(([href, label]) => (
@@ -295,38 +267,46 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
           ))}
         </div>
 
-        {/* Hero */}
-        <section style={{ minHeight: '92vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 24px 64px' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(232,224,208,0.3)', marginBottom: 28 }}>
-            <span>Full-Stack Engineer</span>
-            <span style={{ display: 'block', width: 40, height: 1, background: '#c9a84c', opacity: 0.5 }} />
-          </div>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(58px, 10vw, 112px)', fontWeight: 800, lineHeight: 0.92, letterSpacing: '-0.03em', color: '#e8e0d0', marginBottom: 8 }}>
-            Raphael<br />
-            <em style={{ fontStyle: 'italic', color: '#c9a84c' }}>Samuel</em>
-          </h1>
-          <p style={{ fontSize: 'clamp(15px, 2vw, 18px)', fontWeight: 300, color: 'rgba(232,224,208,0.45)', letterSpacing: '0.02em', marginTop: 20, marginBottom: 40, maxWidth: 500 }}>
-            Building products end to end. Two of my own, plus client work.
-          </p>
-          <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 20 }}>
-            <a href="#projects" className="btn-gold-fill" onClick={() => track('hero_cta_clicked', { button: 'view_projects' })}>View Projects</a>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 56, flexWrap: 'wrap', justifyContent: 'center' }}>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(74,222,128,0.85)', background: 'rgba(74,222,128,0.07)', border: '1px solid rgba(74,222,128,0.2)', borderRadius: 99, padding: '5px 12px' }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 8px #4ade80', flexShrink: 0, animation: 'pulse 2s ease-in-out infinite' }} />
-              Open to joining an early-stage startup
-            </span>
-            <a href="mailto:samuelraphael925@gmail.com" className="hero-email" onClick={() => track('email_clicked', { source: 'hero' })}>samuelraphael925@gmail.com</a>
-          </div>
-          <div style={{ display: 'flex', gap: 56, flexWrap: 'wrap', justifyContent: 'center' }}>
-            {[{ val: '6', unit: '+', label: 'Years Coding' }, { val: '3', unit: '', label: 'Live Products' }, { val: '2', unit: '', label: 'Startups Founded' }].map(({ val, unit, label }) => (
-              <div key={label} style={{ textAlign: 'center' }}>
-                <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 38, fontWeight: 700, color: '#e8e0d0', letterSpacing: '-0.03em', lineHeight: 1 }}>
-                  {val}<span className="gold-text">{unit}</span>
-                </div>
-                <div style={{ fontSize: 11, fontWeight: 400, color: 'rgba(232,224,208,0.32)', marginTop: 7, letterSpacing: '0.07em', textTransform: 'uppercase' }}>{label}</div>
+        {/* Hero — left-aligned, photo left / text right */}
+        <section style={{ minHeight: '90vh', display: 'flex', alignItems: 'center', padding: '120px 24px 64px' }}>
+          <div className="section-inner" style={{ width: '100%' }}>
+            <div className="hero-grid">
+              <div className="hero-photo">
+                <img src="/portfolio-images/img/avatar.jpg" alt="Raphael Samuel" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
               </div>
-            ))}
+              <div>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 20 }}>
+                  <span>Full-Stack Engineer</span>
+                  <span style={{ display: 'block', width: 40, height: 1, background: '#FFD700' }} />
+                </div>
+                <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(46px, 7vw, 84px)', fontWeight: 800, lineHeight: 0.95, letterSpacing: '-0.03em', color: '#fff', marginBottom: 8 }}>
+                  Raphael <em style={{ fontStyle: 'italic', color: '#FFD700' }}>Samuel</em>
+                </h1>
+                <p style={{ fontSize: 'clamp(15px, 1.6vw, 18px)', fontWeight: 300, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.02em', marginTop: 18, marginBottom: 28, maxWidth: 520 }}>
+                  Building products end to end. Two of my own, plus client work.
+                </p>
+                <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 24 }}>
+                  <a href="#projects" className="btn-gold-fill" onClick={() => track('hero_cta_clicked', { button: 'view_projects' })}>View Projects</a>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 40, flexWrap: 'wrap' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontFamily: "'DM Mono', monospace", fontSize: 11, color: '#4ade80', background: 'rgba(74,222,128,0.06)', border: '1px solid rgba(74,222,128,0.25)', padding: '5px 12px' }}>
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 8px #4ade80', flexShrink: 0, animation: 'pulse 2s ease-in-out infinite' }} />
+                    Open to joining an early-stage startup
+                  </span>
+                  <a href="mailto:samuelraphael925@gmail.com" className="hero-email" onClick={() => track('email_clicked', { source: 'hero' })}>samuelraphael925@gmail.com</a>
+                </div>
+                <div style={{ display: 'flex', gap: 48, flexWrap: 'wrap' }}>
+                  {[{ val: '6', unit: '+', label: 'Years Coding' }, { val: '3', unit: '', label: 'Live Products' }, { val: '2', unit: '', label: 'Startups Founded' }].map(({ val, unit, label }) => (
+                    <div key={label}>
+                      <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 34, fontWeight: 700, color: '#fff', letterSpacing: '-0.03em', lineHeight: 1 }}>
+                        {val}<span className="gold-text">{unit}</span>
+                      </div>
+                      <div style={{ fontSize: 11, fontWeight: 400, color: 'rgba(255,255,255,0.35)', marginTop: 7, letterSpacing: '0.07em', textTransform: 'uppercase' }}>{label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -338,16 +318,16 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
             <div className="about-inner-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
               <div>
                 <p className="eyebrow">About</p>
-                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 24 }}>
-                  I build things<br /><em style={{ fontStyle: 'italic', color: '#c9a84c' }}>people actually use.</em>
+                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 24 }}>
+                  I build things<br /><em style={{ fontStyle: 'italic', color: '#FFD700' }}>people actually use.</em>
                 </h2>
-                <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.45)', lineHeight: 1.9, marginBottom: 16 }}>
+                <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.5)', lineHeight: 1.9, marginBottom: 16 }}>
                   I have 6 years of experience across Python, Go, TypeScript, and Next.js. I have built and shipped real products, not demos, not clones, tools with real users, real infrastructure, and real problems I had to solve to keep them running.
                 </p>
-                <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.45)', lineHeight: 1.9, marginBottom: 32 }}>
+                <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.5)', lineHeight: 1.9, marginBottom: 32 }}>
                   Two of the projects below are my own startups, built end to end, from the schema to the UI to the infrastructure keeping them online. Every product in this portfolio was designed, built, and maintained by me alone.
                 </p>
-                <a href="#projects" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.08em', color: '#c9a84c', textDecoration: 'none', borderBottom: '1px solid rgba(201,168,76,0.35)', paddingBottom: 2 }}>See the work →</a>
+                <a href="#projects" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.08em', color: '#FFD700', textDecoration: 'none', borderBottom: '1px solid rgba(255,215,0,0.4)', paddingBottom: 2 }}>See the work →</a>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                 {[
@@ -357,13 +337,13 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   { label: 'Location', pills: ['Nigeria', 'UTC+1'] },
                   { label: 'Response time', pills: ['Within 24 hours'] },
                 ].map(({ label, pills }) => (
-                  <div key={label} style={{ display: 'flex', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid rgba(255,255,255,0.05)', gap: 16 }}>
+                  <div key={label} style={{ display: 'flex', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid rgba(255,255,255,0.08)', gap: 16 }}>
                     <div style={{ minWidth: 140, flexShrink: 0 }}>
-                      <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(232,224,208,0.25)' }}>{label}</span>
+                      <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>{label}</span>
                     </div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                       {pills.map(p => (
-                        <span key={p} style={{ display: 'inline-flex', alignItems: 'center', fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.04em', color: 'rgba(232,224,208,0.5)', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 99, padding: '3px 10px' }}>{p}</span>
+                        <span key={p} style={{ display: 'inline-flex', alignItems: 'center', fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.04em', color: 'rgba(255,255,255,0.55)', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', padding: '3px 10px' }}>{p}</span>
                       ))}
                     </div>
                   </div>
@@ -375,17 +355,17 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
 
         <div className="divider" />
 
-        {/* Contact — moved up front */}
+        {/* Contact — stays up front */}
         <section id="contact" style={{ padding: '80px 0' }}>
           <div className="section-inner">
             <div className="contact-row">
-              <div style={{ width: 190, height: 190, borderRadius: 18, overflow: 'hidden', border: '1px solid rgba(201,168,76,0.2)', flexShrink: 0, boxShadow: '0 0 50px rgba(201,168,76,0.1)', background: '#1a1815' }}>
+              <div style={{ width: 190, height: 190, border: '1px solid rgba(255,215,0,0.3)', flexShrink: 0, background: '#0a0a0a' }}>
                 <img src="/portfolio-images/img/avatar.jpg" alt="Raphael Samuel" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
               </div>
               <div style={{ flex: 1 }}>
                 <p className="eyebrow">Get in Touch</p>
-                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(26px, 3.6vw, 42px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 16 }}>Let's build something worth shipping.</h2>
-                <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.85, marginBottom: 24, maxWidth: 420 }}>Open to remote roles, freelance contracts, and interesting problems. If you have one, let's talk.</p>
+                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(26px, 3.6vw, 42px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 16 }}>Let's build something worth shipping.</h2>
+                <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.45)', lineHeight: 1.85, marginBottom: 24, maxWidth: 420 }}>Open to remote roles, freelance contracts, and interesting problems. If you have one, let's talk.</p>
                 <div className="contact-links-row">
                   <a href="mailto:samuelraphael925@gmail.com" onClick={() => track('email_clicked', { source: 'contact' })} className="btn-gold-fill">samuelraphael925@gmail.com</a>
                   {[['https://github.com/var-raphael', 'GitHub'], ['https://www.linkedin.com/in/samuel-raphael-7679313a2', 'LinkedIn'], ['https://x.com/PhantomDev001', 'X']].map(([href, label]) => (
@@ -399,158 +379,158 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
 
         <div className="divider" />
 
-        {/* Two-column: Why Me + Blog (left, sticky) | Projects + Frontend (right, scrolls) */}
-        <section style={{ padding: '80px 0' }}>
+        {/* Projects — 2-column grid */}
+        <section id="projects" style={{ padding: '80px 0' }}>
           <div className="section-inner">
-            <div className="two-col">
+            <p className="eyebrow">Selected Work</p>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(30px, 4vw, 46px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', marginBottom: 28, lineHeight: 1.1 }}>Projects</h2>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 40 }}>
+              {STACK.map(s => <TechTag key={s} label={s} />)}
+            </div>
 
-              {/* LEFT — sticky */}
-              <div className="left-sticky">
-                <div id="why" style={{ marginBottom: 56 }}>
-                  <p className="eyebrow">Why Work With Me</p>
-                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(22px, 2.4vw, 28px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 20, lineHeight: 1.15 }}>Not just another developer.</h2>
-                  <div>
-                    {WHY_ME.map(({ title, body }) => (
-                      <div key={title} className="why-card">
-                        <div className="why-title">{title}</div>
-                        <div className="why-body">{body}</div>
+            <div className="projects-grid">
+              {PROJECTS.map(p => (
+                <div key={p.title} className="project-card">
+                  <div className="project-card-media">
+                    {p.images.length > 0 ? (
+                      <CyclingImage images={p.images} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                    ) : (
+                      <div style={{ width: '100%', height: '100%', background: '#050505', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(255,215,0,0.25)', letterSpacing: '0.1em' }}>[ infra project ]</span>
                       </div>
-                    ))}
+                    )}
+                  </div>
+                  <div className="project-card-body">
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
+                      {p.tags.map(t => <TechTag key={t} label={t} />)}
+                    </div>
+                    <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 19, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', marginBottom: 8 }}>{p.title}</h3>
+                    <div className="stat-line">{p.stat}</div>
+                    <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(255,255,255,0.45)', lineHeight: 1.75, marginBottom: 22, flex: 1 }}>{p.desc}</p>
+                    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                      {p.live && p.live !== '#' && (
+                        <a href={p.live} target="_blank" rel="noreferrer" className="btn-gold-fill" onClick={() => track('project_link_clicked', { project: p.title, type: 'live' })}>View Site ↗</a>
+                      )}
+                      {!p.closedSource && p.github && (
+                        <a href={p.github} target="_blank" rel="noreferrer" className="btn-gold-outline" onClick={() => track('project_link_clicked', { project: p.title, type: 'github' })}>GitHub</a>
+                      )}
+                    </div>
                   </div>
                 </div>
+              ))}
+            </div>
 
-                <div id="blog">
-                  <p className="eyebrow">Recent Writing</p>
-                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(22px, 2.4vw, 28px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 16, lineHeight: 1.15 }}>From the Blog</h2>
-                  <div>
-                    {posts.slice(0, 4).map(post => (
-                      <a key={post.slug} href={`/blog/${post.slug}`} className="blog-row" onClick={() => track('blog_post_clicked', { slug: post.slug, title: post.title })}>
-                        <span className="blog-date">{post.date}</span>
-                        <div className="blog-title">{post.title}</div>
-                        <p className="blog-excerpt">{post.excerpt}</p>
-                      </a>
-                    ))}
+            <div style={{ marginTop: 40 }}>
+              <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: 16 }}>More Projects</p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
+                {MORE_PROJECTS.map(p => (
+                  <div key={p.title} className="more-project-card">
+                    <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: 15, fontWeight: 700, color: '#fff', marginBottom: 8 }}>{p.title}</h4>
+                    <p style={{ fontSize: 12, fontWeight: 300, color: 'rgba(255,255,255,0.45)', lineHeight: 1.6, marginBottom: 14 }}>{p.desc}</p>
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                      {p.live !== '#' && <a href={p.live} target="_blank" rel="noreferrer" className="btn-gold-outline" style={{ fontSize: 10, padding: '7px 14px' }}>View ↗</a>}
+                      <a href={p.github} target="_blank" rel="noreferrer" className="btn-gold-outline" style={{ fontSize: 10, padding: '7px 14px' }}>GitHub</a>
+                    </div>
                   </div>
-                  <a href="/blog" onClick={() => track('blog_all_posts_clicked')} style={{ display: 'inline-block', marginTop: 20, fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.1em', color: '#c9a84c', textDecoration: 'none', borderBottom: '1px solid rgba(201,168,76,0.35)', paddingBottom: 2 }}>All posts ({posts.length}) →</a>
-                </div>
+                ))}
               </div>
+            </div>
 
-              {/* RIGHT — scrolls normally */}
-              <div>
-                {/* Projects */}
-                <div id="projects" style={{ marginBottom: 72 }}>
-                  <p className="eyebrow">Selected Work</p>
-                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(30px, 4vw, 46px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 28, lineHeight: 1.1 }}>Projects</h2>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 40 }}>
-                    {STACK.map(s => <TechTag key={s} label={s} />)}
-                  </div>
-
-                  <div className="projects-grid">
-                    {PROJECTS.map(p => (
-                      <div key={p.title} className="project-card">
-                        <div className="project-card-media">
-                          {p.images.length > 0 ? (
-                            <CyclingImage images={p.images} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                          ) : (
-                            <div style={{ width: '100%', height: '100%', minHeight: 220, background: 'linear-gradient(135deg, #1a1815, #0e0d0c)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(201,168,76,0.2)', letterSpacing: '0.1em' }}>[ infra project ]</span>
-                            </div>
-                          )}
-                        </div>
-                        <div className="project-card-body">
-                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
-                            {p.tags.map(t => <TechTag key={t} label={t} />)}
-                          </div>
-                          <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 19, fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 8 }}>{p.title}</h3>
-                          <div className="stat-line">{p.stat}</div>
-                          <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.75, marginBottom: 22, flex: 1 }}>{p.desc}</p>
-                          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                            {p.live && p.live !== '#' && (
-                              <a href={p.live} target="_blank" rel="noreferrer" className="btn-gold-fill" onClick={() => track('project_link_clicked', { project: p.title, type: 'live' })}>View Site ↗</a>
-                            )}
-                            {!p.closedSource && p.github && (
-                              <a href={p.github} target="_blank" rel="noreferrer" className="btn-gold-outline" onClick={() => track('project_link_clicked', { project: p.title, type: 'github' })}>GitHub</a>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* More Projects — lighter treatment */}
-                  <div style={{ marginTop: 40 }}>
-                    <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(232,224,208,0.3)', marginBottom: 16 }}>More Projects</p>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
-                      {MORE_PROJECTS.map(p => (
-                        <div key={p.title} className="more-project-card">
-                          <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: 15, fontWeight: 700, color: 'rgba(232,224,208,0.85)', marginBottom: 8 }}>{p.title}</h4>
-                          <p style={{ fontSize: 12, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.6, marginBottom: 14 }}>{p.desc}</p>
-                          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                            {p.live !== '#' && <a href={p.live} target="_blank" rel="noreferrer" className="btn-gold-outline" style={{ fontSize: 10, padding: '7px 14px' }}>View ↗</a>}
-                            <a href={p.github} target="_blank" rel="noreferrer" className="btn-gold-outline" style={{ fontSize: 10, padding: '7px 14px' }}>GitHub</a>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div style={{ marginTop: 32, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-                    <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.35)', lineHeight: 1.7, maxWidth: 420 }}>
-                      More experimentation and older work on my GitHub if you want to dig deeper.
-                    </p>
-                    <a href="https://github.com/var-raphael" target="_blank" rel="noreferrer" onClick={() => track('github_more_projects_clicked')} className="btn-gold-outline">See more on GitHub ↗</a>
-                  </div>
-                </div>
-
-                {/* Frontend / UI */}
-                <div id="frontend">
-                  <p className="eyebrow">Frontend & UI</p>
-                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(30px, 4vw, 46px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 44, lineHeight: 1.1 }}>Design Work</h2>
-
-                  <div className="ring-card" style={{ marginBottom: 56 }}>
-                    <div className="ring-visual">
-                      <CyclingImage images={['/portfolio-images/img/ring-view1.jpg', '/portfolio-images/img/ring-view2.jpg']} alt="Interactive 3D Ring Viewer" style={{ width: '100%', height: '100%', minHeight: 300, objectFit: 'cover', display: 'block' }} />
-                      <span className="ring-badge">3D Interactive</span>
-                    </div>
-                    <div style={{ padding: '40px 44px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                      <p className="eyebrow" style={{ marginBottom: 12 }}>Featured: 3D Viewer</p>
-                      <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(19px, 2.2vw, 25px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 14, lineHeight: 1.2 }}>Interactive 3D Ring Viewer</h3>
-                      <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.8, marginBottom: 22 }}>A real-time 3D ring viewer for jewelry e-commerce. Customers rotate, zoom and inspect rings from every angle before buying, reducing returns and building confidence.</p>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
-                        {['360° rotation with mouse and touch', 'Real-time zoom and pan controls', 'Multiple material & finish previews', 'Embeddable in any store page'].map(f => (
-                          <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 12, color: 'rgba(232,224,208,0.38)', fontWeight: 300 }}>
-                            <div style={{ width: 5, height: 5, borderRadius: '50%', background: 'rgba(201,168,76,0.6)', flexShrink: 0 }} />{f}
-                          </div>
-                        ))}
-                      </div>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 26 }}>
-                        {['Next.js', 'Three.js', 'TypeScript', 'Tailwind', 'WebGL'].map(t => <TechTag key={t} label={t} />)}
-                      </div>
-                      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                        <a href="https://ring-view.vercel.app/" onClick={() => track('ring_demo_clicked')} className="btn-gold-fill">View Demo ↗</a>
-                        <a href="https://github.com/var-raphael/atelier" target="_blank" rel="noreferrer" onClick={() => track('ring_github_clicked')} className="btn-gold-outline">GitHub</a>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 22 }}>
-                    <div>
-                      <p className="eyebrow" style={{ marginBottom: 8 }}>Landing Pages</p>
-                      <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(19px, 2.6vw, 27px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em' }}>Jewelry Store Collections</h3>
-                    </div>
-                    <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, color: 'rgba(232,224,208,0.2)' }}>{JEWELRY_COLLECTIONS.length} premium landing pages</span>
-                  </div>
-                  <JewelryCarousel />
-                </div>
-              </div>
-
+            <div style={{ marginTop: 32, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+              <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(255,255,255,0.4)', lineHeight: 1.7, maxWidth: 420 }}>
+                More experimentation and older work on my GitHub if you want to dig deeper.
+              </p>
+              <a href="https://github.com/var-raphael" target="_blank" rel="noreferrer" onClick={() => track('github_more_projects_clicked')} className="btn-gold-outline">See more on GitHub ↗</a>
             </div>
           </div>
         </section>
 
-        <footer style={{ borderTop: '1px solid rgba(255,255,255,0.06)', padding: '26px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
-          <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(232,224,208,0.2)', letterSpacing: '0.06em' }}>© 2026 Raphael Samuel / var-raphael</p>
-          <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(232,224,208,0.2)', letterSpacing: '0.06em' }}>Built with Next.js + TypeScript</p>
+        <div className="divider" />
+
+        {/* Frontend / UI */}
+        <section id="frontend" style={{ padding: '80px 0' }}>
+          <div className="section-inner">
+            <p className="eyebrow">Frontend & UI</p>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(30px, 4vw, 46px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', marginBottom: 44, lineHeight: 1.1 }}>Design Work</h2>
+
+            <div className="ring-card" style={{ marginBottom: 56 }}>
+              <div className="ring-visual">
+                <CyclingImage images={['/portfolio-images/img/ring-view1.jpg', '/portfolio-images/img/ring-view2.jpg']} alt="Interactive 3D Ring Viewer" style={{ width: '100%', height: '100%', minHeight: 300, objectFit: 'cover', display: 'block' }} />
+                <span className="ring-badge">3D Interactive</span>
+              </div>
+              <div style={{ padding: '40px 44px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <p className="eyebrow" style={{ marginBottom: 12 }}>Featured: 3D Viewer</p>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(19px, 2.2vw, 25px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', marginBottom: 14, lineHeight: 1.2 }}>Interactive 3D Ring Viewer</h3>
+                <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(255,255,255,0.45)', lineHeight: 1.8, marginBottom: 22 }}>A real-time 3D ring viewer for jewelry e-commerce. Customers rotate, zoom and inspect rings from every angle before buying, reducing returns and building confidence.</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
+                  {['360° rotation with mouse and touch', 'Real-time zoom and pan controls', 'Multiple material & finish previews', 'Embeddable in any store page'].map(f => (
+                    <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 12, color: 'rgba(255,255,255,0.4)', fontWeight: 300 }}>
+                      <div style={{ width: 5, height: 5, background: '#FFD700', flexShrink: 0 }} />{f}
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 26 }}>
+                  {['Next.js', 'Three.js', 'TypeScript', 'Tailwind', 'WebGL'].map(t => <TechTag key={t} label={t} />)}
+                </div>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                  <a href="https://ring-view.vercel.app/" onClick={() => track('ring_demo_clicked')} className="btn-gold-fill">View Demo ↗</a>
+                  <a href="https://github.com/var-raphael/atelier" target="_blank" rel="noreferrer" onClick={() => track('ring_github_clicked')} className="btn-gold-outline">GitHub</a>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 22 }}>
+              <div>
+                <p className="eyebrow" style={{ marginBottom: 8 }}>Landing Pages</p>
+                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(19px, 2.6vw, 27px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em' }}>Jewelry Store Collections</h3>
+              </div>
+              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, color: 'rgba(255,255,255,0.3)' }}>{JEWELRY_COLLECTIONS.length} premium landing pages</span>
+            </div>
+            <JewelryCarousel />
+          </div>
+        </section>
+
+        <div className="divider" />
+
+        {/* Why Me — back at the bottom, grid of cards */}
+        <section id="why" style={{ padding: '80px 0' }}>
+          <div className="section-inner">
+            <p className="eyebrow">Why Work With Me</p>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(30px, 4vw, 46px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', marginBottom: 36, lineHeight: 1.1 }}>Not just another developer.</h2>
+            <div className="why-grid">
+              {WHY_ME.map(({ title, body }) => (
+                <div key={title} className="why-card">
+                  <div className="why-title">{title}</div>
+                  <div className="why-body">{body}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div className="divider" />
+
+        {/* Blog — bottom, grid */}
+        <section id="blog" style={{ padding: '80px 0' }}>
+          <div className="section-inner">
+            <p className="eyebrow">Recent Writing</p>
+            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(30px, 4vw, 46px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', marginBottom: 28, lineHeight: 1.1 }}>From the Blog</h2>
+            <div className="blog-grid">
+              {posts.slice(0, 4).map(post => (
+                <a key={post.slug} href={`/blog/${post.slug}`} className="blog-row" onClick={() => track('blog_post_clicked', { slug: post.slug, title: post.title })}>
+                  <span className="blog-date">{post.date}</span>
+                  <div className="blog-title">{post.title}</div>
+                  <p className="blog-excerpt">{post.excerpt}</p>
+                </a>
+              ))}
+            </div>
+            <a href="/blog" onClick={() => track('blog_all_posts_clicked')} style={{ display: 'inline-block', marginTop: 28, fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.1em', color: '#FFD700', textDecoration: 'none', borderBottom: '1px solid rgba(255,215,0,0.4)', paddingBottom: 2 }}>All posts ({posts.length}) →</a>
+          </div>
+        </section>
+
+        <footer style={{ borderTop: '1px solid rgba(255,215,0,0.12)', padding: '26px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+          <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.06em' }}>© 2026 Raphael Samuel / var-raphael</p>
+          <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.06em' }}>Built with Next.js + TypeScript</p>
         </footer>
 
       </div>

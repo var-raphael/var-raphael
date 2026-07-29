@@ -30,8 +30,6 @@ export const TECH_ICONS: Record<string, string> = {
 export const STACK = ['Python', 'Go', 'TypeScript', 'Next.js', 'Tailwind', 'MySQL', 'PostgreSQL'];
 
 // ── Projects ──────────────────────────────────────────────────────────────────
-// stat: a short, honest, checkable claim shown right under the title.
-// Keep numbers real — anything here should hold up if asked about directly.
 export const PROJECTS = [
   {
     title: 'Quorel',
@@ -65,7 +63,6 @@ export const PROJECTS = [
   },
 ];
 
-// Lighter-weight secondary projects — smaller cards, less copy.
 export const MORE_PROJECTS = [
   {
     title: 'Skim',
