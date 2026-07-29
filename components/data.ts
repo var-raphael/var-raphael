@@ -21,7 +21,6 @@ export const TECH_ICONS: Record<string, string> = {
   'Tailwind':      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg',
   'npm':           'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/npm/npm-original-wordmark.svg',
   'CLI':           'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bash/bash-original.svg',
-  'GSAP':          'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
   'WebGL':         'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/webgl.svg',
   'Framer Motion': 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/framer.svg',
   'SQLite':        'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg',
@@ -31,11 +30,13 @@ export const TECH_ICONS: Record<string, string> = {
 export const STACK = ['Python', 'Go', 'TypeScript', 'Next.js', 'Tailwind', 'MySQL', 'PostgreSQL'];
 
 // ── Projects ──────────────────────────────────────────────────────────────────
+// stat: a short, honest, checkable claim shown right under the title.
+// Keep numbers real — anything here should hold up if asked about directly.
 export const PROJECTS = [
   {
     title: 'Quorel',
-    desc: 'Scraping gets you a page. It doesn\'t get you a source of truth. Quorel lets you define what data you want from any public website once, then handles the rest: schema-first AI extraction, nightly automatic refresh, and full version history on every change, nothing is ever overwritten. Every dataset ships with a native MCP server, so agents can query, filter, and clean the data conversationally without a line of scraping code. Public datasets are live and queryable with no account needed.',
-    visual: 'img' as const,
+    stat: '4 live datasets · full version history · public & queryable, no login required',
+    desc: 'Scraping gets you a page. It doesn\'t get you a source of truth. Quorel lets you define what data you want from any public website once, then handles the rest: schema-first AI extraction, nightly automatic refresh, and full version history on every change, nothing is ever overwritten. Every dataset ships with a native MCP server, so agents can query, filter, and clean the data conversationally without a line of scraping code.',
     images: ['/portfolio-images/img/quorel1.jpg', '/portfolio-images/img/quorel2.jpg'],
     live: 'https://quorel.vercel.app',
     github: 'https://github.com/var-raphael/quorel',
@@ -44,8 +45,8 @@ export const PROJECTS = [
   },
   {
     title: 'VarsityLine',
-    desc: 'Nigerian students figure out admission cut-offs from group chats and outdated PDFs. VarsityLine fixes that: verified cut-off marks, courses, and screening dates for every Nigerian university, cross-checked against each school\'s own admissions office, with a "last confirmed" timestamp on every entry. Search by university, by course, or both with state and type filters, export results as a PDF, and subscribe for email or Telegram alerts on admission updates, paid through Paystack.',
-    visual: 'img' as const,
+    stat: '24 universities covered · verified cut-offs & courses · Paystack-powered alerts',
+    desc: 'Nigerian students figure out admission cut-offs from group chats and outdated PDFs. VarsityLine fixes that: verified cut-off marks, courses, and screening dates for every Nigerian university, cross-checked against each school\'s own admissions office, with a "last confirmed" timestamp on every entry. Search by university, by course, or both with state and type filters, export results as a PDF, and subscribe for email or Telegram alerts on admission updates.',
     images: ['/portfolio-images/img/varsityline1.jpg', '/portfolio-images/img/varsityline2.jpg'],
     live: 'https://varsityline.vercel.app',
     github: 'https://github.com/var-raphael/varsityline',
@@ -53,14 +54,32 @@ export const PROJECTS = [
     tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'Tailwind'],
   },
   {
+    title: 'PhantomCrawl + PhantomClean',
+    stat: '4-layer crawler · TLS fingerprinting & anti-bot evasion · paired AI-cleaning pipeline',
+    desc: 'The infrastructure that makes Quorel possible. PhantomCrawl is a 4-layer web crawler built to handle TLS fingerprinting and anti-bot evasion at scale. PhantomClean sits downstream, stripping boilerplate and normalizing the mess a crawler pulls in, using AI-assisted cleaning and batch processing. Built from scratch, no scraping framework underneath.',
+    images: [],
+    live: '#',
+    github: 'https://github.com/var-raphael/PhantomCrawl',
+    closedSource: false,
+    tags: ['Go', 'Python'],
+  },
+];
+
+// Lighter-weight secondary projects — smaller cards, less copy.
+export const MORE_PROJECTS = [
+  {
     title: 'Skim',
-    desc: 'Uploading a 40-page PDF and getting a wall of text back isn\'t a summary, it\'s a chore. Skim lets you tell it exactly what you\'re looking for, then returns a clear, page-by-page summary in seconds, built for students and teachers who need the signal, not the whole document. Copy or download the result, and revisit past summaries anytime.',
-    visual: 'img' as const,
-    images: ['/portfolio-images/img/skim1.jpg', '/portfolio-images/img/skim2.jpg'],
+    desc: 'AI-powered PDF summarizer with real users. Tell it what you\'re looking for, get a page-by-page summary in seconds.',
     live: 'https://skim-7inx.onrender.com',
     github: 'https://github.com/var-raphael/skim',
-    closedSource: false,
     tags: ['Python', 'JavaScript'],
+  },
+  {
+    title: 'Wildpalace SEO PLP',
+    desc: 'Shopify app that auto-generates SEO-optimized Product Listing Pages from keyword intent.',
+    live: '#',
+    github: 'https://github.com/var-raphael/wildpalace-seo-plp',
+    tags: ['TypeScript'],
   },
 ];
 

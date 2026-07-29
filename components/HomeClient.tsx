@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Lenis from 'lenis';
 import type { PostMeta } from '@/lib/posts';
 import {
   TECH_ICONS, STACK,
-  PROJECTS, JEWELRY_COLLECTIONS,
+  PROJECTS, MORE_PROJECTS, JEWELRY_COLLECTIONS,
 } from './data';
 
 // ── Phantom tracking helper ───────────────────────────────────────────────────
@@ -16,40 +16,17 @@ function track(event: string, props?: Record<string, string>) {
 }
 
 // ── TechTag ───────────────────────────────────────────────────────────────────
-function TechTag({ label, gold = false }: { label: string; gold?: boolean }) {
+function TechTag({ label }: { label: string }) {
   const icon = TECH_ICONS[label];
   const needsInvert = label === 'Next.js' || label === 'Three.js' || label === 'Framer Motion' || label === 'WebGL' || label === 'Ethereum' || label === 'HTMX';
 
-  const style: React.CSSProperties = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: 5,
-    padding: '3px 10px',
-    borderRadius: 5,
-    fontSize: 10,
-    fontFamily: "'DM Mono', monospace",
-    fontWeight: 500,
-    border: '1px solid',
-    transition: 'all 0.2s',
-    lineHeight: 1.6,
-    ...(gold
-      ? { background: 'rgba(234,179,8,0.08)', borderColor: 'rgba(234,179,8,0.22)', color: 'rgba(234,179,8,0.75)' }
-      : { background: 'rgba(99,102,241,0.08)', borderColor: 'rgba(99,102,241,0.22)', color: 'rgba(165,180,252,0.85)' }),
-  };
-
   return (
-    <span style={style}>
+    <span className="tech-tag">
       {icon && (
         <img
           src={icon}
           alt={label}
-          style={{
-            width: 13,
-            height: 13,
-            objectFit: 'contain',
-            flexShrink: 0,
-            filter: needsInvert ? 'invert(1)' : undefined,
-          }}
+          style={{ width: 13, height: 13, objectFit: 'contain', flexShrink: 0, filter: needsInvert ? 'invert(1)' : undefined }}
         />
       )}
       {label}
@@ -57,142 +34,32 @@ function TechTag({ label, gold = false }: { label: string; gold?: boolean }) {
   );
 }
 
-// ── Auto-cycling image with Ken Burns ─────────────────────────────────────────
+// ── Static cross-fade image (no Ken Burns motion — restraint over decoration) ──
 function CyclingImage({ images, alt, style }: { images: string[]; alt: string; style?: React.CSSProperties }) {
   const [idx, setIdx] = useState(0);
-  const [nextIdx, setNextIdx] = useState<number | null>(null);
-  const [phase, setPhase] = useState<'idle' | 'crossfade'>('idle');
+  const [fading, setFading] = useState(false);
 
   useEffect(() => {
     if (images.length <= 1) return;
     const interval = setInterval(() => {
-      const next = (idx + 1) % images.length;
-      setNextIdx(next);
-      setPhase('crossfade');
+      setFading(true);
       setTimeout(() => {
-        setIdx(next);
-        setNextIdx(null);
-        setPhase('idle');
-      }, 700);
-    }, 3000);
+        setIdx(i => (i + 1) % images.length);
+        setFading(false);
+      }, 400);
+    }, 4000);
     return () => clearInterval(interval);
-  }, [idx, images.length]);
-
-  const kenBurnsStyle = (active: boolean): React.CSSProperties => ({
-    position: 'absolute',
-    inset: 0,
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover',
-    display: 'block',
-    animation: active ? `kenBurns${idx % 2 === 0 ? 'A' : 'B'} 6s ease-in-out forwards` : 'none',
-  });
+  }, [images.length]);
 
   return (
     <div style={{ ...style, position: 'relative', overflow: 'hidden' }}>
       <img
-        key={`cur-${idx}`}
         src={images[idx]}
         alt={alt}
-        style={{
-          ...kenBurnsStyle(true),
-          opacity: phase === 'crossfade' ? 0 : 1,
-          transition: phase === 'crossfade' ? 'opacity 0.7s ease' : 'none',
-          zIndex: 1,
-        }}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block', opacity: fading ? 0 : 1, transition: 'opacity 0.4s ease' }}
       />
-      {nextIdx !== null && (
-        <img
-          key={`next-${nextIdx}`}
-          src={images[nextIdx]}
-          alt={alt}
-          style={{
-            ...kenBurnsStyle(false),
-            opacity: phase === 'crossfade' ? 1 : 0,
-            transition: 'opacity 0.7s ease',
-            zIndex: 2,
-            animation: `kenBurns${nextIdx % 2 === 0 ? 'A' : 'B'} 6s ease-in-out forwards`,
-          }}
-        />
-      )}
     </div>
   );
-}
-
-// ── Falling canvas ────────────────────────────────────────────────────────────
-const ICON_SRCS = Object.values(TECH_ICONS).slice(0, 14);
-const TEXT_SYMBOLS = ['</>', '{}', '=>', 'fn()', '[]', '&&', '||', '??', 'async', 'await', 'const', 'type', 'SELECT', 'JOIN', 'POST', 'GET', 'npm', 'git', '::'];
-const TEXT_COLORS = ['rgba(99,102,241,0.7)','rgba(247,223,30,0.6)','rgba(139,92,246,0.6)','rgba(52,211,153,0.55)','rgba(96,165,250,0.55)','rgba(249,115,22,0.55)','rgba(232,224,208,0.25)'];
-
-type Particle =
-  | { kind: 'icon'; x: number; y: number; speed: number; img: HTMLImageElement; size: number; opacity: number; rotation: number; rotationSpeed: number; wobble: number; wobbleSpeed: number; wobbleOffset: number }
-  | { kind: 'text'; x: number; y: number; speed: number; symbol: string; color: string; size: number; opacity: number; rotation: number; rotationSpeed: number; wobble: number; wobbleSpeed: number; wobbleOffset: number };
-
-function useCanvas() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const particlesRef = useRef<Particle[]>([]);
-  const rafRef = useRef<number>(0);
-  const imagesRef = useRef<HTMLImageElement[]>([]);
-
-  const baseProps = (w: number, h: number, fromTop: boolean) => ({
-    x: Math.random() * w, y: fromTop ? -50 : Math.random() * h,
-    speed: 0.3 + Math.random() * 0.7, opacity: 0.2 + Math.random() * 0.35,
-    rotation: Math.random() * Math.PI * 2, rotationSpeed: (Math.random() - 0.5) * 0.01,
-    wobble: Math.random() * Math.PI * 2, wobbleSpeed: 0.006 + Math.random() * 0.012,
-    wobbleOffset: 16 + Math.random() * 24,
-  });
-
-  const createParticle = useCallback((w: number, h: number, fromTop = false): Particle => {
-    const useIcon = imagesRef.current.length > 0 && Math.random() < 0.55;
-    if (useIcon) {
-      const imgs = imagesRef.current;
-      return { kind: 'icon', ...baseProps(w, h, fromTop), img: imgs[Math.floor(Math.random() * imgs.length)], size: 24 + Math.floor(Math.random() * 18) };
-    }
-    return { kind: 'text', ...baseProps(w, h, fromTop), symbol: TEXT_SYMBOLS[Math.floor(Math.random() * TEXT_SYMBOLS.length)], color: TEXT_COLORS[Math.floor(Math.random() * TEXT_COLORS.length)], size: 11 + Math.floor(Math.random() * 13) };
-  }, []);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-    const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; };
-    resize();
-    window.addEventListener('resize', resize);
-    const COUNT = Math.min(90, Math.floor((window.innerWidth * window.innerHeight) / 9000));
-    particlesRef.current = Array.from({ length: COUNT }, () => createParticle(canvas.width, canvas.height));
-    let loaded = 0;
-    const images: HTMLImageElement[] = [];
-    ICON_SRCS.forEach(src => {
-      const img = new Image(); img.crossOrigin = 'anonymous';
-      img.onload = img.onerror = () => {
-        loaded++;
-        if (img.complete && img.naturalWidth > 0) images.push(img);
-        if (loaded === ICON_SRCS.length) {
-          imagesRef.current = images;
-          particlesRef.current = particlesRef.current.map(p => Math.random() < 0.55 ? createParticle(canvas.width, canvas.height) : p);
-        }
-      };
-      img.src = src;
-    });
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particlesRef.current.forEach((p, i) => {
-        p.y += p.speed; p.wobble += p.wobbleSpeed; p.rotation += p.rotationSpeed;
-        const xPos = p.x + Math.sin(p.wobble) * p.wobbleOffset;
-        ctx.save(); ctx.translate(xPos, p.y); ctx.rotate(p.rotation); ctx.globalAlpha = p.opacity;
-        if (p.kind === 'icon') { if (p.img.complete && p.img.naturalWidth > 0) ctx.drawImage(p.img, -p.size / 2, -p.size / 2, p.size, p.size); }
-        else { ctx.fillStyle = p.color; ctx.shadowColor = p.color; ctx.shadowBlur = 5; ctx.font = `600 ${p.size}px 'DM Mono', monospace`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(p.symbol, 0, 0); }
-        ctx.restore();
-        if (p.y > canvas.height + 60) particlesRef.current[i] = createParticle(canvas.width, canvas.height, true);
-      });
-      rafRef.current = requestAnimationFrame(draw);
-    };
-    draw();
-    return () => { window.removeEventListener('resize', resize); cancelAnimationFrame(rafRef.current); };
-  }, [createParticle]);
-
-  return canvasRef;
 }
 
 // ── Jewelry Carousel ──────────────────────────────────────────────────────────
@@ -209,36 +76,29 @@ function JewelryCarousel() {
       : (current - 1 + JEWELRY_COLLECTIONS.length) % JEWELRY_COLLECTIONS.length;
     setDirection(dir === 'next' ? 'right' : 'left');
     setAnimating(true);
-    setTimeout(() => { setCurrent(next); setDisplayed(next); setAnimating(false); }, 320);
+    setTimeout(() => { setCurrent(next); setDisplayed(next); setAnimating(false); }, 280);
   };
 
   const goTo = (i: number) => {
     if (animating || i === current) return;
     setDirection(i > current ? 'right' : 'left');
     setAnimating(true);
-    setTimeout(() => { setCurrent(i); setDisplayed(i); setAnimating(false); }, 320);
+    setTimeout(() => { setCurrent(i); setDisplayed(i); setAnimating(false); }, 280);
   };
 
   const item = JEWELRY_COLLECTIONS[displayed];
-
-  const slideOut: React.CSSProperties = animating ? {
-    transform: direction === 'right' ? 'translateX(-32px)' : 'translateX(32px)',
-    opacity: 0,
-    transition: 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.28s ease',
-  } : {
-    transform: 'translateX(0)',
-    opacity: 1,
-    transition: 'transform 0.32s cubic-bezier(0.4,0,0.2,1), opacity 0.28s ease',
-  };
+  const slideOut: React.CSSProperties = animating
+    ? { transform: direction === 'right' ? 'translateX(-24px)' : 'translateX(24px)', opacity: 0, transition: 'transform 0.28s ease, opacity 0.24s ease' }
+    : { transform: 'translateX(0)', opacity: 1, transition: 'transform 0.28s ease, opacity 0.24s ease' };
 
   return (
     <div className="carousel-grid">
       <div className="carousel-image-panel" style={slideOut}>
         <CyclingImage images={item.images} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-        <div style={{ position: 'absolute', bottom: 16, left: 16, display: 'flex', alignItems: 'baseline', gap: 3, background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, padding: '6px 12px' }}>
-          <span style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: 'rgba(255,255,255,0.9)', lineHeight: 1 }}>{String(current + 1).padStart(2, '0')}</span>
-          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: 'rgba(255,255,255,0.3)', margin: '0 2px' }}>/</span>
-          <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, color: 'rgba(255,255,255,0.3)' }}>{String(JEWELRY_COLLECTIONS.length).padStart(2, '0')}</span>
+        <div className="carousel-counter">
+          <span>{String(current + 1).padStart(2, '0')}</span>
+          <span style={{ opacity: 0.35 }}>/</span>
+          <span style={{ opacity: 0.35 }}>{String(JEWELRY_COLLECTIONS.length).padStart(2, '0')}</span>
         </div>
       </div>
       <div className="carousel-info-panel">
@@ -246,18 +106,17 @@ function JewelryCarousel() {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
             {item.tags.map(t => <TechTag key={t} label={t} />)}
           </div>
-          <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(18px, 2.2vw, 24px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 10 }}>{item.name}</h3>
-          <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.75 }}>{item.desc}</p>
+          <h3 className="carousel-title">{item.name}</h3>
+          <p className="carousel-desc">{item.desc}</p>
         </div>
         <div style={{ marginTop: 24 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 18 }}>
             <div style={{ display: 'flex', gap: 8 }}>
-              <a href={item.live} target="_blank" rel="noreferrer" onClick={() => track('jewelry_view_site_clicked', { collection: item.name })} style={{ display: 'inline-flex', alignItems: 'center', background: '#6366f1', color: '#fff', fontFamily: "'DM Mono', monospace", fontSize: 11, fontWeight: 500, padding: '9px 18px', borderRadius: 8, textDecoration: 'none', letterSpacing: '0.06em', boxShadow: '0 0 20px rgba(99,102,241,0.3)', transition: 'all 0.2s' }}>View Site ↗</a>
-              <a href="https://github.com/var-raphael/phantom-demo" target="_blank" rel="noreferrer" onClick={() => track('jewelry_github_clicked', { collection: item.name })} className="btn-gh">GitHub</a>
+              <a href={item.live} target="_blank" rel="noreferrer" onClick={() => track('jewelry_view_site_clicked', { collection: item.name })} className="btn-gold-fill">View Site ↗</a>
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
               {(['prev', 'next'] as const).map(dir => (
-                <button key={dir} onClick={() => go(dir)} style={{ width: 38, height: 38, borderRadius: 8, border: '1px solid rgba(255,255,255,0.12)', background: 'transparent', color: 'rgba(255,255,255,0.4)', fontSize: 16, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' }}>
+                <button key={dir} onClick={() => go(dir)} className="carousel-nav-btn" aria-label={dir}>
                   {dir === 'prev' ? '←' : '→'}
                 </button>
               ))}
@@ -265,7 +124,7 @@ function JewelryCarousel() {
           </div>
           <div style={{ display: 'flex', gap: 7 }}>
             {JEWELRY_COLLECTIONS.map((_, i) => (
-              <button key={i} onClick={() => goTo(i)} style={{ height: 6, width: i === current ? 24 : 6, borderRadius: 9999, border: 'none', padding: 0, cursor: 'pointer', background: i === current ? '#6366f1' : 'rgba(255,255,255,0.18)', transition: 'all 0.25s' }} aria-label={`Go to ${i + 1}`} />
+              <button key={i} onClick={() => goTo(i)} className="carousel-dot" data-active={i === current} aria-label={`Go to ${i + 1}`} />
             ))}
           </div>
         </div>
@@ -276,16 +135,26 @@ function JewelryCarousel() {
 
 function useLenis() {
   useEffect(() => {
-    const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+    const lenis = new Lenis({ duration: 1.1, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
     const raf = (time: number) => { lenis.raf(time); requestAnimationFrame(raf); };
     requestAnimationFrame(raf);
     return () => lenis.destroy();
   }, []);
 }
 
+const NAV_LINKS: [string, string][] = [['#contact', 'Contact'], ['#why', 'Why Me'], ['#projects', 'Projects'], ['#frontend', 'Frontend'], ['#blog', 'Blog']];
+
+const WHY_ME = [
+  { title: 'I ship, not just code', body: 'Quorel and VarsityLine are live, self-built startups, from schema to UI to the infrastructure keeping them running. These are not tutorial projects. They are products I designed, deployed, and maintain.' },
+  { title: 'I think before I type', body: 'Years of working with limited resources taught me to design logic before writing a line. I map edge cases and question assumptions early, so things ship less buggy from the start.' },
+  { title: 'I fix real problems', body: 'Running Quorel and VarsityLine means I am the one who gets paged when something breaks, whether it is a scraping layer, a payment webhook, or a data pipeline going stale. I own problems until they are fixed.' },
+  { title: 'I learn at uncommon speed', body: 'I picked up TypeScript and Go in 2023 simultaneously while already knowing PHP and JavaScript, and was building real projects in both within weeks.' },
+  { title: 'I work remotely by default', body: 'I have been self-directed for years with no classroom, no bootcamp, no one looking over my shoulder. Remote work is the environment I have always operated in.' },
+  { title: 'I contribute beyond my role', body: 'I mentor students and teach free coding classes online. A team that hires me gets someone who adds energy to the room, not just code to the repo.' },
+];
+
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function Portfolio({ posts }: { posts: PostMeta[] }) {
-  const canvasRef = useCanvas();
   useLenis();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -298,94 +167,104 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         body { background: #0e0d0c; color: #e8e0d0; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
         html { scroll-behavior: smooth; }
         @keyframes pulse { 0%,100%{opacity:.3} 50%{opacity:1} }
-        @keyframes kenBurnsA {
-          0%   { transform: scale(1)    translate(0%, 0%); }
-          100% { transform: scale(1.07) translate(-1.5%, -1%); }
-        }
-        @keyframes kenBurnsB {
-          0%   { transform: scale(1.07) translate(-1.5%, -1%); }
-          100% { transform: scale(1)    translate(1%, 0.5%); }
-        }
+
+        /* ── Gold accent system ── */
+        .gold-text { color: #c9a84c; }
+        .eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #c9a84c; margin-bottom: 12px; }
+        .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(201,168,76,0.18) 20%, rgba(201,168,76,0.18) 80%, transparent); margin: 0 40px; }
+        .section-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
 
         .nav-link { font-size: 13px; font-weight: 500; color: rgba(232,224,208,0.45); text-decoration: none; transition: color 0.2s; letter-spacing: 0.04em; }
-        .nav-link:hover { color: rgba(232,224,208,0.9); }
+        .nav-link:hover { color: #c9a84c; }
 
-        .btn-primary { background: #6366f1; color: #fff; font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600; padding: 13px 30px; border-radius: 10px; text-decoration: none; box-shadow: 0 0 32px rgba(99,102,241,0.35); transition: all 0.25s cubic-bezier(0.22,1,0.36,1); display: inline-block; }
-        .btn-primary:hover { background: #5254cc; box-shadow: 0 0 52px rgba(99,102,241,0.6); transform: translateY(-2px); }
-        .btn-live { display: inline-block; background: #6366f1; color: #fff; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; padding: 9px 16px; border-radius: 7px; text-decoration: none; transition: all 0.2s; box-shadow: 0 0 18px rgba(99,102,241,0.28); }
-        .btn-live:hover { box-shadow: 0 0 30px rgba(99,102,241,0.5); }
-        .btn-gh { display: inline-block; border: 1px solid rgba(255,255,255,0.12); color: rgba(232,224,208,0.4); font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; padding: 9px 16px; border-radius: 7px; text-decoration: none; transition: all 0.2s; }
-        .btn-gh:hover { border-color: rgba(255,255,255,0.28); color: rgba(232,224,208,0.85); }
+        .btn-gold-fill { display: inline-flex; align-items: center; background: #c9a84c; color: #0a0806; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; padding: 11px 22px; border-radius: 8px; text-decoration: none; box-shadow: 0 0 20px rgba(201,168,76,0.22); transition: all 0.2s; border: none; cursor: pointer; }
+        .btn-gold-fill:hover { box-shadow: 0 0 32px rgba(201,168,76,0.4); transform: translateY(-1px); }
+        .btn-gold-outline { display: inline-block; border: 1px solid rgba(201,168,76,0.35); color: rgba(201,168,76,0.85); font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; padding: 10px 20px; border-radius: 7px; text-decoration: none; transition: all 0.2s; background: transparent; }
+        .btn-gold-outline:hover { border-color: rgba(201,168,76,0.7); background: rgba(201,168,76,0.06); }
 
-        .section-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
-        .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07) 20%, rgba(255,255,255,0.07) 80%, transparent); margin: 0 40px; }
+        .tech-tag { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 5px; font-size: 10px; font-family: 'DM Mono', monospace; font-weight: 500; border: 1px solid rgba(201,168,76,0.22); background: rgba(201,168,76,0.06); color: rgba(201,168,76,0.8); line-height: 1.6; }
 
-        .projects-grid { display: flex; flex-direction: column; gap: 20px; }
-        .project-card { background: #141310; border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; overflow: hidden; display: grid; grid-template-columns: 380px 1fr; transition: all 0.35s cubic-bezier(0.22,1,0.36,1); }
-        .project-card:hover { border-color: rgba(255,255,255,0.14); transform: translateY(-4px); box-shadow: 0 28px 72px rgba(0,0,0,0.6); }
-        .project-card-media { height: 100%; min-height: 240px; }
-        .project-card-body { padding: 32px 40px; display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.06); }
+        .stat-line { font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(201,168,76,0.75); letter-spacing: 0.02em; margin-bottom: 14px; line-height: 1.6; }
 
-        .ring-card { display: grid; grid-template-columns: 5fr 7fr; background: #141310; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; transition: all 0.3s; }
-        .ring-card:hover { border-color: rgba(234,179,8,0.2); box-shadow: 0 0 80px rgba(201,168,76,0.08); }
+        .project-card { background: #141310; border: 1px solid rgba(255,255,255,0.07); border-radius: 18px; overflow: hidden; display: grid; grid-template-columns: 340px 1fr; transition: all 0.3s ease; }
+        .project-card:hover { border-color: rgba(201,168,76,0.25); transform: translateY(-3px); box-shadow: 0 24px 60px rgba(0,0,0,0.5); }
+        .project-card-media { min-height: 220px; background: #0e0d0c; }
+        .project-card-body { padding: 30px 36px; display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.06); }
+        .projects-grid { display: flex; flex-direction: column; gap: 18px; }
 
-        .carousel-grid { display: grid; grid-template-columns: 1fr 1fr; background: #141310; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; isolation: isolate; }
-        .carousel-image-panel { position: relative; min-height: 280px; border-right: 1px solid rgba(255,255,255,0.07); background: #0e0d0c; overflow: hidden; will-change: transform; }
-        .carousel-info-panel { padding: 36px 40px; display: flex; flex-direction: column; justify-content: space-between; min-height: 260px; }
+        .more-project-card { background: #141310; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 22px 24px; transition: all 0.2s; }
+        .more-project-card:hover { border-color: rgba(201,168,76,0.2); }
 
-        .hero-email { font-family: "DM Mono", monospace; font-size: 11px; color: rgba(232,224,208,0.35); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; border-bottom: 1px solid rgba(232,224,208,0.12); padding-bottom: 1px; }
-        .hero-email:hover { color: rgba(165,180,252,0.85); border-bottom-color: rgba(165,180,252,0.35); }
+        .ring-card { display: grid; grid-template-columns: 5fr 7fr; background: #141310; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; }
+        .ring-visual { position: relative; min-height: 300px; border-right: 1px solid rgba(255,255,255,0.07); background: #0a0806; overflow: hidden; }
+        .ring-badge { position: absolute; top: 16px; left: 16px; font-family: 'DM Mono', monospace; font-size: 10px; background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.3); color: rgba(201,168,76,0.85); border-radius: 4px; padding: 4px 10px; letter-spacing: 0.1em; text-transform: uppercase; }
 
-        .blog-row { display: flex; align-items: flex-start; gap: 32px; padding: 32px 0; border-bottom: 1px solid rgba(255,255,255,0.06); text-decoration: none; transition: all 0.2s; }
-        .blog-row:hover .blog-title { color: #a5b4fc; }
-        .blog-row:hover .blog-arrow { transform: translateX(5px); color: #a5b4fc; }
-        .blog-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: rgba(232,224,208,0.85); letter-spacing: -0.02em; margin-bottom: 7px; line-height: 1.3; transition: color 0.2s; }
-        .blog-arrow { font-size: 18px; color: rgba(232,224,208,0.2); transition: all 0.2s; flex-shrink: 0; padding-top: 2px; }
+        .carousel-grid { display: grid; grid-template-columns: 1fr 1fr; background: #141310; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; }
+        .carousel-image-panel { position: relative; min-height: 260px; border-right: 1px solid rgba(255,255,255,0.07); background: #0e0d0c; overflow: hidden; }
+        .carousel-info-panel { padding: 32px 36px; display: flex; flex-direction: column; justify-content: space-between; min-height: 240px; }
+        .carousel-counter { position: absolute; bottom: 14px; left: 14px; display: flex; align-items: baseline; gap: 3px; background: rgba(0,0,0,0.65); backdrop-filter: blur(8px); border: 1px solid rgba(201,168,76,0.2); border-radius: 8px; padding: 5px 11px; font-family: 'DM Mono', monospace; font-size: 11px; color: #c9a84c; }
+        .carousel-title { font-family: 'Playfair Display', serif; font-size: clamp(17px, 2vw, 22px); font-weight: 700; color: rgba(232,224,208,0.9); letter-spacing: -0.02em; margin-bottom: 9px; }
+        .carousel-desc { font-size: 12.5px; font-weight: 300; color: rgba(232,224,208,0.4); line-height: 1.7; }
+        .carousel-nav-btn { width: 36px; height: 36px; border-radius: 8px; border: 1px solid rgba(201,168,76,0.25); background: transparent; color: rgba(201,168,76,0.7); font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .carousel-nav-btn:hover { border-color: rgba(201,168,76,0.6); color: #c9a84c; }
+        .carousel-dot { height: 6px; width: 6px; border-radius: 9999px; border: none; padding: 0; cursor: pointer; background: rgba(255,255,255,0.15); transition: all 0.25s; }
+        .carousel-dot[data-active="true"] { width: 22px; background: #c9a84c; }
 
-        .contact-row { display: flex; align-items: flex-start; gap: 64px; }
+        .why-card { border-bottom: 1px solid rgba(255,255,255,0.06); padding: 18px 0; }
+        .why-card:last-child { border-bottom: none; }
+        .why-title { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: rgba(232,224,208,0.88); margin-bottom: 6px; }
+        .why-body { font-size: 12.5px; font-weight: 300; color: rgba(232,224,208,0.4); line-height: 1.7; }
+
+        .blog-row { display: block; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.06); text-decoration: none; transition: all 0.2s; }
+        .blog-row:last-child { border-bottom: none; }
+        .blog-row:hover .blog-title { color: #c9a84c; }
+        .blog-date { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(232,224,208,0.25); letter-spacing: 0.06em; }
+        .blog-title { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: rgba(232,224,208,0.85); letter-spacing: -0.01em; margin: 4px 0 5px; line-height: 1.3; transition: color 0.2s; }
+        .blog-excerpt { font-size: 12px; font-weight: 300; color: rgba(232,224,208,0.38); line-height: 1.6; }
+
+        .hero-email { font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(232,224,208,0.35); text-decoration: none; letter-spacing: 0.04em; border-bottom: 1px solid rgba(232,224,208,0.12); padding-bottom: 1px; transition: color 0.2s; }
+        .hero-email:hover { color: #c9a84c; border-bottom-color: rgba(201,168,76,0.4); }
+
+        .contact-row { display: flex; align-items: flex-start; gap: 56px; }
         .contact-links-row { display: flex; gap: 12px; flex-wrap: wrap; }
 
-        .nav-desktop-links { display: flex; align-items: center; gap: 28px; }
+        .two-col { display: grid; grid-template-columns: 340px 1fr; gap: 48px; align-items: start; }
+        .left-sticky { position: sticky; top: 88px; }
+
+        .nav-desktop-links { display: flex; align-items: center; gap: 26px; }
         .nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; background: transparent; border: none; cursor: pointer; padding: 4px; }
-        .nav-hamburger span { display: block; width: 22px; height: 2px; background: rgba(232,224,208,0.6); border-radius: 2px; transition: all 0.2s; }
+        .nav-hamburger span { display: block; width: 22px; height: 2px; background: rgba(232,224,208,0.6); border-radius: 2px; }
         .nav-mobile-menu { display: none; position: fixed; top: 57px; left: 0; right: 0; background: rgba(14,13,12,0.97); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.08); padding: 20px 24px; flex-direction: column; gap: 4px; z-index: 99; }
         .nav-mobile-menu.open { display: flex; }
-        .nav-mobile-link { font-size: 15px; font-weight: 500; color: rgba(232,224,208,0.5); text-decoration: none; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); letter-spacing: 0.04em; transition: color 0.2s; }
+        .nav-mobile-link { font-size: 15px; font-weight: 500; color: rgba(232,224,208,0.5); text-decoration: none; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); letter-spacing: 0.04em; }
         .nav-mobile-link:last-child { border-bottom: none; }
-        .nav-mobile-link:hover { color: rgba(232,224,208,0.9); }
 
         @media (max-width: 900px) {
-          .projects-grid { gap: 16px; }
+          .two-col { grid-template-columns: 1fr; gap: 56px; }
+          .left-sticky { position: static; }
           .project-card { grid-template-columns: 1fr; }
-          .project-card-media { min-height: 210px; }
-          .project-card-body { border-left: none; border-top: 1px solid rgba(255,255,255,0.06); padding: 24px 24px 28px; }
+          .project-card-body { border-left: none; border-top: 1px solid rgba(255,255,255,0.06); padding: 22px 22px 26px; }
           .ring-card { grid-template-columns: 1fr; }
           .ring-visual { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.07) !important; }
           .carousel-grid { grid-template-columns: 1fr; }
           .carousel-image-panel { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
-          .carousel-info-panel { padding: 28px 24px; }
-          .contact-row { flex-direction: column; gap: 32px; align-items: center; text-align: center; }
+          .carousel-info-panel { padding: 26px 22px; }
+          .contact-row { flex-direction: column; gap: 28px; align-items: center; text-align: center; }
           .contact-links-row { justify-content: center; }
-          .about-inner-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .about-inner-grid { grid-template-columns: 1fr !important; gap: 36px !important; }
           .section-inner { padding: 0 28px; }
           .nav-desktop-links { display: none; }
           .nav-hamburger { display: flex; }
+          .cv-btn-label { display: none; }
         }
-
         @media (max-width: 680px) {
           .section-inner { padding: 0 20px; }
           .divider { margin: 0 20px; }
-          .blog-row { flex-direction: column; gap: 6px; }
-          .blog-date { min-width: unset !important; }
         }
       `}</style>
 
-      <canvas ref={canvasRef} style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, width: '100vw', height: '100vh' }} />
-
-      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 1 }}>
-        <div style={{ position: 'absolute', top: '10%', left: '50%', transform: 'translateX(-50%)', width: 700, height: 400, borderRadius: '50%', filter: 'blur(80px)', background: 'radial-gradient(ellipse, rgba(99,102,241,0.1) 0%, transparent 70%)' }} />
-        <div style={{ position: 'absolute', bottom: '20%', left: '10%', width: 400, height: 350, borderRadius: '50%', filter: 'blur(80px)', background: 'radial-gradient(ellipse, rgba(139,92,246,0.07) 0%, transparent 70%)' }} />
-        <div style={{ position: 'absolute', top: '50%', right: '5%', width: 350, height: 350, borderRadius: '50%', filter: 'blur(80px)', background: 'radial-gradient(ellipse, rgba(52,211,153,0.05) 0%, transparent 70%)' }} />
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+        <div style={{ position: 'absolute', top: '8%', left: '50%', transform: 'translateX(-50%)', width: 700, height: 400, borderRadius: '50%', filter: 'blur(90px)', background: 'radial-gradient(ellipse, rgba(201,168,76,0.06) 0%, transparent 70%)' }} />
       </div>
 
       <div style={{ position: 'relative', zIndex: 2 }}>
@@ -393,52 +272,57 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         {/* Nav */}
         <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 24px 18px 48px', background: 'rgba(14,13,12,0.75)', backdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
           <a href="#" onClick={() => track('nav_logo_clicked')} style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, letterSpacing: '0.12em', color: 'rgba(232,224,208,0.5)', textDecoration: 'none' }}>var-raphael</a>
-          <div className="nav-desktop-links">
-            {[['#about','About'],['#projects','Projects'],['#frontend','Frontend'],['#why','Why Me'],['#blog','Blog'],['#contact','Contact']].map(([href, label]) => (
-              <a key={href} href={href} className="nav-link" onClick={() => track('nav_link_clicked', { label, device: 'desktop' })}>{label}</a>
-            ))}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+            <div className="nav-desktop-links">
+              {NAV_LINKS.map(([href, label]) => (
+                <a key={href} href={href} className="nav-link" onClick={() => track('nav_link_clicked', { label, device: 'desktop' })}>{label}</a>
+              ))}
+            </div>
+            <a href="/cv.pdf" download onClick={() => track('cv_downloaded')} className="btn-gold-fill">
+              <span className="cv-btn-label">Download CV</span>
+            </a>
+            <button className="nav-hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Toggle menu">
+              <span style={{ transform: menuOpen ? 'rotate(45deg) translateY(7px)' : 'none' }} />
+              <span style={{ opacity: menuOpen ? 0 : 1 }} />
+              <span style={{ transform: menuOpen ? 'rotate(-45deg) translateY(-7px)' : 'none' }} />
+            </button>
           </div>
-          <button className="nav-hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Toggle menu">
-            <span style={{ transform: menuOpen ? 'rotate(45deg) translateY(7px)' : 'none' }} />
-            <span style={{ opacity: menuOpen ? 0 : 1 }} />
-            <span style={{ transform: menuOpen ? 'rotate(-45deg) translateY(-7px)' : 'none' }} />
-          </button>
         </nav>
 
         <div className={`nav-mobile-menu${menuOpen ? ' open' : ''}`}>
-          {[['#about','About'],['#projects','Projects'],['#frontend','Frontend'],['#why','Why Me'],['#blog','Blog'],['#contact','Contact']].map(([href, label]) => (
+          {NAV_LINKS.map(([href, label]) => (
             <a key={href} href={href} className="nav-mobile-link" onClick={() => { setMenuOpen(false); track('nav_link_clicked', { label, device: 'mobile' }); }}>{label}</a>
           ))}
         </div>
 
         {/* Hero */}
-        <section style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 24px 80px' }}>
+        <section style={{ minHeight: '92vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '120px 24px 64px' }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(232,224,208,0.3)', marginBottom: 28 }}>
             <span>Full-Stack Engineer</span>
-            <span style={{ display: 'block', width: 40, height: 1, background: '#6366f1', opacity: 0.5 }} />
+            <span style={{ display: 'block', width: 40, height: 1, background: '#c9a84c', opacity: 0.5 }} />
           </div>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(58px, 10vw, 112px)', fontWeight: 800, lineHeight: 0.92, letterSpacing: '-0.03em', color: '#e8e0d0', marginBottom: 8 }}>
             Raphael<br />
-            <em style={{ fontStyle: 'italic', background: 'linear-gradient(135deg, #6366f1 0%, #a78bfa 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>Samuel</em>
+            <em style={{ fontStyle: 'italic', color: '#c9a84c' }}>Samuel</em>
           </h1>
           <p style={{ fontSize: 'clamp(15px, 2vw, 18px)', fontWeight: 300, color: 'rgba(232,224,208,0.45)', letterSpacing: '0.02em', marginTop: 20, marginBottom: 40, maxWidth: 500 }}>
             Building products end to end. Two of my own, plus client work.
           </p>
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center', marginBottom: 20 }}>
-            <a href="#projects" className="btn-primary" onClick={() => track('hero_cta_clicked', { button: 'view_projects' })}>View Projects</a>
+            <a href="#projects" className="btn-gold-fill" onClick={() => track('hero_cta_clicked', { button: 'view_projects' })}>View Projects</a>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 56, flexWrap: 'wrap', justifyContent: 'center' }}>
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(74,222,128,0.85)', background: 'rgba(74,222,128,0.07)', border: '1px solid rgba(74,222,128,0.2)', borderRadius: 99, padding: '5px 12px' }}>
-  <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 8px #4ade80', flexShrink: 0, animation: 'pulse 2s ease-in-out infinite' }} />
-  Open to joining an early-stage startup
-</span>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 8px #4ade80', flexShrink: 0, animation: 'pulse 2s ease-in-out infinite' }} />
+              Open to joining an early-stage startup
+            </span>
             <a href="mailto:samuelraphael925@gmail.com" className="hero-email" onClick={() => track('email_clicked', { source: 'hero' })}>samuelraphael925@gmail.com</a>
           </div>
           <div style={{ display: 'flex', gap: 56, flexWrap: 'wrap', justifyContent: 'center' }}>
             {[{ val: '6', unit: '+', label: 'Years Coding' }, { val: '3', unit: '', label: 'Live Products' }, { val: '2', unit: '', label: 'Startups Founded' }].map(({ val, unit, label }) => (
               <div key={label} style={{ textAlign: 'center' }}>
                 <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 38, fontWeight: 700, color: '#e8e0d0', letterSpacing: '-0.03em', lineHeight: 1 }}>
-                  {val}<span style={{ color: '#6366f1' }}>{unit}</span>
+                  {val}<span className="gold-text">{unit}</span>
                 </div>
                 <div style={{ fontSize: 11, fontWeight: 400, color: 'rgba(232,224,208,0.32)', marginTop: 7, letterSpacing: '0.07em', textTransform: 'uppercase' }}>{label}</div>
               </div>
@@ -453,9 +337,9 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
           <div className="section-inner">
             <div className="about-inner-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
               <div>
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#6366f1', marginBottom: 12 }}>About</p>
+                <p className="eyebrow">About</p>
                 <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 24 }}>
-                  I build things<br /><em style={{ fontStyle: 'italic', color: 'rgba(165,180,252,0.8)' }}>people actually use.</em>
+                  I build things<br /><em style={{ fontStyle: 'italic', color: '#c9a84c' }}>people actually use.</em>
                 </h2>
                 <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.45)', lineHeight: 1.9, marginBottom: 16 }}>
                   I have 6 years of experience across Python, Go, TypeScript, and Next.js. I have built and shipped real products, not demos, not clones, tools with real users, real infrastructure, and real problems I had to solve to keep them running.
@@ -463,19 +347,18 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                 <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.45)', lineHeight: 1.9, marginBottom: 32 }}>
                   Two of the projects below are my own startups, built end to end, from the schema to the UI to the infrastructure keeping them online. Every product in this portfolio was designed, built, and maintained by me alone.
                 </p>
-                <a href="#projects" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.08em', color: '#a5b4fc', textDecoration: 'none', borderBottom: '1px solid rgba(165,180,252,0.3)', paddingBottom: 2, transition: 'all 0.2s' }}>See the work →</a>
+                <a href="#projects" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.08em', color: '#c9a84c', textDecoration: 'none', borderBottom: '1px solid rgba(201,168,76,0.35)', paddingBottom: 2 }}>See the work →</a>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                 {[
-                  { icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>, label: 'Primary Stack', pills: ['Python', 'Go', 'TypeScript', 'Next.js'] },
-                  { icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>, label: 'Databases', pills: ['PostgreSQL', 'MySQL'] },
-                  { icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>, label: 'Currently', pills: ['Open to remote roles worldwide'] },
-                  { icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>, label: 'Location', pills: ['Nigeria', 'UTC+1'] },
-                  { icon: <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>, label: 'Response time', pills: ['Within 24 hours'] },
-                ].map(({ icon, label, pills }) => (
+                  { label: 'Primary Stack', pills: ['Python', 'Go', 'TypeScript', 'Next.js'] },
+                  { label: 'Databases', pills: ['PostgreSQL', 'MySQL'] },
+                  { label: 'Currently', pills: ['Open to remote roles worldwide'] },
+                  { label: 'Location', pills: ['Nigeria', 'UTC+1'] },
+                  { label: 'Response time', pills: ['Within 24 hours'] },
+                ].map(({ label, pills }) => (
                   <div key={label} style={{ display: 'flex', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid rgba(255,255,255,0.05)', gap: 16 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 7, minWidth: 140, flexShrink: 0 }}>
-                      <span style={{ color: 'rgba(99,102,241,0.6)', display: 'flex', alignItems: 'center' }}>{icon}</span>
+                    <div style={{ minWidth: 140, flexShrink: 0 }}>
                       <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(232,224,208,0.25)' }}>{label}</span>
                     </div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
@@ -492,205 +375,175 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
 
         <div className="divider" />
 
-        {/* Projects */}
-        <section id="projects" style={{ padding: '96px 0' }}>
-          <div className="section-inner">
-            <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#6366f1', marginBottom: 12 }}>Selected Work</p>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 32, lineHeight: 1.1 }}>Projects</h2>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 52 }}>
-              {STACK.map(s => <TechTag key={s} label={s} />)}
-            </div>
-
-            <div className="projects-grid">
-              {PROJECTS.map(p => (
-                <div key={p.title} className="project-card">
-                  {/* Media */}
-                  <div className="project-card-media" style={{ background: '#0e0d0c', overflow: 'hidden', display: 'flex', alignItems: 'stretch' }}>
-                    {p.images.length > 0 ? (
-                      <CyclingImage images={p.images} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                    ) : (
-                      <div style={{ width: '100%', height: '100%', minHeight: 240, background: 'linear-gradient(135deg, #1a1815, #0e0d0c)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.12)', letterSpacing: '0.1em' }}>[ coming soon ]</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Body */}
-                  <div className="project-card-body">
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
-                      {p.tags.map(t => <TechTag key={t} label={t} />)}
-                    </div>
-                    <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 10 }}>{p.title}</h3>
-                    <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.75, marginBottom: 22, flex: 1 }}>{p.desc}</p>
-                    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                      {p.live && p.live !== '#' && (
-                        <a href={p.live} target="_blank" rel="noreferrer" className="btn-live" onClick={() => track('project_link_clicked', { project: p.title, type: 'live' })}>View Site ↗</a>
-                      )}
-                      {!p.closedSource && p.github && (
-                        <a href={p.github} target="_blank" rel="noreferrer" className="btn-gh" onClick={() => track('project_link_clicked', { project: p.title, type: 'github' })}>GitHub</a>
-                      )}
-                      {p.closedSource && (
-                        <span style={{ display: 'inline-block', border: '1px solid rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.2)', fontFamily: "'DM Mono', monospace", fontSize: 11, padding: '9px 16px', borderRadius: 7, cursor: 'default' }}>Closed Source</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <div className="divider" />
-
-        {/* More on GitHub */}
-        <section style={{ padding: '48px 0' }}>
-          <div className="section-inner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20 }}>
-            <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.7, maxWidth: 480 }}>
-              These are the projects I'm most proud of. There's more experimentation, smaller tools, and older work on my GitHub if you want to dig deeper.
-            </p>
-            <a
-              href="https://github.com/var-raphael"
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => track('github_more_projects_clicked')}
-              className="btn-gh"
-              style={{ padding: '11px 22px', fontSize: 12, flexShrink: 0 }}
-            >
-              See more on GitHub ↗
-            </a>
-          </div>
-        </section>
-
-        <div className="divider" />
-
-        {/* Frontend */}
-        <section id="frontend" style={{ padding: '96px 0' }}>
-          <div className="section-inner">
-            <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#6366f1', marginBottom: 12 }}>Frontend & UI</p>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 56, lineHeight: 1.1 }}>Design Work</h2>
-            <div className="ring-card" style={{ marginBottom: 64 }}>
-              <div className="ring-visual" style={{ position: 'relative', minHeight: 320, borderRight: '1px solid rgba(255,255,255,0.07)', background: 'linear-gradient(135deg, #141008, #0a0806)', overflow: 'hidden' }}>
-                <CyclingImage images={['/portfolio-images/img/ring-view1.jpg', '/portfolio-images/img/ring-view2.jpg']} alt="Interactive 3D Ring Viewer" style={{ width: '100%', height: '100%', minHeight: 320, objectFit: 'cover', display: 'block' }} />
-                <span style={{ position: 'absolute', top: 16, left: 16, fontFamily: "'DM Mono', monospace", fontSize: 10, background: 'rgba(234,179,8,0.1)', border: '1px solid rgba(234,179,8,0.25)', color: 'rgba(234,179,8,0.65)', borderRadius: 4, padding: '4px 10px', letterSpacing: '0.1em', textTransform: 'uppercase' }}>3D Interactive</span>
-              </div>
-              <div style={{ padding: '48px 52px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(234,179,8,0.55)', marginBottom: 14 }}>Featured: 3D Viewer</p>
-                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(20px, 2.5vw, 28px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 16, lineHeight: 1.2 }}>Interactive 3D Ring Viewer</h3>
-                <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.8, marginBottom: 24 }}>A real-time 3D ring viewer for jewelry e-commerce. Customers rotate, zoom and inspect rings from every angle before buying, reducing returns and building confidence.</p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginBottom: 26 }}>
-                  {['360° rotation with mouse and touch', 'Real-time zoom and pan controls', 'Multiple material & finish previews', 'Embeddable in any store page'].map(f => (
-                    <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 12, color: 'rgba(232,224,208,0.38)', fontWeight: 300 }}>
-                      <div style={{ width: 5, height: 5, borderRadius: '50%', background: 'rgba(234,179,8,0.6)', flexShrink: 0 }} />{f}
-                    </div>
-                  ))}
-                </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 28 }}>
-                  {['Next.js', 'Three.js', 'TypeScript', 'Tailwind'].map(t => <TechTag key={t} label={t} gold />)}
-                  <TechTag label='WebGL' gold />
-                </div>
-                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                  <a href="https://ring-view.vercel.app/" onClick={() => track('ring_demo_clicked')} style={{ display: 'inline-flex', alignItems: 'center', background: '#ca8a04', color: '#0a0806', fontFamily: "'DM Mono', monospace", fontSize: 11, fontWeight: 700, letterSpacing: '0.07em', padding: '11px 22px', borderRadius: 8, textDecoration: 'none', boxShadow: '0 0 24px rgba(201,168,76,0.2)', transition: 'all 0.2s', alignSelf: 'flex-start' }}>View Demo ↗</a>
-                  <a href="https://github.com/var-raphael/atelier" target="_blank" rel="noreferrer" onClick={() => track('ring_github_clicked')} className="btn-gh" style={{ alignSelf: 'flex-start' }}>GitHub</a>
-                </div>
-              </div>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 24 }}>
-              <div>
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#6366f1', marginBottom: 8 }}>Landing Pages</p>
-                <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(20px, 3vw, 30px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em' }}>Jewelry Store Collections</h3>
-              </div>
-              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, color: 'rgba(232,224,208,0.2)' }}>{JEWELRY_COLLECTIONS.length} premium landing pages</span>
-            </div>
-            <JewelryCarousel />
-          </div>
-        </section>
-
-        <div className="divider" />
-
-        {/* Blog */}
-        <section id="blog" style={{ padding: '96px 0' }}>
-          <div className="section-inner">
-            <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#6366f1', marginBottom: 12 }}>Recent Writing</p>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 14, lineHeight: 1.1 }}>From the Blog</h2>
-            <div>
-              {posts.slice(0, 3).map(post => (
-                <a key={post.slug} href={`/blog/${post.slug}`} className="blog-row" onClick={() => track('blog_post_clicked', { slug: post.slug, title: post.title })}>
-                  <span className="blog-date" style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(232,224,208,0.22)', letterSpacing: '0.08em', minWidth: 96, paddingTop: 3, flexShrink: 0 }}>{post.date}</span>
-                  <div style={{ flex: 1 }}>
-                    <div className="blog-title">{post.title}</div>
-                    <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.38)', lineHeight: 1.7 }}>{post.excerpt}</p>
-                  </div>
-                  <span className="blog-arrow">→</span>
-                </a>
-              ))}
-            </div>
-            <a href="/blog" onClick={() => track('blog_all_posts_clicked')} style={{ display: 'inline-block', marginTop: 32, fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.1em', color: '#6366f1', textDecoration: 'none', borderBottom: '1px solid rgba(99,102,241,0.35)', paddingBottom: 2, transition: 'all 0.2s' }}>All posts ({posts.length}) →</a>
-          </div>
-        </section>
-
-        <div className="divider" />
-
-        {/* Why Hire Me */}
-        <section id="why" style={{ padding: '96px 0' }}>
-          <div className="section-inner">
-            <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#6366f1', marginBottom: 12 }}>Why Work With Me</p>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 16, lineHeight: 1.1 }}>Not just another developer.</h2>
-            <p style={{ fontSize: 15, fontWeight: 300, color: 'rgba(232,224,208,0.45)', lineHeight: 1.85, marginBottom: 56, maxWidth: 620 }}>
-              I started coding at 12 on a 1GB RAM phone with no laptop, no mentor, and no shortcuts. Six years later I ship tools that real people use and pay to keep running. Here is what that actually means for a team.
-            </p>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
-              {[
-                { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>, title: 'I ship, not just code', body: 'Quorel and VarsityLine are live, self-built startups, from schema to UI to the infrastructure keeping them running. Skim is a working AI tool with real users summarizing real documents. These are not tutorial projects. They are products I designed, deployed, and maintain.' },
-                { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="12" r="10"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>, title: 'I think before I type', body: 'Coding on a phone for 6 years with limited resources taught me to design logic on paper before writing a line. I map edge cases, question assumptions, and build things that are less buggy from the start. Not after three rounds of fixes.' },
-                { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>, title: 'I fix real problems', body: 'Running Quorel and VarsityLine means I am the one who gets paged when something breaks, whether it is a scraping layer, a payment webhook, or a data pipeline going stale. I do not abandon problems, I own them until they are fixed.' },
-                { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>, title: 'I learn at uncommon speed', body: 'I picked up TypeScript and Go in 2023 simultaneously while already knowing PHP and JavaScript. I was building real projects in both within weeks. New stacks, new tools, new environments. I iterate fast because I love this more than anything.' },
-                { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>, title: 'I work remotely by default', body: 'I have been self-directed since age 12 with no classroom, no bootcamp, no one looking over my shoulder. Remote work is not a perk I am adjusting to. It is the environment I have always operated in and where I do my best work.' },
-                { icon: <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>, title: 'I contribute beyond my role', body: 'I mentor students, lead a small startup team, and teach free coding classes on WhatsApp, Facebook, and Telegram. I show up fully wherever I am. A team that hires me gets someone who adds energy to the room, not just code to the repo.' },
-              ].map(({ icon, title, body }) => (
-                <div key={title} style={{ background: '#141310', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 16, padding: '28px 28px 32px', transition: 'all 0.3s' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(99,102,241,0.25)'; (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-3px)'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(255,255,255,0.07)'; (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'; }}
-                >
-                  <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#a5b4fc', marginBottom: 16 }}>{icon}</div>
-                  <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 700, color: 'rgba(232,224,208,0.88)', letterSpacing: '-0.01em', marginBottom: 10 }}>{title}</h3>
-                  <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.38)', lineHeight: 1.8 }}>{body}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <div className="divider" />
-
-        {/* Contact */}
-        <section id="contact" style={{ padding: '96px 0' }}>
+        {/* Contact — moved up front */}
+        <section id="contact" style={{ padding: '80px 0' }}>
           <div className="section-inner">
             <div className="contact-row">
-              <div style={{ width: 210, height: 210, borderRadius: 18, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.12)', flexShrink: 0, boxShadow: '0 0 60px rgba(99,102,241,0.12)', background: '#1a1815' }}>
+              <div style={{ width: 190, height: 190, borderRadius: 18, overflow: 'hidden', border: '1px solid rgba(201,168,76,0.2)', flexShrink: 0, boxShadow: '0 0 50px rgba(201,168,76,0.1)', background: '#1a1815' }}>
                 <img src="/portfolio-images/img/avatar.jpg" alt="Raphael Samuel" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
               </div>
               <div style={{ flex: 1 }}>
-                <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#6366f1', marginBottom: 14 }}>Get in Touch</p>
-                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 4vw, 48px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 16 }}>Let's build something worth shipping.</h2>
-                <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.85, marginBottom: 16, maxWidth: 420 }}>Open to remote roles, freelance contracts, and interesting problems. If you have one, let's talk.</p>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 32 }}>
-                  {[
-                    { icon: <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>, label: 'Nigeria' },
-                    { icon: <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>, label: 'UTC+1' },
-                    { icon: <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>, label: 'Remote worldwide' },
-                  ].map(({ icon, label }) => (
-                    <span key={label} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.06em', color: 'rgba(232,224,208,0.4)', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 99, padding: '4px 10px' }}>
-                      <span style={{ color: 'rgba(165,180,252,0.6)', display: 'flex', alignItems: 'center' }}>{icon}</span>{label}
-                    </span>
-                  ))}
-                </div>
+                <p className="eyebrow">Get in Touch</p>
+                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(26px, 3.6vw, 42px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 16 }}>Let's build something worth shipping.</h2>
+                <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.85, marginBottom: 24, maxWidth: 420 }}>Open to remote roles, freelance contracts, and interesting problems. If you have one, let's talk.</p>
                 <div className="contact-links-row">
-                  <a href="mailto:samuelraphael925@gmail.com" onClick={() => track('email_clicked', { source: 'contact' })} style={{ display: 'inline-block', background: '#6366f1', color: '#fff', fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.06em', padding: '12px 22px', borderRadius: 10, textDecoration: 'none', boxShadow: '0 0 28px rgba(99,102,241,0.3)', transition: 'all 0.2s' }}>samuelraphael925@gmail.com</a>
-                  {[['https://github.com/var-raphael','GitHub'],['https://www.linkedin.com/in/samuel-raphael-7679313a2','LinkedIn']].map(([href, label]) => (
-                    <a key={label} href={href} target="_blank" rel="noreferrer" onClick={() => track('social_clicked', { platform: label })} style={{ display: 'inline-block', border: '1px solid rgba(255,255,255,0.12)', color: 'rgba(232,224,208,0.45)', fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.06em', padding: '12px 22px', borderRadius: 10, textDecoration: 'none', transition: 'all 0.2s' }}>{label}</a>
+                  <a href="mailto:samuelraphael925@gmail.com" onClick={() => track('email_clicked', { source: 'contact' })} className="btn-gold-fill">samuelraphael925@gmail.com</a>
+                  {[['https://github.com/var-raphael', 'GitHub'], ['https://www.linkedin.com/in/samuel-raphael-7679313a2', 'LinkedIn'], ['https://x.com/PhantomDev001', 'X']].map(([href, label]) => (
+                    <a key={label} href={href} target="_blank" rel="noreferrer" onClick={() => track('social_clicked', { platform: label })} className="btn-gold-outline">{label}</a>
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="divider" />
+
+        {/* Two-column: Why Me + Blog (left, sticky) | Projects + Frontend (right, scrolls) */}
+        <section style={{ padding: '80px 0' }}>
+          <div className="section-inner">
+            <div className="two-col">
+
+              {/* LEFT — sticky */}
+              <div className="left-sticky">
+                <div id="why" style={{ marginBottom: 56 }}>
+                  <p className="eyebrow">Why Work With Me</p>
+                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(22px, 2.4vw, 28px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 20, lineHeight: 1.15 }}>Not just another developer.</h2>
+                  <div>
+                    {WHY_ME.map(({ title, body }) => (
+                      <div key={title} className="why-card">
+                        <div className="why-title">{title}</div>
+                        <div className="why-body">{body}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div id="blog">
+                  <p className="eyebrow">Recent Writing</p>
+                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(22px, 2.4vw, 28px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 16, lineHeight: 1.15 }}>From the Blog</h2>
+                  <div>
+                    {posts.slice(0, 4).map(post => (
+                      <a key={post.slug} href={`/blog/${post.slug}`} className="blog-row" onClick={() => track('blog_post_clicked', { slug: post.slug, title: post.title })}>
+                        <span className="blog-date">{post.date}</span>
+                        <div className="blog-title">{post.title}</div>
+                        <p className="blog-excerpt">{post.excerpt}</p>
+                      </a>
+                    ))}
+                  </div>
+                  <a href="/blog" onClick={() => track('blog_all_posts_clicked')} style={{ display: 'inline-block', marginTop: 20, fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.1em', color: '#c9a84c', textDecoration: 'none', borderBottom: '1px solid rgba(201,168,76,0.35)', paddingBottom: 2 }}>All posts ({posts.length}) →</a>
+                </div>
+              </div>
+
+              {/* RIGHT — scrolls normally */}
+              <div>
+                {/* Projects */}
+                <div id="projects" style={{ marginBottom: 72 }}>
+                  <p className="eyebrow">Selected Work</p>
+                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(30px, 4vw, 46px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 28, lineHeight: 1.1 }}>Projects</h2>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 40 }}>
+                    {STACK.map(s => <TechTag key={s} label={s} />)}
+                  </div>
+
+                  <div className="projects-grid">
+                    {PROJECTS.map(p => (
+                      <div key={p.title} className="project-card">
+                        <div className="project-card-media">
+                          {p.images.length > 0 ? (
+                            <CyclingImage images={p.images} alt={p.title} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                          ) : (
+                            <div style={{ width: '100%', height: '100%', minHeight: 220, background: 'linear-gradient(135deg, #1a1815, #0e0d0c)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(201,168,76,0.2)', letterSpacing: '0.1em' }}>[ infra project ]</span>
+                            </div>
+                          )}
+                        </div>
+                        <div className="project-card-body">
+                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 14 }}>
+                            {p.tags.map(t => <TechTag key={t} label={t} />)}
+                          </div>
+                          <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 19, fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 8 }}>{p.title}</h3>
+                          <div className="stat-line">{p.stat}</div>
+                          <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.75, marginBottom: 22, flex: 1 }}>{p.desc}</p>
+                          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                            {p.live && p.live !== '#' && (
+                              <a href={p.live} target="_blank" rel="noreferrer" className="btn-gold-fill" onClick={() => track('project_link_clicked', { project: p.title, type: 'live' })}>View Site ↗</a>
+                            )}
+                            {!p.closedSource && p.github && (
+                              <a href={p.github} target="_blank" rel="noreferrer" className="btn-gold-outline" onClick={() => track('project_link_clicked', { project: p.title, type: 'github' })}>GitHub</a>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* More Projects — lighter treatment */}
+                  <div style={{ marginTop: 40 }}>
+                    <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(232,224,208,0.3)', marginBottom: 16 }}>More Projects</p>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
+                      {MORE_PROJECTS.map(p => (
+                        <div key={p.title} className="more-project-card">
+                          <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: 15, fontWeight: 700, color: 'rgba(232,224,208,0.85)', marginBottom: 8 }}>{p.title}</h4>
+                          <p style={{ fontSize: 12, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.6, marginBottom: 14 }}>{p.desc}</p>
+                          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                            {p.live !== '#' && <a href={p.live} target="_blank" rel="noreferrer" className="btn-gold-outline" style={{ fontSize: 10, padding: '7px 14px' }}>View ↗</a>}
+                            <a href={p.github} target="_blank" rel="noreferrer" className="btn-gold-outline" style={{ fontSize: 10, padding: '7px 14px' }}>GitHub</a>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div style={{ marginTop: 32, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+                    <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.35)', lineHeight: 1.7, maxWidth: 420 }}>
+                      More experimentation and older work on my GitHub if you want to dig deeper.
+                    </p>
+                    <a href="https://github.com/var-raphael" target="_blank" rel="noreferrer" onClick={() => track('github_more_projects_clicked')} className="btn-gold-outline">See more on GitHub ↗</a>
+                  </div>
+                </div>
+
+                {/* Frontend / UI */}
+                <div id="frontend">
+                  <p className="eyebrow">Frontend & UI</p>
+                  <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(30px, 4vw, 46px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 44, lineHeight: 1.1 }}>Design Work</h2>
+
+                  <div className="ring-card" style={{ marginBottom: 56 }}>
+                    <div className="ring-visual">
+                      <CyclingImage images={['/portfolio-images/img/ring-view1.jpg', '/portfolio-images/img/ring-view2.jpg']} alt="Interactive 3D Ring Viewer" style={{ width: '100%', height: '100%', minHeight: 300, objectFit: 'cover', display: 'block' }} />
+                      <span className="ring-badge">3D Interactive</span>
+                    </div>
+                    <div style={{ padding: '40px 44px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                      <p className="eyebrow" style={{ marginBottom: 12 }}>Featured: 3D Viewer</p>
+                      <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(19px, 2.2vw, 25px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em', marginBottom: 14, lineHeight: 1.2 }}>Interactive 3D Ring Viewer</h3>
+                      <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(232,224,208,0.4)', lineHeight: 1.8, marginBottom: 22 }}>A real-time 3D ring viewer for jewelry e-commerce. Customers rotate, zoom and inspect rings from every angle before buying, reducing returns and building confidence.</p>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
+                        {['360° rotation with mouse and touch', 'Real-time zoom and pan controls', 'Multiple material & finish previews', 'Embeddable in any store page'].map(f => (
+                          <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 12, color: 'rgba(232,224,208,0.38)', fontWeight: 300 }}>
+                            <div style={{ width: 5, height: 5, borderRadius: '50%', background: 'rgba(201,168,76,0.6)', flexShrink: 0 }} />{f}
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 26 }}>
+                        {['Next.js', 'Three.js', 'TypeScript', 'Tailwind', 'WebGL'].map(t => <TechTag key={t} label={t} />)}
+                      </div>
+                      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                        <a href="https://ring-view.vercel.app/" onClick={() => track('ring_demo_clicked')} className="btn-gold-fill">View Demo ↗</a>
+                        <a href="https://github.com/var-raphael/atelier" target="_blank" rel="noreferrer" onClick={() => track('ring_github_clicked')} className="btn-gold-outline">GitHub</a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 22 }}>
+                    <div>
+                      <p className="eyebrow" style={{ marginBottom: 8 }}>Landing Pages</p>
+                      <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(19px, 2.6vw, 27px)', fontWeight: 700, color: 'rgba(232,224,208,0.9)', letterSpacing: '-0.02em' }}>Jewelry Store Collections</h3>
+                    </div>
+                    <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, color: 'rgba(232,224,208,0.2)' }}>{JEWELRY_COLLECTIONS.length} premium landing pages</span>
+                  </div>
+                  <JewelryCarousel />
+                </div>
+              </div>
+
             </div>
           </div>
         </section>
