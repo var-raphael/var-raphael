@@ -117,7 +117,7 @@ function useLenis() {
   }, []);
 }
 
-const NAV_LINKS: [string, string][] = [['#about', 'About'], ['#contact', 'Contact'], ['#projects', 'Projects'], ['#frontend', 'Frontend'], ['#why', 'Why Me'], ['#blog', 'Blog']];
+const NAV_LINKS: [string, string][] = [['#about', 'About'], ['#projects', 'Projects'], ['#frontend', 'Frontend'], ['#why', 'Why Me'], ['#blog', 'Blog']];
 
 const WHY_ME = [
   { title: 'I ship, not just code', body: 'Quorel and VarsityLine are live, self-built startups, from schema to UI to the infrastructure keeping them running. These are not tutorial projects. They are products I designed, deployed, and maintain.' },
@@ -285,15 +285,11 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                 <p style={{ fontSize: 'clamp(15px, 1.6vw, 18px)', fontWeight: 300, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.02em', marginTop: 18, marginBottom: 28, maxWidth: 520 }}>
                   Building products end to end. Two of my own, plus client work.
                 </p>
-                <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', marginBottom: 24 }}>
-                  <a href="#projects" className="btn-gold-fill" onClick={() => track('hero_cta_clicked', { button: 'view_projects' })}>View Projects</a>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 40, flexWrap: 'wrap' }}>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontFamily: "'DM Mono', monospace", fontSize: 11, color: '#4ade80', background: 'rgba(74,222,128,0.06)', border: '1px solid rgba(74,222,128,0.25)', padding: '5px 12px' }}>
-                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4ade80', boxShadow: '0 0 8px #4ade80', flexShrink: 0, animation: 'pulse 2s ease-in-out infinite' }} />
-                    Open to joining an early-stage startup
-                  </span>
-                  <a href="mailto:samuelraphael925@gmail.com" className="hero-email" onClick={() => track('email_clicked', { source: 'hero' })}>samuelraphael925@gmail.com</a>
+                <div className="contact-links-row" style={{ marginBottom: 40 }}>
+                  <a href="mailto:samuelraphael925@gmail.com" onClick={() => track('email_clicked', { source: 'hero' })} className="btn-gold-fill">samuelraphael925@gmail.com</a>
+                  {[['https://www.linkedin.com/in/samuel-raphael-7679313a2', 'LinkedIn'], ['https://x.com/PhantomDev001', 'X']].map(([href, label]) => (
+                    <a key={label} href={href} target="_blank" rel="noreferrer" onClick={() => track('social_clicked', { platform: label })} className="btn-gold-outline">{label}</a>
+                  ))}
                 </div>
                 <div style={{ display: 'flex', gap: 48, flexWrap: 'wrap' }}>
                   {[{ val: '6', unit: '+', label: 'Years Coding' }, { val: '3', unit: '', label: 'Live Products' }, { val: '2', unit: '', label: 'Startups Founded' }].map(({ val, unit, label }) => (
@@ -319,15 +315,14 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
               <div>
                 <p className="eyebrow">About</p>
                 <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 24 }}>
-                  I build things<br /><em style={{ fontStyle: 'italic', color: '#FFD700' }}>people actually use.</em>
+                  A quick intro.
                 </h2>
                 <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.5)', lineHeight: 1.9, marginBottom: 16 }}>
-                  I have 6 years of experience across Python, Go, TypeScript, and Next.js. I have built and shipped real products, not demos, not clones, tools with real users, real infrastructure, and real problems I had to solve to keep them running.
+                  Six years across Python, Go, TypeScript, and Next.js, mostly spent building things people rely on rather than one-off demos: real users, real infrastructure, real problems that show up after launch.
                 </p>
                 <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.5)', lineHeight: 1.9, marginBottom: 32 }}>
-                  Two of the projects below are my own startups, built end to end, from the schema to the UI to the infrastructure keeping them online. Every product in this portfolio was designed, built, and maintained by me alone.
+                  Two of the projects below are my own, built solo end to end, schema through UI through the infrastructure keeping them online. The rest is client and collaborative work.
                 </p>
-                <a href="#projects" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: "'DM Mono', monospace", fontSize: 12, letterSpacing: '0.08em', color: '#FFD700', textDecoration: 'none', borderBottom: '1px solid rgba(255,215,0,0.4)', paddingBottom: 2 }}>See the work →</a>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                 {[
@@ -348,30 +343,6 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                     </div>
                   </div>
                 ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <div className="divider" />
-
-        {/* Contact — stays up front */}
-        <section id="contact" style={{ padding: '80px 0' }}>
-          <div className="section-inner">
-            <div className="contact-row">
-              <div style={{ width: 190, height: 190, border: '1px solid rgba(255,215,0,0.3)', flexShrink: 0, background: '#0a0a0a' }}>
-                <img src="/portfolio-images/img/avatar.jpg" alt="Raphael Samuel" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-              </div>
-              <div style={{ flex: 1 }}>
-                <p className="eyebrow">Get in Touch</p>
-                <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(26px, 3.6vw, 42px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 16 }}>Let's build something worth shipping.</h2>
-                <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.45)', lineHeight: 1.85, marginBottom: 24, maxWidth: 420 }}>Open to remote roles, freelance contracts, and interesting problems. If you have one, let's talk.</p>
-                <div className="contact-links-row">
-                  <a href="mailto:samuelraphael925@gmail.com" onClick={() => track('email_clicked', { source: 'contact' })} className="btn-gold-fill">samuelraphael925@gmail.com</a>
-                  {[['https://github.com/var-raphael', 'GitHub'], ['https://www.linkedin.com/in/samuel-raphael-7679313a2', 'LinkedIn'], ['https://x.com/PhantomDev001', 'X']].map(([href, label]) => (
-                    <a key={label} href={href} target="_blank" rel="noreferrer" onClick={() => track('social_clicked', { platform: label })} className="btn-gold-outline">{label}</a>
-                  ))}
-                </div>
               </div>
             </div>
           </div>
