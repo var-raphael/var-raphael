@@ -5,7 +5,7 @@ import Lenis from 'lenis';
 import type { PostMeta } from '@/lib/posts';
 import {
   TECH_ICONS, STACK,
-  PROJECTS, MORE_PROJECTS, JEWELRY_COLLECTIONS,
+  PROJECTS, JEWELRY_COLLECTIONS,
 } from './data';
 
 function track(event: string, props?: Record<string, string>) {
@@ -167,8 +167,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         .project-card-media { height: 200px; background: #050505; flex-shrink: 0; }
         .project-card-body { padding: 26px 28px; display: flex; flex-direction: column; flex: 1; border-top: 1px solid rgba(255,215,0,0.1); }
 
-        .more-project-card { background: #0a0a0a; border: 1px solid rgba(255,215,0,0.12); border-radius: 0; padding: 22px 24px; transition: all 0.15s; }
-        .more-project-card:hover { border-color: rgba(255,215,0,0.4); }
+
 
         .ring-card { display: grid; grid-template-columns: 5fr 7fr; background: #0a0a0a; border: 1px solid rgba(255,215,0,0.15); border-radius: 0; overflow: hidden; }
         .ring-visual { position: relative; min-height: 300px; border-right: 1px solid rgba(255,215,0,0.15); background: #050505; overflow: hidden; }
@@ -318,10 +317,10 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   A quick intro.
                 </h2>
                 <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.5)', lineHeight: 1.9, marginBottom: 16 }}>
-                  Six years across Python, Go, TypeScript, and Next.js, mostly spent building things people rely on rather than one-off demos: real users, real infrastructure, real problems that show up after launch.
+                  Six years of writing Python, Go, TypeScript, and Next.js, most of it spent on two questions: does this hold up once real people depend on it, and who fixes it at 2am when it doesn't. Quorel and VarsityLine are both still answering yes.
                 </p>
                 <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.5)', lineHeight: 1.9, marginBottom: 32 }}>
-                  Two of the projects below are my own, built solo end to end, schema through UI through the infrastructure keeping them online. The rest is client and collaborative work.
+                  I built both of those solo, schema to UI to the infrastructure keeping them online. The rest of what's here is client work and side projects.
                 </p>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
@@ -382,6 +381,9 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                       {p.live && p.live !== '#' && (
                         <a href={p.live} target="_blank" rel="noreferrer" className="btn-gold-fill" onClick={() => track('project_link_clicked', { project: p.title, type: 'live' })}>View Site ↗</a>
                       )}
+                      {(p as any).secondaryLive && (
+                        <a href={(p as any).secondaryLive} target="_blank" rel="noreferrer" className="btn-gold-outline" onClick={() => track('project_link_clicked', { project: p.title, type: 'secondary_live' })}>{(p as any).secondaryLiveLabel || 'View More ↗'}</a>
+                      )}
                       {!p.closedSource && p.github && (
                         <a href={p.github} target="_blank" rel="noreferrer" className="btn-gold-outline" onClick={() => track('project_link_clicked', { project: p.title, type: 'github' })}>GitHub</a>
                       )}
@@ -389,22 +391,6 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   </div>
                 </div>
               ))}
-            </div>
-
-            <div style={{ marginTop: 40 }}>
-              <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: 16 }}>More Projects</p>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 14 }}>
-                {MORE_PROJECTS.map(p => (
-                  <div key={p.title} className="more-project-card">
-                    <h4 style={{ fontFamily: "'Playfair Display', serif", fontSize: 15, fontWeight: 700, color: '#fff', marginBottom: 8 }}>{p.title}</h4>
-                    <p style={{ fontSize: 12, fontWeight: 300, color: 'rgba(255,255,255,0.45)', lineHeight: 1.6, marginBottom: 14 }}>{p.desc}</p>
-                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                      {p.live !== '#' && <a href={p.live} target="_blank" rel="noreferrer" className="btn-gold-outline" style={{ fontSize: 10, padding: '7px 14px' }}>View ↗</a>}
-                      <a href={p.github} target="_blank" rel="noreferrer" className="btn-gold-outline" style={{ fontSize: 10, padding: '7px 14px' }}>GitHub</a>
-                    </div>
-                  </div>
-                ))}
-              </div>
             </div>
 
             <div style={{ marginTop: 32, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>

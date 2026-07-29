@@ -33,10 +33,12 @@ export const STACK = ['Python', 'Go', 'TypeScript', 'Next.js', 'Tailwind', 'MySQ
 export const PROJECTS = [
   {
     title: 'Quorel',
-    stat: '4 live datasets · full version history · public & queryable, no login required',
-    desc: 'Scraping gets you a page. It doesn\'t get you a source of truth. Quorel lets you define what data you want from any public website once, then handles the rest: schema-first AI extraction, nightly automatic refresh, and full version history on every change, nothing is ever overwritten. Every dataset ships with a native MCP server, so agents can query, filter, and clean the data conversationally without a line of scraping code.',
+    stat: '4 live datasets · MCP tool on every plan · full version history, nothing overwritten',
+    desc: 'Gives your AI agent a live, versioned view of any website. Describe the fields you want in plain English, Quorel extracts them nightly and keeps every past version permanently queryable. Every dataset ships with an MCP server, so Claude or any MCP-compatible agent can query it, catch what changed since last week, and even fix bad rows itself, publishing the correction as a new, reversible version.',
     images: ['/portfolio-images/img/quorel1.jpg', '/portfolio-images/img/quorel2.jpg'],
     live: 'https://quorel.vercel.app',
+    secondaryLive: 'https://quorel.vercel.app/datasets',
+    secondaryLiveLabel: 'Browse Live Datasets ↗',
     github: 'https://github.com/var-raphael/quorel',
     closedSource: false,
     tags: ['Go', 'Next.js', 'TypeScript', 'MySQL'],
@@ -52,31 +54,24 @@ export const PROJECTS = [
     tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'Tailwind'],
   },
   {
-    title: 'PhantomCrawl + PhantomClean',
-    stat: '4-layer crawler · TLS fingerprinting & anti-bot evasion · paired AI-cleaning pipeline',
-    desc: 'The infrastructure that makes Quorel possible. PhantomCrawl is a 4-layer web crawler built to handle TLS fingerprinting and anti-bot evasion at scale. PhantomClean sits downstream, stripping boilerplate and normalizing the mess a crawler pulls in, using AI-assisted cleaning and batch processing. Built from scratch, no scraping framework underneath.',
-    images: [],
-    live: '#',
-    github: 'https://github.com/var-raphael/PhantomCrawl',
-    closedSource: false,
-    tags: ['Go', 'Python'],
-  },
-];
-
-export const MORE_PROJECTS = [
-  {
     title: 'Skim',
-    desc: 'AI-powered PDF summarizer with real users. Tell it what you\'re looking for, get a page-by-page summary in seconds.',
+    stat: 'Real users · page-by-page summaries · targeted extraction, not a wall of text',
+    desc: 'Uploading a 40-page PDF and getting a wall of text back isn\'t a summary, it\'s a chore. Skim lets you tell it exactly what you\'re looking for, then returns a clear, page-by-page summary in seconds, built for students and teachers who need the signal, not the whole document. Copy or download the result, and revisit past summaries anytime.',
+    images: ['/portfolio-images/img/skim1.jpg', '/portfolio-images/img/skim2.jpg'],
     live: 'https://skim-7inx.onrender.com',
     github: 'https://github.com/var-raphael/skim',
+    closedSource: false,
     tags: ['Python', 'JavaScript'],
   },
   {
     title: 'Wildpalace SEO PLP',
-    desc: 'Shopify app that auto-generates SEO-optimized Product Listing Pages from keyword intent.',
+    stat: 'Shopify app · keyword-intent driven · auto-generated product listing pages',
+    desc: 'Store owners waste hours hand-writing SEO copy for every product listing page, and most of it still doesn\'t rank. Wildpalace plugs into Shopify and auto-generates SEO-optimized Product Listing Pages straight from keyword intent, turning a manual content chore into something that runs itself.',
+    images: ['/portfolio-images/img/wildpalace1.jpg', '/portfolio-images/img/wildpalace2.jpg'],
     live: '#',
     github: 'https://github.com/var-raphael/wildpalace-seo-plp',
-    tags: ['TypeScript'],
+    closedSource: false,
+    tags: ['TypeScript', 'Next.js'],
   },
 ];
 
