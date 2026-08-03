@@ -65,24 +65,6 @@ View Demo ↗ · GitHub
 
 ---
 
-## Why Work With Me
-
-- **I ship, not just code.** Quorel and VarsityLine are live, self-built startups, built schema to UI to infrastructure. Not tutorial projects; products I designed, deployed, and maintain.
-- **I think before I type.** Years of working with limited resources taught me to design logic before writing a line.
-- **I fix real problems.** Running Quorel and VarsityLine means I'm the one who gets paged when something breaks, whether it's the scraping layer, a payment webhook, or a stale data pipeline. I own problems until they're fixed.
-- **I learn at uncommon speed.** Picked up TypeScript and Go simultaneously in 2022 while already knowing PHP and JavaScript, building real projects in both within weeks.
-- **I work remotely by default.** Self-directed for years, no classroom, no bootcamp.
-- **I contribute beyond my role.** I mentor students and teach free coding classes online.
-
----
-
-## Recent Writing
-
-- **The Bug That Fixed My Architecture** (2026-07-29): a storage problem, a clustering fix, and the race condition that fix caused.
-- **Why I Switched from REST to tRPC for Internal APIs** (2026-02-12): after two projects with undocumented REST endpoints, here's what changed.
-
----
-
 ## Contact
 
 | | |
