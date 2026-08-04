@@ -120,6 +120,7 @@ function useLenis() {
 const NAV_LINKS: [string, string][] = [['#about', 'About'], ['#projects', 'Projects'], ['#frontend', 'Frontend'], ['#why', 'Why Me'], ['#blog', 'Blog']];
 
 const WHY_ME = [
+  { title: 'I move to what needs solving', body: 'I don\'t think in terms of one stack or role. Backend, frontend, infra, whatever\'s in the way that week, I go there and figure it out.' },
   { title: 'I ship, not just code', body: 'Quorel and VarsityLine are live, self-built startups, from schema to UI to the infrastructure keeping them running. These are not tutorial projects. They are products I designed, deployed, and maintain.' },
   { title: 'I think before I type', body: 'Years of working with limited resources taught me to design logic before writing a line. I map edge cases and question assumptions early, so things ship less buggy from the start.' },
   { title: 'I fix real problems', body: 'Running Quorel and VarsityLine means I am the one who gets paged when something breaks, whether it is a scraping layer, a payment webhook, or a data pipeline going stale. I own problems until they are fixed.' },
