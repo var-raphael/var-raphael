@@ -58,7 +58,8 @@ export default function RootLayout({
         {children}
         <Analytics />
         <Script
-          src="https://phantomtrack-cdn.vercel.app/phantom.v1.0.0.js?trackid=track_wn48o57cfg7ytynr7355sd"
+          src="https://gnat-np2m.onrender.com/tracker.js"
+          data-site-key="60186c0903288b1cfb491bc72f12b8fa36d24e0981847b71"
           strategy="afterInteractive"
         />
       </body>

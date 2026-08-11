@@ -9,8 +9,8 @@ import {
 } from './data';
 
 function track(event: string, props?: Record<string, string>) {
-  if (typeof window !== 'undefined' && (window as any).phantom?.track) {
-    (window as any).phantom.track(event, props ?? {});
+  if (typeof window !== 'undefined' && (window as any).gnat?.track) {
+    (window as any).gnat.track(event, props ?? {});
   }
 }
 
