@@ -33,7 +33,7 @@ export const STACK = ['Python', 'Go', 'TypeScript', 'Next.js', 'Tailwind', 'MySQ
 export const PROJECTS = [
   {
     title: 'Quorel',
-    stat: '4 live datasets · full version history, nothing overwritten',
+    stat: '10 signups · 4 live datasets · 844+ records · 300+ API calls served',
     desc: 'Gives your AI agent a live, versioned view of any website. Describe the fields you want in plain English, Quorel extracts them nightly and keeps every past version permanently queryable. Every dataset ships with an MCP server, so Claude or any MCP-compatible agent can query it, catch what changed since last week, and even fix bad rows itself, publishing the correction as a new, reversible version.',
     images: ['/portfolio-images/img/quorel1.jpg', '/portfolio-images/img/quorel2.jpg'],
     live: 'https://quorel.vercel.app',
@@ -45,7 +45,7 @@ export const PROJECTS = [
   },
   {
     title: 'VarsityLine',
-    stat: '24 universities covered · verified cut-offs & courses · Paystack-powered alerts',
+    stat: '24 universities · 13 paying subscribers · 132 free users · 687+ searches',
     desc: 'Nigerian students figure out admission cut-offs from group chats and outdated PDFs. VarsityLine fixes that: verified cut-off marks, courses, and screening dates for every Nigerian university, cross-checked against each school\'s own admissions office, with a "last confirmed" timestamp on every entry. Search by university, by course, or both with state and type filters, export results as a PDF, and subscribe for access to search and compare feature for decsion making.',
     images: ['/portfolio-images/img/varsityline1.jpg', '/portfolio-images/img/varsityline2.jpg'],
     live: 'https://varsityline.vercel.app',
@@ -54,11 +54,22 @@ export const PROJECTS = [
     tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'Tailwind'],
   },
   {
+    title: 'Gnat',
+    stat: 'Single Go binary · zero dependencies · built-in MCP server',
+    desc: 'Existing self-hosted analytics tools force a tradeoff between depth and simplicity. Gnat is a single Go binary, no Docker, no multi-service stack, with funnels, cohorts, retention curves, and auto-discovered path analysis built in. Every instance ships with a native MCP server, so AI agents can query analytics data directly, no separate export step required.',
+    images: [],
+    live: 'https://gnat-np2m.onrender.com/dashboard',
+    demoPassword: 'vJzTMw0bjTtWHyNpBCPGaZqE',
+    github: 'https://github.com/var-raphael/Gnat',
+    closedSource: false,
+    tags: ['Go', 'SQLite', 'MySQL', 'PostgreSQL'],
+  },
+  {
     title: 'Skim',
-    stat: 'Real users · page-by-page summaries · targeted extraction, not a wall of text',
-    desc: 'Uploading a 40-page PDF and getting a wall of text back isn\'t a summary, it\'s a chore. Skim lets you tell it exactly what you\'re looking for, then returns a clear, page-by-page summary in seconds, built for students and teachers who need the signal, not the whole document. Copy or download the result, and revisit past summaries anytime.',
+    stat: 'Prototype · currently paused',
+    desc: 'Uploading a 40-page PDF and getting a wall of text back isn\'t a summary, it\'s a chore. Skim lets you tell it exactly what you\'re looking for, then returns a clear, page-by-page summary in seconds, built for students and teachers who need the signal, not the whole document.',
     images: ['/portfolio-images/img/skim1.jpg', '/portfolio-images/img/skim2.jpg'],
-    live: 'https://skim-7inx.onrender.com',
+    live: '#',
     github: 'https://github.com/var-raphael/skim',
     closedSource: false,
     tags: ['Python', 'JavaScript'],

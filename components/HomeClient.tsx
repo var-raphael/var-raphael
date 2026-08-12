@@ -161,6 +161,9 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
 
         .stat-line { font-family: 'DM Mono', monospace; font-size: 11px; color: #FFD700; letter-spacing: 0.02em; margin-bottom: 14px; line-height: 1.6; }
 
+        .demo-password-line { font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 0.01em; margin-bottom: 16px; line-height: 1.6; word-break: break-all; }
+        .demo-password-value { color: #FFD700; }
+
         /* Projects grid — 2 columns on desktop */
         .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
         .project-card { background: #0a0a0a; border: 1px solid rgba(255,215,0,0.15); border-radius: 0; overflow: hidden; display: flex; flex-direction: column; transition: all 0.2s ease; }
@@ -378,6 +381,11 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                     <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 19, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', marginBottom: 8 }}>{p.title}</h3>
                     <div className="stat-line">{p.stat}</div>
                     <p style={{ fontSize: 13, fontWeight: 300, color: 'rgba(255,255,255,0.45)', lineHeight: 1.75, marginBottom: 22, flex: 1 }}>{p.desc}</p>
+                    {(p as any).demoPassword && (
+                      <div className="demo-password-line">
+                        Demo password: <span className="demo-password-value">{(p as any).demoPassword}</span>
+                      </div>
+                    )}
                     <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                       {p.live && p.live !== '#' && (
                         <a href={p.live} target="_blank" rel="noreferrer" className="btn-gold-fill" onClick={() => track('project_link_clicked', { project: p.title, type: 'live' })}>View Site ↗</a>
