@@ -320,11 +320,8 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                 <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 24 }}>
                   A quick intro.
                 </h2>
-                <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.5)', lineHeight: 1.9, marginBottom: 16 }}>
-                  Six years of writing Python, Go, TypeScript, and Next.js, most of it spent on two questions: does this hold up once real people depend on it, and who fixes it at 2am when it doesn't. Quorel and VarsityLine are both still answering yes.
-                </p>
                 <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.5)', lineHeight: 1.9, marginBottom: 32 }}>
-                  I built both of those solo, schema to UI to the infrastructure keeping them online. The rest of what's here is client work and side projects.
+                  Six years of writing Python, Go, TypeScript, and Next.js, most of it spent on two questions: does this hold up once real people depend on it, and who fixes it at 2am when it doesn't. Quorel and VarsityLine are both still answering yes.
                 </p>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
@@ -392,6 +389,9 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                       )}
                       {(p as any).secondaryLive && (
                         <a href={(p as any).secondaryLive} target="_blank" rel="noreferrer" className="btn-gold-outline" onClick={() => track('project_link_clicked', { project: p.title, type: 'secondary_live' })}>{(p as any).secondaryLiveLabel || 'View More ↗'}</a>
+                      )}
+                      {(p as any).tertiaryLive && (
+                        <a href={(p as any).tertiaryLive} target="_blank" rel="noreferrer" className="btn-gold-outline" onClick={() => track('project_link_clicked', { project: p.title, type: 'tertiary_live' })}>{(p as any).tertiaryLiveLabel || 'View More ↗'}</a>
                       )}
                       {!p.closedSource && p.github && (
                         <a href={p.github} target="_blank" rel="noreferrer" className="btn-gold-outline" onClick={() => track('project_link_clicked', { project: p.title, type: 'github' })}>GitHub</a>

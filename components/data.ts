@@ -39,6 +39,8 @@ export const PROJECTS = [
     live: 'https://quorel.vercel.app',
     secondaryLive: 'https://quorel.vercel.app/datasets',
     secondaryLiveLabel: 'Browse Live Datasets ↗',
+    tertiaryLive: 'https://diffboard.vercel.app',
+    tertiaryLiveLabel: 'See It In Use (Diffboard) ↗',
     github: 'https://github.com/var-raphael/quorel',
     closedSource: true,
     tags: ['Go', 'Next.js', 'TypeScript', 'MySQL'],
