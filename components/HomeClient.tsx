@@ -279,14 +279,14 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
               </div>
               <div>
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, fontFamily: "'DM Mono', monospace", fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', marginBottom: 20 }}>
-                  <span>Full-Stack Engineer</span>
+                  <span>Software Engineer</span>
                   <span style={{ display: 'block', width: 40, height: 1, background: '#FFD700' }} />
                 </div>
                 <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(46px, 7vw, 84px)', fontWeight: 800, lineHeight: 0.95, letterSpacing: '-0.03em', color: '#fff', marginBottom: 8 }}>
                   Raphael <em style={{ fontStyle: 'italic', color: '#FFD700' }}>Samuel</em>
                 </h1>
                 <p style={{ fontSize: 'clamp(15px, 1.6vw, 18px)', fontWeight: 300, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.02em', marginTop: 18, marginBottom: 28, maxWidth: 520 }}>
-                  Building products end to end. Two of my own, plus client work.
+                  Building AI agent tooling and data infrastructure end to end. Two products of my own, plus client work.
                 </p>
                 <div className="contact-links-row" style={{ marginBottom: 40 }}>
                   <a href="mailto:samuelraphael925@gmail.com" onClick={() => track('email_clicked', { source: 'hero' })} className="btn-gold-fill">samuelraphael925@gmail.com</a>

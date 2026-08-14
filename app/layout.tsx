@@ -8,9 +8,9 @@ const OG_IMAGE = "/portfolio-images/img/og-image.jpg"; // 1200x630 recommended, 
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Raphael Samuel, Full-Stack Engineer",
-  description: "Full-stack engineer building products end to end. Two of my own startups, plus client work, across Python, Go, TypeScript, and Next.js.",
-  keywords: ["Full-Stack Engineer", "Next.js", "TypeScript", "Go", "Python", "PostgreSQL", "MySQL"],
+  title: "Raphael Samuel, Software Engineer",
+  description: "Software engineer building AI agent tooling and data infrastructure end to end. Two of my own startups, plus client work, across Python, Go, TypeScript, and Next.js.",
+  keywords: ["Software Engineer", "AI Agent Tooling", "Data Infrastructure", "Next.js", "TypeScript", "Go", "Python", "PostgreSQL", "MySQL"],
   authors: [{ name: "Raphael Samuel", url: "https://github.com/var-raphael" }],
   manifest: "/manifest.json",
   icons: {
@@ -18,8 +18,8 @@ export const metadata: Metadata = {
     apple: "/portfolio-images/img/avatar.jpg",
   },
   openGraph: {
-    title: "Raphael Samuel, Full-Stack Engineer",
-    description: "Full-stack engineer building products end to end. Two of my own startups, plus client work.",
+    title: "Raphael Samuel, Software Engineer",
+    description: "Software engineer building AI agent tooling and data infrastructure end to end. Two of my own startups, plus client work.",
     url: SITE_URL,
     siteName: "Raphael Samuel",
     type: "website",
@@ -28,14 +28,14 @@ export const metadata: Metadata = {
         url: OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "Raphael Samuel, Full-Stack Engineer",
+        alt: "Raphael Samuel, Software Engineer",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Raphael Samuel, Full-Stack Engineer",
-    description: "Full-stack engineer building products end to end. Two of my own startups, plus client work.",
+    title: "Raphael Samuel, Software Engineer",
+    description: "Software engineer building AI agent tooling and data infrastructure end to end. Two of my own startups, plus client work.",
     images: [OG_IMAGE],
   },
 };
