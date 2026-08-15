@@ -41,8 +41,8 @@ export const PROJECTS = [
     secondaryLiveLabel: 'Browse Live Datasets ↗',
     tertiaryLive: 'https://diffboard.vercel.app',
     tertiaryLiveLabel: 'See It In Use (Diffboard) ↗',
-    github: 'https://github.com/var-raphael/quorel',
-    closedSource: true,
+    github: 'https://github.com/var-raphael/vexaro',
+    closedSource: false,
     tags: ['Go', 'Next.js', 'TypeScript', 'MySQL'],
   },
   {
