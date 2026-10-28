@@ -29,12 +29,13 @@ export const TECH_ICONS: Record<string, string> = {
   'Vercel':        'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/vercel.svg',
   'OpenAI':        'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/openai.svg',
   'Playwright':    'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/playwright/playwright-original.svg',
+  'Claude':        'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/claude.svg',
   'LangChain':     'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/langchain.svg',
 };
 
 export const STACK = ['Python', 'Go', 'TypeScript', 'Next.js', 'Tailwind', 'MySQL', 'PostgreSQL'];
 
-export const TOOLS = ['Docker', 'Vercel', 'Firecrawl', 'Chromium', 'Playwright', 'Mistral', 'OpenAI', 'LangChain', 'Supabase', 'Vector DB'];
+export const TOOLS = ['Tailwind', 'Docker', 'Vercel', 'Firecrawl', 'Chromium', 'Playwright', 'Mistral', 'OpenAI', 'Claude', 'LangChain', 'Supabase', 'Vector DB'];
 
 // ── KAIST / Claytronics ───────────────────────────────────────────────────────
 // Set `live` to the real simulation URL when it's ready. '#' shows a "coming soon" label.

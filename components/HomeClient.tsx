@@ -16,7 +16,7 @@ function track(event: string, props?: Record<string, string>) {
 
 function TechTag({ label, large }: { label: string; large?: boolean }) {
   const icon = TECH_ICONS[label];
-  const needsInvert = ['Next.js', 'Three.js', 'Framer Motion', 'WebGL', 'Ethereum', 'HTMX', 'Mistral', 'Vercel', 'OpenAI', 'LangChain', 'Supabase'].includes(label);
+  const needsInvert = ['Next.js', 'Three.js', 'Framer Motion', 'WebGL', 'Ethereum', 'HTMX', 'Mistral', 'Vercel', 'OpenAI', 'Claude', 'LangChain', 'Supabase'].includes(label);
   return (
     <span className={large ? 'tech-tag tech-tag-lg' : 'tech-tag'}>
       {icon && <img src={icon} alt={label} onError={(e) => { e.currentTarget.style.display = 'none'; }} style={{ width: large ? 16 : 13, height: large ? 16 : 13, objectFit: 'contain', flexShrink: 0, filter: needsInvert ? 'invert(1)' : undefined }} />}
@@ -485,7 +485,6 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
 
         <footer style={{ borderTop: '1px solid rgba(255,215,0,0.12)', padding: '26px 48px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
           <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.06em' }}>© 2026 Raphael Samuel / var-raphael</p>
-          <p style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.06em' }}>Built with Next.js + TypeScript</p>
         </footer>
 
       </div>
