@@ -25,12 +25,15 @@ export const TECH_ICONS: Record<string, string> = {
   'Framer Motion': 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/framer.svg',
   'SQLite':        'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg',
   'Supabase':      'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/supabase.svg',
-  'Mistral':       'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/mistralai.svg',
+  'Mistral':       'https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/mistral-color.svg',
   'Vercel':        'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/vercel.svg',
   'OpenAI':        'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/openai.svg',
   'Playwright':    'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/playwright/playwright-original.svg',
-  'Claude':        'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/claude.svg',
-  'LangChain':     'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/langchain.svg',
+  'Claude':        'https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/claude-color.svg',
+  'LangChain':     'https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/langchain-color.svg',
+  'Firecrawl':     'https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/firecrawl-color.svg',
+  'Chromium':      'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/chromium.svg',
+  'Vector DB':     'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>',
 };
 
 export const STACK = ['Python', 'Go', 'TypeScript', 'Next.js', 'Tailwind', 'MySQL', 'PostgreSQL'];
