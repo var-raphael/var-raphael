@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Lenis from 'lenis';
 import type { PostMeta } from '@/lib/posts';
 import {
-  TECH_ICONS, STACK,
+  TECH_ICONS, STACK, TOOLS,
   PROJECTS, JEWELRY_COLLECTIONS, CLAYTRONICS,
 } from './data';
 
@@ -16,10 +16,10 @@ function track(event: string, props?: Record<string, string>) {
 
 function TechTag({ label }: { label: string }) {
   const icon = TECH_ICONS[label];
-  const needsInvert = label === 'Next.js' || label === 'Three.js' || label === 'Framer Motion' || label === 'WebGL' || label === 'Ethereum' || label === 'HTMX' || label === 'Mistral';
+  const needsInvert = ['Next.js', 'Three.js', 'Framer Motion', 'WebGL', 'Ethereum', 'HTMX', 'Mistral', 'Vercel', 'OpenAI', 'LangChain', 'Supabase'].includes(label);
   return (
     <span className="tech-tag">
-      {icon && <img src={icon} alt={label} style={{ width: 13, height: 13, objectFit: 'contain', flexShrink: 0, filter: needsInvert ? 'invert(1)' : undefined }} />}
+      {icon && <img src={icon} alt={label} onError={(e) => { e.currentTarget.style.display = 'none'; }} style={{ width: 13, height: 13, objectFit: 'contain', flexShrink: 0, filter: needsInvert ? 'invert(1)' : undefined }} />}
       {label}
     </span>
   );
@@ -331,16 +331,19 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                 {[
                   { label: 'Primary Stack', pills: ['Python', 'Go', 'TypeScript', 'Next.js'] },
                   { label: 'Databases', pills: ['PostgreSQL', 'MySQL'] },
+                  { label: 'Frameworks & Tools', pills: TOOLS, icons: true },
                   { label: 'Currently', pills: ['Open to remote roles worldwide'] },
                   { label: 'Location', pills: ['Nigeria', 'UTC+1'] },
                   { label: 'Response time', pills: ['Within 24 hours'] },
-                ].map(({ label, pills }) => (
+                ].map(({ label, pills, icons }) => (
                   <div key={label} style={{ display: 'flex', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid rgba(255,255,255,0.08)', gap: 16 }}>
                     <div style={{ minWidth: 140, flexShrink: 0 }}>
                       <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>{label}</span>
                     </div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                      {pills.map(p => (
+                      {pills.map(p => icons ? (
+                        <TechTag key={p} label={p} />
+                      ) : (
                         <span key={p} style={{ display: 'inline-flex', alignItems: 'center', fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.04em', color: 'rgba(255,255,255,0.55)', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', padding: '3px 10px' }}>{p}</span>
                       ))}
                     </div>
