@@ -14,12 +14,12 @@ function track(event: string, props?: Record<string, string>) {
   }
 }
 
-function TechTag({ label }: { label: string }) {
+function TechTag({ label, large }: { label: string; large?: boolean }) {
   const icon = TECH_ICONS[label];
   const needsInvert = ['Next.js', 'Three.js', 'Framer Motion', 'WebGL', 'Ethereum', 'HTMX', 'Mistral', 'Vercel', 'OpenAI', 'LangChain', 'Supabase'].includes(label);
   return (
-    <span className="tech-tag">
-      {icon && <img src={icon} alt={label} onError={(e) => { e.currentTarget.style.display = 'none'; }} style={{ width: 13, height: 13, objectFit: 'contain', flexShrink: 0, filter: needsInvert ? 'invert(1)' : undefined }} />}
+    <span className={large ? 'tech-tag tech-tag-lg' : 'tech-tag'}>
+      {icon && <img src={icon} alt={label} onError={(e) => { e.currentTarget.style.display = 'none'; }} style={{ width: large ? 16 : 13, height: large ? 16 : 13, objectFit: 'contain', flexShrink: 0, filter: needsInvert ? 'invert(1)' : undefined }} />}
       {label}
     </span>
   );
@@ -149,6 +149,8 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         .btn-gold-outline:hover { background: #FFD700; color: #000; }
 
         .tech-tag { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 0; font-size: 10px; font-family: 'DM Mono', monospace; font-weight: 500; border: 1px solid rgba(255,215,0,0.35); background: rgba(255,215,0,0.05); color: #FFD700; line-height: 1.6; }
+
+        .tech-tag-lg { font-size: 12px; font-weight: 700; padding: 5px 12px; gap: 7px; border-color: rgba(255,215,0,0.6); background: rgba(255,215,0,0.09); }
 
         .stat-line { font-family: 'DM Mono', monospace; font-size: 11px; color: #FFD700; letter-spacing: 0.02em; margin-bottom: 14px; line-height: 1.6; }
 
@@ -316,20 +318,18 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                 {[
                   { label: 'Primary Stack', pills: ['Python', 'Go', 'TypeScript', 'Next.js'] },
                   { label: 'Databases', pills: ['PostgreSQL', 'MySQL'] },
-                  { label: 'Frameworks & Tools', pills: TOOLS, icons: true },
+                  { label: 'Frameworks & Tools', pills: TOOLS },
                   { label: 'Currently', pills: ['Open to remote roles worldwide'] },
                   { label: 'Location', pills: ['Nigeria', 'UTC+1'] },
                   { label: 'Response time', pills: ['Within 24 hours'] },
-                ].map(({ label, pills, icons }) => (
+                ].map(({ label, pills }) => (
                   <div key={label} style={{ display: 'flex', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid rgba(255,255,255,0.08)', gap: 16 }}>
                     <div style={{ minWidth: 140, flexShrink: 0 }}>
-                      <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)' }}>{label}</span>
+                      <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 500, color: 'rgba(255,255,255,0.65)' }}>{label}</span>
                     </div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                      {pills.map(p => icons ? (
-                        <TechTag key={p} label={p} />
-                      ) : (
-                        <span key={p} style={{ display: 'inline-flex', alignItems: 'center', fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.04em', color: 'rgba(255,255,255,0.55)', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', padding: '3px 10px' }}>{p}</span>
+                      {pills.map(p => (
+                        <TechTag key={p} label={p} large />
                       ))}
                     </div>
                   </div>
