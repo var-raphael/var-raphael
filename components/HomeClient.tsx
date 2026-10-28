@@ -315,16 +315,20 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   { label: 'Databases', pills: ['PostgreSQL', 'MySQL'] },
                   { label: 'Frameworks & Tools', pills: TOOLS },
                   { label: 'Currently', pills: ['Open to remote roles worldwide'] },
-                  { label: 'Location', pills: ['Nigeria', 'UTC+1'] },
+                  { label: 'Timezone', pills: ['UTC+1'], highlight: true },
                   { label: 'Response time', pills: ['Within 24 hours'] },
-                ].map(({ label, pills }) => (
+                ].map(({ label, pills, highlight }) => (
                   <div key={label} style={{ display: 'flex', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid rgba(255,255,255,0.08)', gap: 16 }}>
                     <div style={{ minWidth: 140, flexShrink: 0 }}>
                       <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 10, letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 500, color: 'rgba(255,255,255,0.65)' }}>{label}</span>
                     </div>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                       {pills.map(p => (
-                        <TechTag key={p} label={p} large />
+                        highlight ? (
+                          <span key={p} style={{ display: 'inline-flex', alignItems: 'center', fontFamily: "'DM Mono', monospace", fontSize: 14, fontWeight: 700, letterSpacing: '0.04em', color: '#000', background: '#FFD700', padding: '6px 16px' }}>{p}</span>
+                        ) : (
+                          <TechTag key={p} label={p} large />
+                        )
                       ))}
                     </div>
                   </div>
