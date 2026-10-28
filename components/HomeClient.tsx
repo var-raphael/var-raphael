@@ -16,7 +16,7 @@ function track(event: string, props?: Record<string, string>) {
 
 function TechTag({ label, large }: { label: string; large?: boolean }) {
   const icon = TECH_ICONS[label];
-  const needsInvert = ['Next.js', 'Three.js', 'Framer Motion', 'WebGL', 'Ethereum', 'HTMX', 'Vercel', 'OpenAI', 'Supabase', 'Chromium'].includes(label);
+  const needsInvert = ['Next.js', 'Three.js', 'Framer Motion', 'WebGL', 'Ethereum', 'HTMX', 'Vercel', 'OpenAI', 'Supabase'].includes(label);
   return (
     <span className={large ? 'tech-tag tech-tag-lg' : 'tech-tag'}>
       {icon && <img src={icon} alt={label} onError={(e) => { e.currentTarget.style.display = 'none'; }} style={{ width: large ? 16 : 13, height: large ? 16 : 13, objectFit: 'contain', flexShrink: 0, filter: needsInvert ? 'invert(1)' : undefined }} />}
