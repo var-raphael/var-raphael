@@ -40,12 +40,6 @@ export const STACK = ['Python', 'Go', 'TypeScript', 'Next.js', 'Tailwind', 'MySQ
 
 export const TOOLS = ['Tailwind', 'Docker', 'Vercel', 'Firecrawl', 'Chromium', 'Playwright', 'Mistral', 'OpenAI', 'Claude', 'LangChain', 'Supabase', 'Vector DB'];
 
-// ── KAIST / Claytronics ───────────────────────────────────────────────────────
-// Set `live` to the real simulation URL when it's ready. '#' shows a "coming soon" label.
-export const CLAYTRONICS = {
-  live: '#',
-};
-
 // ── Projects ──────────────────────────────────────────────────────────────────
 export const PROJECTS = [
   {

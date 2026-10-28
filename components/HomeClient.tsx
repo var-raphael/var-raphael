@@ -5,7 +5,7 @@ import Lenis from 'lenis';
 import type { PostMeta } from '@/lib/posts';
 import {
   TECH_ICONS, STACK, TOOLS,
-  PROJECTS, JEWELRY_COLLECTIONS, CLAYTRONICS,
+  PROJECTS, JEWELRY_COLLECTIONS,
 } from './data';
 
 function track(event: string, props?: Record<string, string>) {
@@ -122,7 +122,6 @@ const NAV_LINKS: [string, string][] = [['#about', 'About'], ['#projects', 'Proje
 export default function Portfolio({ posts }: { posts: PostMeta[] }) {
   useLenis();
   const [menuOpen, setMenuOpen] = useState(false);
-  const claytronicsReady = CLAYTRONICS.live && CLAYTRONICS.live !== '#';
 
   return (
     <>
@@ -157,10 +156,6 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         .demo-password-line { font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 0.01em; margin-bottom: 16px; line-height: 1.6; word-break: break-all; }
         .demo-password-value { color: #FFD700; }
 
-        /* Aspiration block (About) */
-        .aspire-card { background: #0a0a0a; border: 1px solid rgba(255,215,0,0.15); border-radius: 0; padding: 22px 24px; }
-        .aspire-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: #fff; letter-spacing: -0.01em; margin-bottom: 8px; }
-        .aspire-body { font-size: 12.5px; font-weight: 300; color: rgba(255,255,255,0.5); line-height: 1.75; margin-bottom: 16px; }
 
         /* Projects grid — 2 columns on desktop */
         .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
@@ -335,19 +330,6 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   </div>
                 ))}
               </div>
-            </div>
-            {/* KAIST aspiration + claytronics */}
-            <div className="aspire-card" style={{ marginTop: 48 }}>
-              <p className="eyebrow" style={{ marginBottom: 10 }}>Next Chapter</p>
-              <h3 className="aspire-title">Aiming for KAIST</h3>
-              <p className="aspire-body">
-                I'm aspiring to study Materials Science and Engineering at KAIST. In my spare time I'm building a claytronics simulation, exploring how programmable matter could work.
-              </p>
-              {claytronicsReady ? (
-                <a href={CLAYTRONICS.live} target="_blank" rel="noreferrer" onClick={() => track('claytronics_clicked')} className="btn-gold-outline">View Simulation ↗</a>
-              ) : (
-                <a href="/blog" onClick={() => track('claytronics_blog_clicked')} className="btn-gold-outline">More info on the blog →</a>
-              )}
             </div>
           </div>
         </section>
