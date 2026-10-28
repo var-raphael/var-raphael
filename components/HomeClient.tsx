@@ -5,7 +5,7 @@ import Lenis from 'lenis';
 import type { PostMeta } from '@/lib/posts';
 import {
   TECH_ICONS, STACK,
-  PROJECTS, JEWELRY_COLLECTIONS,
+  PROJECTS, JEWELRY_COLLECTIONS, CLAYTRONICS,
 } from './data';
 
 function track(event: string, props?: Record<string, string>) {
@@ -16,7 +16,7 @@ function track(event: string, props?: Record<string, string>) {
 
 function TechTag({ label }: { label: string }) {
   const icon = TECH_ICONS[label];
-  const needsInvert = label === 'Next.js' || label === 'Three.js' || label === 'Framer Motion' || label === 'WebGL' || label === 'Ethereum' || label === 'HTMX';
+  const needsInvert = label === 'Next.js' || label === 'Three.js' || label === 'Framer Motion' || label === 'WebGL' || label === 'Ethereum' || label === 'HTMX' || label === 'Mistral';
   return (
     <span className="tech-tag">
       {icon && <img src={icon} alt={label} style={{ width: 13, height: 13, objectFit: 'contain', flexShrink: 0, filter: needsInvert ? 'invert(1)' : undefined }} />}
@@ -117,21 +117,12 @@ function useLenis() {
   }, []);
 }
 
-const NAV_LINKS: [string, string][] = [['#about', 'About'], ['#projects', 'Projects'], ['#frontend', 'Frontend'], ['#why', 'Why Me'], ['#blog', 'Blog']];
-
-const WHY_ME = [
-  { title: 'I move to what needs solving', body: 'I don\'t think in terms of one stack or role. Backend, frontend, infra, whatever\'s in the way that week, I go there and figure it out.' },
-  { title: 'I ship, not just code', body: 'Quorel and VarsityLine are live, self-built startups, from schema to UI to the infrastructure keeping them running. These are not tutorial projects. They are products I designed, deployed, and maintain.' },
-  { title: 'I think before I type', body: 'Years of working with limited resources taught me to design logic before writing a line. I map edge cases and question assumptions early, so things ship less buggy from the start.' },
-  { title: 'I fix real problems', body: 'Running Quorel and VarsityLine means I am the one who gets paged when something breaks, whether it is a scraping layer, a payment webhook, or a data pipeline going stale. I own problems until they are fixed.' },
-  { title: 'I learn at uncommon speed', body: 'I picked up TypeScript and Go in 2022 simultaneously while already knowing PHP and JavaScript, and was building real projects in both within weeks.' },
-  { title: 'I work remotely by default', body: 'I have been self-directed for years with no classroom, no bootcamp, no one looking over my shoulder. Remote work is the environment I have always operated in.' },
-  { title: 'I contribute beyond my role', body: 'I mentor students and teach free coding classes online. A team that hires me gets someone who adds energy to the room, not just code to the repo.' },
-];
+const NAV_LINKS: [string, string][] = [['#about', 'About'], ['#projects', 'Projects'], ['#frontend', 'Frontend'], ['#blog', 'Blog']];
 
 export default function Portfolio({ posts }: { posts: PostMeta[] }) {
   useLenis();
   const [menuOpen, setMenuOpen] = useState(false);
+  const claytronicsReady = CLAYTRONICS.live && CLAYTRONICS.live !== '#';
 
   return (
     <>
@@ -164,14 +155,18 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         .demo-password-line { font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 0.01em; margin-bottom: 16px; line-height: 1.6; word-break: break-all; }
         .demo-password-value { color: #FFD700; }
 
+        /* Aspiration block (About) */
+        .aspire-card { background: #0a0a0a; border: 1px solid rgba(255,215,0,0.15); border-radius: 0; padding: 22px 24px; }
+        .aspire-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: #fff; letter-spacing: -0.01em; margin-bottom: 8px; }
+        .aspire-body { font-size: 12.5px; font-weight: 300; color: rgba(255,255,255,0.5); line-height: 1.75; margin-bottom: 16px; }
+        .aspire-soon { display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em; color: rgba(255,255,255,0.35); border: 1px dashed rgba(255,255,255,0.2); padding: 6px 12px; }
+
         /* Projects grid — 2 columns on desktop */
         .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
         .project-card { background: #0a0a0a; border: 1px solid rgba(255,215,0,0.15); border-radius: 0; overflow: hidden; display: flex; flex-direction: column; transition: all 0.2s ease; }
         .project-card:hover { border-color: rgba(255,215,0,0.5); }
         .project-card-media { height: 200px; background: #050505; flex-shrink: 0; }
         .project-card-body { padding: 26px 28px; display: flex; flex-direction: column; flex: 1; border-top: 1px solid rgba(255,215,0,0.1); }
-
-
 
         .ring-card { display: grid; grid-template-columns: 5fr 7fr; background: #0a0a0a; border: 1px solid rgba(255,215,0,0.15); border-radius: 0; overflow: hidden; }
         .ring-visual { position: relative; min-height: 300px; border-right: 1px solid rgba(255,215,0,0.15); background: #050505; overflow: hidden; }
@@ -187,12 +182,6 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         .carousel-nav-btn:hover { background: #FFD700; color: #000; }
         .carousel-dot { height: 6px; width: 6px; border-radius: 0; border: none; padding: 0; cursor: pointer; background: rgba(255,255,255,0.2); transition: all 0.2s; }
         .carousel-dot[data-active="true"] { width: 22px; background: #FFD700; }
-
-        .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-        .why-card { background: #0a0a0a; border: 1px solid rgba(255,215,0,0.12); border-radius: 0; padding: 24px 26px; transition: all 0.15s; }
-        .why-card:hover { border-color: rgba(255,215,0,0.4); }
-        .why-title { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 8px; }
-        .why-body { font-size: 12.5px; font-weight: 300; color: rgba(255,255,255,0.45); line-height: 1.7; }
 
         .blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
         .blog-row { display: block; background: #0a0a0a; border: 1px solid rgba(255,215,0,0.12); border-radius: 0; padding: 22px 24px; text-decoration: none; transition: all 0.15s; }
@@ -286,7 +275,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   Raphael <em style={{ fontStyle: 'italic', color: '#FFD700' }}>Samuel</em>
                 </h1>
                 <p style={{ fontSize: 'clamp(15px, 1.6vw, 18px)', fontWeight: 300, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.02em', marginTop: 18, marginBottom: 28, maxWidth: 520 }}>
-                  Building AI agent tooling and data infrastructure end to end. Two products of my own, plus client work.
+                  Building AI agent tooling and data infrastructure end to end. Three products of my own, plus client work.
                 </p>
                 <div className="contact-links-row" style={{ marginBottom: 40 }}>
                   <a href="mailto:samuelraphael925@gmail.com" onClick={() => track('email_clicked', { source: 'hero' })} className="btn-gold-fill">samuelraphael925@gmail.com</a>
@@ -295,7 +284,7 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   ))}
                 </div>
                 <div style={{ display: 'flex', gap: 48, flexWrap: 'wrap' }}>
-                  {[{ val: '6', unit: '+', label: 'Years Coding' }, { val: '3', unit: '', label: 'Live Products' }, { val: '2', unit: '', label: 'Startups Founded' }].map(({ val, unit, label }) => (
+                  {[{ val: '7', unit: '+', label: 'Years Coding' }, { val: '3', unit: '', label: 'Startups Founded' }].map(({ val, unit, label }) => (
                     <div key={label}>
                       <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 34, fontWeight: 700, color: '#fff', letterSpacing: '-0.03em', lineHeight: 1 }}>
                         {val}<span className="gold-text">{unit}</span>
@@ -321,8 +310,22 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   A quick intro.
                 </h2>
                 <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.5)', lineHeight: 1.9, marginBottom: 32 }}>
-                  Six years of writing Python, Go, TypeScript, and Next.js, most of it spent on two questions: does this hold up once real people depend on it, and who fixes it at 2am when it doesn't. Quorel and VarsityLine are both still answering yes.
+                  Seven years of writing Python, Go, TypeScript, and Next.js, most of it spent on two questions: does this hold up once real people depend on it, and who fixes it at 2am when it doesn't. Quorel and VarsityLine are both still answering yes.
                 </p>
+
+                {/* KAIST aspiration + claytronics */}
+                <div className="aspire-card">
+                  <p className="eyebrow" style={{ marginBottom: 10 }}>Next Chapter</p>
+                  <h3 className="aspire-title">Aiming for KAIST</h3>
+                  <p className="aspire-body">
+                    I'm aspiring to study Materials Science and Engineering at KAIST. In my spare time I'm building a claytronics simulation, exploring how programmable matter could work.
+                  </p>
+                  {claytronicsReady ? (
+                    <a href={CLAYTRONICS.live} target="_blank" rel="noreferrer" onClick={() => track('claytronics_clicked')} className="btn-gold-outline">View Simulation ↗</a>
+                  ) : (
+                    <span className="aspire-soon">Simulation site · coming soon</span>
+                  )}
+                </div>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                 {[
@@ -394,7 +397,10 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                         <a href={(p as any).tertiaryLive} target="_blank" rel="noreferrer" className="btn-gold-outline" onClick={() => track('project_link_clicked', { project: p.title, type: 'tertiary_live' })}>{(p as any).tertiaryLiveLabel || 'View More ↗'}</a>
                       )}
                       {!p.closedSource && p.github && (
-                        <a href={p.github} target="_blank" rel="noreferrer" className="btn-gold-outline" onClick={() => track('project_link_clicked', { project: p.title, type: 'github' })}>GitHub</a>
+                        <a href={p.github} target="_blank" rel="noreferrer" className="btn-gold-outline" onClick={() => track('project_link_clicked', { project: p.title, type: 'github' })}>{(p as any).githubLabel ? `GitHub · ${(p as any).githubLabel}` : 'GitHub'}</a>
+                      )}
+                      {!p.closedSource && (p as any).secondaryGithub && (
+                        <a href={(p as any).secondaryGithub} target="_blank" rel="noreferrer" className="btn-gold-outline" onClick={() => track('project_link_clicked', { project: p.title, type: 'secondary_github' })}>{`GitHub · ${(p as any).secondaryGithubLabel || 'More'}`}</a>
                       )}
                     </div>
                   </div>
@@ -453,24 +459,6 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
               <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, color: 'rgba(255,255,255,0.3)' }}>{JEWELRY_COLLECTIONS.length} premium landing pages</span>
             </div>
             <JewelryCarousel />
-          </div>
-        </section>
-
-        <div className="divider" />
-
-        {/* Why Me — back at the bottom, grid of cards */}
-        <section id="why" style={{ padding: '80px 0' }}>
-          <div className="section-inner">
-            <p className="eyebrow">Why Work With Me</p>
-            <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(30px, 4vw, 46px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', marginBottom: 36, lineHeight: 1.1 }}>Not just another developer.</h2>
-            <div className="why-grid">
-              {WHY_ME.map(({ title, body }) => (
-                <div key={title} className="why-card">
-                  <div className="why-title">{title}</div>
-                  <div className="why-body">{body}</div>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
 

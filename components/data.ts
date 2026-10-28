@@ -25,9 +25,16 @@ export const TECH_ICONS: Record<string, string> = {
   'Framer Motion': 'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/framer.svg',
   'SQLite':        'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg',
   'Supabase':      'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/supabase.svg',
+  'Mistral':       'https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/mistralai.svg',
 };
 
 export const STACK = ['Python', 'Go', 'TypeScript', 'Next.js', 'Tailwind', 'MySQL', 'PostgreSQL'];
+
+// ── KAIST / Claytronics ───────────────────────────────────────────────────────
+// Set `live` to the real simulation URL when it's ready. '#' shows a "coming soon" label.
+export const CLAYTRONICS = {
+  live: '#',
+};
 
 // ── Projects ──────────────────────────────────────────────────────────────────
 export const PROJECTS = [
@@ -54,6 +61,21 @@ export const PROJECTS = [
     github: 'https://github.com/var-raphael/varsityline',
     closedSource: false,
     tags: ['Next.js', 'TypeScript', 'PostgreSQL', 'Tailwind'],
+  },
+  {
+    title: 'Groundtruth',
+    stat: 'GitHub-verified candidate reports · scored per role · every claim sourced',
+    desc: 'Every resume reads the same now, polished by the same AI tools and impossible to verify. Groundtruth skips the resume entirely: candidates connect GitHub, and it checks what they\'ve actually built, from repos and commit history to live deployed projects. Recruiters get a ranked report scored per role, where every claim traces back to a source, dead links are flagged instead of hidden, and facts are kept separate from opinions.',
+    images: ['/portfolio-images/img/groundtruth1.jpg', '/portfolio-images/img/groundtruth2.jpg'],
+    live: 'https://ground-truth-app.vercel.app',
+    secondaryLive: 'https://ground-truth-app.vercel.app/blog/how-groundtruth-scores-candidates',
+    secondaryLiveLabel: 'How Scoring Works ↗',
+    github: 'https://github.com/var-raphael/groundtruth-frontend',
+    githubLabel: 'Frontend',
+    secondaryGithub: 'https://github.com/var-raphael/groundtruth-backend',
+    secondaryGithubLabel: 'Backend',
+    closedSource: false,
+    tags: ['Go', 'Next.js', 'TypeScript', 'PostgreSQL', 'Mistral'],
   },
   {
     title: 'Gnat',
