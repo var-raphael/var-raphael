@@ -159,7 +159,6 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
         .aspire-card { background: #0a0a0a; border: 1px solid rgba(255,215,0,0.15); border-radius: 0; padding: 22px 24px; }
         .aspire-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: #fff; letter-spacing: -0.01em; margin-bottom: 8px; }
         .aspire-body { font-size: 12.5px; font-weight: 300; color: rgba(255,255,255,0.5); line-height: 1.75; margin-bottom: 16px; }
-        .aspire-soon { display: inline-block; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em; color: rgba(255,255,255,0.35); border: 1px dashed rgba(255,255,255,0.2); padding: 6px 12px; }
 
         /* Projects grid — 2 columns on desktop */
         .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
@@ -312,20 +311,6 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                 <p style={{ fontSize: 14, fontWeight: 300, color: 'rgba(255,255,255,0.5)', lineHeight: 1.9, marginBottom: 32 }}>
                   Seven years of writing Python, Go, TypeScript, and Next.js, most of it spent on two questions: does this hold up once real people depend on it, and who fixes it at 2am when it doesn't. Quorel and VarsityLine are both still answering yes.
                 </p>
-
-                {/* KAIST aspiration + claytronics */}
-                <div className="aspire-card">
-                  <p className="eyebrow" style={{ marginBottom: 10 }}>Next Chapter</p>
-                  <h3 className="aspire-title">Aiming for KAIST</h3>
-                  <p className="aspire-body">
-                    I'm aspiring to study Materials Science and Engineering at KAIST. In my spare time I'm building a claytronics simulation, exploring how programmable matter could work.
-                  </p>
-                  {claytronicsReady ? (
-                    <a href={CLAYTRONICS.live} target="_blank" rel="noreferrer" onClick={() => track('claytronics_clicked')} className="btn-gold-outline">View Simulation ↗</a>
-                  ) : (
-                    <span className="aspire-soon">Simulation site · coming soon</span>
-                  )}
-                </div>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                 {[
@@ -350,6 +335,19 @@ export default function Portfolio({ posts }: { posts: PostMeta[] }) {
                   </div>
                 ))}
               </div>
+            </div>
+            {/* KAIST aspiration + claytronics */}
+            <div className="aspire-card" style={{ marginTop: 48 }}>
+              <p className="eyebrow" style={{ marginBottom: 10 }}>Next Chapter</p>
+              <h3 className="aspire-title">Aiming for KAIST</h3>
+              <p className="aspire-body">
+                I'm aspiring to study Materials Science and Engineering at KAIST. In my spare time I'm building a claytronics simulation, exploring how programmable matter could work.
+              </p>
+              {claytronicsReady ? (
+                <a href={CLAYTRONICS.live} target="_blank" rel="noreferrer" onClick={() => track('claytronics_clicked')} className="btn-gold-outline">View Simulation ↗</a>
+              ) : (
+                <a href="/blog" onClick={() => track('claytronics_blog_clicked')} className="btn-gold-outline">More info on the blog →</a>
+              )}
             </div>
           </div>
         </section>
